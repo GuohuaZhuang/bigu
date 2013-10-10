@@ -1,0 +1,92 @@
+<script type="text/javascript">
+// document.addEventListener("dblclick",function(){
+// 	if(event.srcElement.tagName.toLowerCase() == "td"){
+// 		alert('halo!');
+// 		// changeToEdit(event.srcElement)
+// 	}
+// });
+function SelectChanged(flag) {
+	if (typeof flag !== 'undefined' && flag) {
+		document.getElementById('btn_list_save').disabled = true;
+		return;
+	}
+	document.getElementById('btn_list_save').disabled = false;
+}
+function Save() {
+	var data = new Array();
+	var tr = $('#mlist_table').find('tr');
+	for (var i = 1; i < tr.length; i ++) {
+		var cells = tr[i].cells;
+		var data_line = {
+			'username': ((typeof cells[0].childNodes[0] === 'undefined') ? '' : cells[0].childNodes[0].data),
+			'real_name': ((typeof cells[1].childNodes[0] === 'undefined') ? '' : cells[1].childNodes[0].data), 
+			'email': ((typeof cells[2].childNodes[0] === 'undefined') ? '' : cells[2].childNodes[0].data),
+			'status': cells[3].childNodes[1].value,
+			'id_role': cells[4].childNodes[1].value
+		};
+		data[i-1] = data_line;
+	}
+
+    Jsoncallback('/auth/users/update', 
+    	    function (json) {
+		        if (typeof json.err !== 'undefined' && json.err != "") {
+		            alert(json.err);
+		            return false;
+		        }
+		        if (typeof json.success !== 'undefined') {
+		        	SelectChanged(true);
+			        alert(json.success);
+			        return true;
+		        }
+		        if (typeof json.data === 'undefined') {
+		    		return false;
+	    		}
+		        var data = json.data;
+		        alert(data);// debug
+	    	}, 
+            'POST', 
+            {'d': data, 'timestamp' : Date.parse(new Date())}, 
+            'loading');
+}
+</script>
+
+<style>
+.table_manage {
+border-width: 5px 5px 5px 5px;
+border-color: blue rgb(25%,35%,45%) #909090 red;
+border-spacing: 10px;
+border-style: solid;
+border-bottom:1px #999999 solid;
+}
+.table_manage tr>td, .table_manage tr>th {
+border:1px solid #ff0000;
+}
+</style>
+
+<span style="font-size: 20px;">用户管理</span><br/><br/>
+<table id="mlist_table" class="table_manage">
+    <tr><th>username/用户名</th><th>real_name/真实姓名</th><th>email/邮箱</th><th>status/状态</th><th>role/角色</th></tr>
+    <?php foreach($this->result as $row) { ?>
+    <tr>
+        <td><?php echo $row['username'] ?></td>
+        <td><?php echo $row['real_name'] ?></td>
+        <td><?php echo $row['email'] ?></td>
+        <td>
+            <select onchange="SelectChanged()">
+                <option <?php if($row['status'] == 'approved') { ?>selected<?php } ?> >approved</option>
+                <option <?php if($row['status'] == 'unapproved') { ?>selected<?php } ?> >unapproved</option>
+            </select>
+        </td>
+        <td>
+        	<select onchange="SelectChanged()">
+        		<?php foreach($this->rolenames as $id_role => $rolename) { ?>
+        		<option value="<?php echo $id_role; ?>" <?php if($row['role'] == $rolename) { ?>selected<?php } ?> ><?php echo $rolename; ?></option>
+        		<?php } ?>
+        	</select>
+        	<input type="hidden" id="id_role" value="<?php echo $row['id_role']; ?>" />
+        </td>
+    </tr>
+    <?php } ?>
+</table>
+
+<button id="btn_list_save" type="button" disabled="disabled" onclick="Save()">保存</button>

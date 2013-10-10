@@ -1,0 +1,71 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<link href="/css/my.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="/js/jquery.js" ></script>
+		<script type="text/javascript" src="/js/util.js" ></script>
+		<script type="text/javascript" src="/js/my.js" ></script>
+	</head>
+	
+	<body>
+<section>
+	<?php if (!empty($this->manage)) { ?>
+	<!-- 管理左面板 -->
+	<?php include(APPLICATION_PATH . "/../public/html/left_mnav.html"); ?>
+	<?php } else { ?>
+	<!-- 主页左面板 -->
+	<?php include(APPLICATION_PATH . "/../public/html/left_nav.html"); ?>
+	<?php } ?>
+	
+	<!-- 右边面板(采用table作布局) -->
+	<div class="span10 content borBox pull-right">
+	<?php if (!empty($this->manage)) { ?>
+	
+	<!-- 管理右边面板 -->
+	<?php if (!empty($this->error)) { ?>Error: <?php echo $this->error; ?><br/><?php } ?>
+	<?php if (!empty($this->success)) { ?>Success: <?php echo $this->success; ?><br/><?php } ?>
+	<?php echo $this->layout()->content; ?>
+	<?php } else { ?>
+	  <table border="1" style="width: 100%;">
+	  	<tr>
+		  	<td style="width: 672px;">
+		  		<!-- 右上广告图块 -->
+		  		<?php include(APPLICATION_PATH . "/../public/html/top_ad.html"); ?>
+		  	</td>
+		  	<td>
+		  		<!-- 右上登录链接块 -->
+		  		<?php include(APPLICATION_PATH . "/../public/html/top_links.html"); ?>
+		  	</td>
+	  	</tr>
+	  	<tr>
+		  	<td>
+		  		<!-- 右上子导航栏 -->
+		  		<?php include(APPLICATION_PATH . "/../public/html/top_subnav.html"); ?>
+		  	</td>
+		  	<td>
+		  		<!-- 右上子搜索框 -->
+		  		<?php include(APPLICATION_PATH . "/../public/html/top_search.html"); ?>
+		  	</td>
+	  	</tr>
+	  	<tr>
+		  	<td>
+		  		<!-- 右中内容正文/列表栏 -->
+		  		内容正文
+		  	</td>
+		  	<td>
+		  		<!-- 右中右列最新评论列表 -->
+		  		最新评论
+		  	</td>
+	  	</tr>
+	</table>
+	
+	<!-- 右下页脚脚注 -->
+	<?php include(APPLICATION_PATH . "/../public/html/foot.html"); ?>
+	<?php } ?>
+	</div>
+</section>
+
+<?php include(APPLICATION_PATH . "/../public/html/loading.html"); ?>
+</body>
+</html>
