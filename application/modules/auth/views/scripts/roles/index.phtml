@@ -18,55 +18,114 @@ function Save() {
 	for (var i = 1; i < tr.length; i ++) {
 		var cells = tr[i].cells;
 		var data_line = {
-			'username': ((typeof cells[0].childNodes[0] === 'undefined') ? '' : cells[0].childNodes[0].data),
-			'real_name': ((typeof cells[1].childNodes[0] === 'undefined') ? '' : cells[1].childNodes[0].data), 
-			'email': ((typeof cells[2].childNodes[0] === 'undefined') ? '' : cells[2].childNodes[0].data),
-			'status': cells[3].childNodes[1].value,
-			'id_role': cells[4].childNodes[1].value
+			'id': ((typeof cells[0].childNodes[0] === 'undefined') ? '' : cells[0].childNodes[0].data),
+			'role': ((typeof cells[1].childNodes[0] === 'undefined') ? '' : cells[1].childNodes[0].data), 
+			'id_parent': ((typeof cells[2].childNodes[0] === 'undefined') ? '' : cells[2].childNodes[0].data)
 		};
 		data[i-1] = data_line;
 	}
 
-    Jsoncallback('/auth/users/update', 
-    	    function (json) {
-		        if (typeof json.err !== 'undefined' && json.err != "") {
-		            alert(json.err);
-		            return false;
-		        }
-		        if (typeof json.success !== 'undefined') {
-		        	SelectChanged(true);
-			        alert(json.success);
-			        return true;
-		        }
-		        if (typeof json.data === 'undefined') {
-		    		return false;
-	    		}
-		        var data = json.data;
-		        alert(data);// debug
-	    	}, 
-            'POST', 
-            {'d': data, 'timestamp' : Date.parse(new Date())}, 
-            'loading');
+    Jsoncallback('/auth/roles/update', 
+    	function (json) {
+	        if (typeof json.err !== 'undefined' && json.err != "") {
+	            alert(json.err);
+	            return false;
+	        }
+	        if (typeof json.success !== 'undefined') {
+	        	SelectChanged(true);
+		        alert(json.success);
+		        return true;
+	        }
+	        if (typeof json.data === 'undefined') {
+	    		return false;
+			}
+	        var data = json.data;
+	        alert(data);// debug
+		}, 
+	    'POST', 
+	    {'d': data, 'timestamp' : Date.parse(new Date())}, 
+	    'loading');
+}
+
+function TblAddItem() {
+	$("#mlist_table tbody").append("<tr><td></td>"
+		+ "<td><input type='text' style='width:100%;text-align:right;' value=''/></td>"
+		+ "<td><input type='text' style='width:100%;text-align:right;' value=''/></td>"
+		+ "<td><button onclick='tbl_additem_handler(event)'>确定</button></td></tr>");
+}
+
+function tbl_deleteitem_handler(event) {
+	Jsoncallback('/auth/roles/delete', 
+	    function (json) {
+	    	if (null == json) return false;
+	        if (typeof json.err !== 'undefined' && json.err != "") {
+	            alert(json.err);
+	            document.location.reload();
+	            return false;
+	        }
+	        if (typeof json.success !== 'undefined') {
+	        	SelectChanged(true);
+		        alert(json.success);
+	        }
+    	}, 
+        'POST', 
+        {'d': '', 'timestamp' : Date.parse(new Date()), 
+         'id': event.toElement.parentElement.parentElement.cells[0].childNodes[0].data}, 
+        'loading');
+	event.toElement.parentElement.parentElement.remove();
+}
+
+function tbl_additem_handler(event) {
+	Jsoncallback('/auth/roles/add', 
+	    function (json) {
+	    	if (null == json) return false;
+	        if (typeof json.err !== 'undefined' && json.err != "") {
+	            alert(json.err);
+	            return false;
+	        }
+	        if (typeof json.success !== 'undefined') {
+	        	SelectChanged(true);
+		        // alert(json.success);
+	        }
+	        if (typeof json.id === 'undefined') {
+	    		return false;
+    		}
+	        var id = json.id;
+	        $("#mlist_table tbody>tr:last>td:first").text(id);
+	        $("#mlist_table tbody>tr:last>td")[1].innerHTML = $("#mlist_table tbody>tr:last>td")[1].childNodes[0].value;
+	        $("#mlist_table tbody>tr:last>td")[2].innerHTML = $("#mlist_table tbody>tr:last>td")[2].childNodes[0].value;
+	        $("#mlist_table tbody>tr:last>td")[3].innerHTML = "<button onclick=\'tbl_deleteitem_handler(event)\'>删除</button>";
+	        $("#mlist_table tbody>tr:last>td").bind("dblclick", (td_dblclick_handler));
+    	}, 
+        'POST', 
+        {'d': '', 'timestamp' : Date.parse(new Date()), 
+         'role': event.toElement.parentElement.parentElement.cells[1].childNodes[0].value, 
+         'id_parent': event.toElement.parentElement.parentElement.cells[2].childNodes[0].value}, 
+        'loading');
+}
+
+function td_dblclick_handler() {
+    // the first id column can not be editable
+    if (event.srcElement.cellIndex != 1 && event.srcElement.cellIndex != 2 ) {
+        return;
+    }
+    SelectChanged();
+    
+    var inval = $(this).html();
+    $(this).unbind("dblclick", td_dblclick_handler);
+    
+    $(this).html("<input type='text' style='width:100%;text-align:right;' value='"+inval+"'/>");
+    $(this).children().focus();
+    
+    $(this).children().focusout(function() {
+        var editval = $(this).val();
+        $(this).parent().bind("dblclick", (td_dblclick_handler));
+        $(this).parent().html(editval);
+    })
 }
 
 $(function() {
-    $("tbody>tr>td").dblclick(function(){
-        // the first id column can not be editable
-        if (event.srcElement.cellIndex == 0) {
-            return;
-        }
-        SelectChanged();
-        
-        var inval = $(this).html();
-        
-        $(this).html("<input type='text' style='width:100%;text-align:right;' value='"+inval+"'>");
-        $(this).children().focus();
-        
-        $(this).children().focusout(function() {
-            var editval = $(this).val();
-            $(this).parent().html(editval);
-        })
-    })
+    $("#mlist_table tbody>tr>td").bind("dblclick", (td_dblclick_handler));
 })
 
 </script>
@@ -78,6 +137,7 @@ border-color: blue rgb(25%,35%,45%) #909090 red;
 border-spacing: 10px;
 border-style: solid;
 border-bottom:1px #999999 solid;
+width: 90%;
 }
 .table_manage tr>td, .table_manage tr>th {
 border:1px solid #ff0000;
@@ -93,7 +153,8 @@ border:1px solid #ff0000;
     <tr>
     	<th style="width:10%;">id/角色ID</th>
     	<th style="width:60%;">role/角色</th>
-    	<th style="width:30%;">id_parent/继承的父角色ID</th>
+    	<th style="width:20%;">id_parent/继承的父角色ID</th>
+    	<th style="width:10%;"></th>
     </tr>
     </thead>
     <tbody>
@@ -102,9 +163,10 @@ border:1px solid #ff0000;
         <td><?php echo $row['id'] ?></td>
         <td><?php echo $row['role'] ?></td>
         <td><?php echo $row['id_parent'] ?></td>
+        <td><button onclick='tbl_deleteitem_handler(event)'>删除</button></td>
     </tr>
     <?php } ?>
     </tbody>
 </table>
-
+<button id="btn_list_add" type="button" onclick="TblAddItem()">添加</button>
 <button id="btn_list_save" type="button" disabled="disabled" onclick="Save()">保存</button>
