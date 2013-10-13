@@ -28,4 +28,15 @@ class Auth_Model_DbTable_Permissions extends Zend_Db_Table_Abstract
 		$stmt = $this->getAdapter()->query($select);
 		return $stmt->fetchAll();
 	}
+	
+	public function fetchAllUR() {
+		$select = $this->getAdapter()->select();
+		$select->from(array('P' => 'tbl_permissions'), array('id', 'permission'));
+		$select->join(array('R' => 'tbl_roles'), 'P.id_role=R.id', array('role'));
+		$select->join(array('RE' => 'tbl_resources'), 'P.id_resource=RE.id', array('resource'));
+		$select->order('id');
+		
+		$stmt = $this->getAdapter()->query($select);
+		return $stmt->fetchAll(null, 'id');
+	}
 }

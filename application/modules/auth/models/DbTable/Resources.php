@@ -19,4 +19,15 @@ class Auth_Model_DbTable_Resources extends Zend_Db_Table_Abstract
 	public function getResources() {
 		return $this->fetchAll(null,'id');
 	}
+	
+	public function getAllResourcename() {
+		$select = $this->select();
+		$select->from($this, array('resource', 'id'));
+		$rolearr = $this->fetchAll($select)->toArray();
+		$roles = array();
+		foreach ($rolearr as $rolerow) {
+			$roles[$rolerow['id']] = $rolerow['resource'];
+		}
+		return $roles;
+	}
 }

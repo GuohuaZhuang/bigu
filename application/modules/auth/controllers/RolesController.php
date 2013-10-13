@@ -23,7 +23,7 @@ class Auth_RolesController extends Zend_Controller_Action
     	$request = $this->getRequest();
     	$role = $request->getParam('role');
     	$id_parent = $request->getParam('id_parent');
-    	if (!$role && !$id_parent) {
+    	if (empty($role) || ($id_parent == null)) {
     		echo '{"err": "添加失败，参数不足"}';
     	} else {
 	    	$roles = new Auth_Model_DbTable_Roles();
@@ -45,12 +45,11 @@ class Auth_RolesController extends Zend_Controller_Action
     {
     	$request = $this->getRequest();
     	$id = $request->getParam('id');
-    	if (!$id) {
+    	if (empty($id)) {
     		echo '{"err": "删除失败，参数不足"}';
     	} else {
     		$roles = new Auth_Model_DbTable_Roles();
 	    	$where = $roles->getAdapter()->quoteInto('id=?', $id);
-	    	$roles = new Auth_Model_DbTable_Roles();
 	    	if ($roles->delete($where) == 1) {
 	    		echo '{"success": "删除成功"}';
 	    	} else {

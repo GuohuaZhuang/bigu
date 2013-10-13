@@ -14,11 +14,13 @@ class Auth_UsersController extends Zend_Controller_Action
     public function indexAction()
     {
         $this->view->manage = true;
+        
         $users = new Auth_Model_DbTable_Users();
-        $roles = new Auth_Model_DbTable_Roles();
         $result = $users->fetchAllR();
-        $rolenames = $roles->getAllRolename();
         $this->view->result = $result;
+        
+        $roles = new Auth_Model_DbTable_Roles();
+        $rolenames = $roles->getAllRolename();
         $this->view->rolenames = $rolenames;
     }
 

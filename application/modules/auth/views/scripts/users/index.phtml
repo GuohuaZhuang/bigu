@@ -64,7 +64,6 @@ function Save() {
         		<option value="<?php echo $id_role; ?>" <?php if($row['role'] == $rolename) { ?>selected<?php } ?> ><?php echo $rolename; ?></option>
         		<?php } ?>
         	</select>
-        	<input type="hidden" id="id_role" value="<?php echo $row['id_role']; ?>" />
         </td>
     </tr>
     <?php } ?>
