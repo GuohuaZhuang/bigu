@@ -1,10 +1,4 @@
 <script type="text/javascript">
-// document.addEventListener("dblclick",function(){
-// 	if(event.srcElement.tagName.toLowerCase() == "td"){
-// 		alert('halo!');
-// 		// changeToEdit(event.srcElement)
-// 	}
-// });
 function SelectChanged(flag) {
 	if (typeof flag !== 'undefined' && flag) {
 		document.getElementById('btn_list_save').disabled = true;
@@ -49,20 +43,6 @@ function Save() {
             'loading');
 }
 </script>
-
-<style>
-.table_manage {
-border-width: 5px 5px 5px 5px;
-border-color: blue rgb(25%,35%,45%) #909090 red;
-border-spacing: 10px;
-border-style: solid;
-border-bottom:1px #999999 solid;
-width: 90%;
-}
-.table_manage tr>td, .table_manage tr>th {
-border:1px solid #ff0000;
-}
-</style>
 
 <span style="font-size: 20px;">用户管理</span><br/><br/>
 <table id="mlist_table" class="table_manage">

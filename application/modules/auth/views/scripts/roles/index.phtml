@@ -1,10 +1,6 @@
 <script type="text/javascript">
-// document.addEventListener("dblclick",function(){
-// 	if(event.srcElement.tagName.toLowerCase() == "td"){
-// 		alert('halo!');
-// 		// changeToEdit(event.srcElement)
-// 	}
-// });
+
+
 function SelectChanged(flag) {
 	if (typeof flag !== 'undefined' && flag) {
 		document.getElementById('btn_list_save').disabled = true;
@@ -47,11 +43,33 @@ function Save() {
 	    'loading');
 }
 
+function TblUnsetAddItem() {
+	$("#btn_list_add").text("添加");
+    $( "#btn_list_add" ).unbind( "click", TblCancelAddItem );
+    $( "#btn_list_add" ).bind( "click", TblAddItem );
+}
+
+function TblCancelAddItem() {
+	$("#mlist_table tbody>tr:last").remove();
+	TblUnsetAddItem();
+}
+
 function TblAddItem() {
 	$("#mlist_table tbody").append("<tr><td></td>"
 		+ "<td><input type='text' style='width:100%;text-align:right;' value=''/></td>"
 		+ "<td><input type='text' style='width:100%;text-align:right;' value=''/></td>"
-		+ "<td><button onclick='tbl_additem_handler(event)'>确定</button></td></tr>");
+		+ "<td><button id='new_add_btn' onclick='tbl_additem_handler(event)'>确定</button></td></tr>");
+	$("#mlist_table tbody>tr:last>td>input:first").focus();
+    $( "#mlist_table input" ).keydown(function() {
+        if (27 == event.which) { // ESC keyboard
+        	TblCancelAddItem();
+        } else if (13 == event.which) { // Enter keyboard
+            $("#mlist_table tbody>tr:last button").trigger("click");
+        }
+	});
+    $("#btn_list_add").text("取消");
+    $( "#btn_list_add" ).unbind( "click", TblAddItem );
+    $( "#btn_list_add" ).bind( "click", TblCancelAddItem );
 }
 
 function tbl_deleteitem_handler(event) {
@@ -65,7 +83,6 @@ function tbl_deleteitem_handler(event) {
 	        }
 	        if (typeof json.success !== 'undefined') {
 	        	SelectChanged(true);
-		        alert(json.success);
 	        }
     	}, 
         'POST', 
@@ -99,9 +116,10 @@ function tbl_additem_handler(event) {
     	}, 
         'POST', 
         {'d': '', 'timestamp' : Date.parse(new Date()), 
-         'role': event.toElement.parentElement.parentElement.cells[1].childNodes[0].value, 
-         'id_parent': event.toElement.parentElement.parentElement.cells[2].childNodes[0].value}, 
+         'role': $("#mlist_table tbody>tr:last>td")[1].childNodes[0].value, 
+         'id_parent': $("#mlist_table tbody>tr:last>td")[2].childNodes[0].value}, 
         'loading');
+	TblUnsetAddItem();
 }
 
 function td_dblclick_handler() {
@@ -129,23 +147,6 @@ $(function() {
 })
 
 </script>
-
-<style>
-.table_manage {
-border-width: 5px 5px 5px 5px;
-border-color: blue rgb(25%,35%,45%) #909090 red;
-border-spacing: 10px;
-border-style: solid;
-border-bottom:1px #999999 solid;
-width: 90%;
-}
-.table_manage tr>td, .table_manage tr>th {
-border:1px solid #ff0000;
-}
-.table_manage input {
-	text-align: left;
-}
-</style>
 
 <span style="font-size: 20px;">角色管理</span><br/><br/>
 <table id="mlist_table" class="table_manage">
