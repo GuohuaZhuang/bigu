@@ -6,11 +6,16 @@ require(APPLICATION_PATH . '/modules/auth/models/DbTable/Permissions.php');
 
 class Auth_Plugin_Acladapter extends Zend_Acl
 {
-	public function __construct()
+	public function __construct($role)
 	{
 		$this->loadRoles();
-		$this->loadResources();
-		$this->loadPermissions();
+		$roles = new Auth_Model_DbTable_Roles();
+		$inhRole= $role;
+		while (!empty($inhRole)) {
+			$this->loadResources($inhRole);
+			$this->loadPermissions($inhRole);
+			$inhRole= $roles->getParentRole($inhRole);
+		}
 	}
 	
 	public function loadRoles() {
@@ -18,24 +23,26 @@ class Auth_Plugin_Acladapter extends Zend_Acl
 		$result = $roles->getRoles();
 		foreach ($result as $role) {
 			if (!empty($role['id_parent'])) {
+				// echo '正在addRole(' . $role['id'] . ') 继承于 (' . $role['id_parent'] . ')<br/>';
 				$this->addRole($role['id'], $role['id_parent']);
 			} else {
+				// echo '正在addRole(' . $role['id'] . ')<br/>';
 				$this->addRole($role['id']);
 			}
 		}
 	}
 	
-	public function loadResources() {
+	public function loadResources($role) {
 		$resources = new Auth_Model_DbTable_Resources();
-		$result = $resources->getResources();
+		$result = $resources->getResources($role);
 		foreach ($result as $resource) {
 			$this->addResource($resource['resource']);
 		}
 	}
 	
-	public function loadPermissions() {
+	public function loadPermissions($role) {
 		$resources = new Auth_Model_DbTable_Permissions();
-		$result = $resources->getPermissions();
+		$result = $resources->getPermissions($role);
 		foreach ($result as $permission) {
 			if ($permission['permission'] == 'allow') {
 				$this->allow($permission['id_role'], $permission['resource']);

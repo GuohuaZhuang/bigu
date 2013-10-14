@@ -1,6 +1,6 @@
 <?php
 
-require(APPLICATION_PATH . '/modules/auth/models/DbTable/Resources.php');
+require_once(APPLICATION_PATH . '/modules/auth/models/DbTable/Resources.php');
 
 class Auth_ResourcesController extends Zend_Controller_Action
 {

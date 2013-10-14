@@ -1,8 +1,8 @@
 <?php
 
-require(APPLICATION_PATH . '/modules/auth/models/DbTable/Roles.php');
-require(APPLICATION_PATH . '/modules/auth/models/DbTable/Resources.php');
-require(APPLICATION_PATH . '/modules/auth/models/DbTable/Permissions.php');
+require_once(APPLICATION_PATH . '/modules/auth/models/DbTable/Roles.php');
+require_once(APPLICATION_PATH . '/modules/auth/models/DbTable/Resources.php');
+require_once(APPLICATION_PATH . '/modules/auth/models/DbTable/Permissions.php');
 
 class Auth_PermissionsController extends Zend_Controller_Action
 {

@@ -1,6 +1,6 @@
 <?php
 
-require(APPLICATION_PATH . '/modules/auth/models/DbTable/Roles.php');
+require_once(APPLICATION_PATH . '/modules/auth/models/DbTable/Roles.php');
 
 class Auth_RolesController extends Zend_Controller_Action
 {

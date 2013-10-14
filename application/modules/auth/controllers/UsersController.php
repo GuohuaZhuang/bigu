@@ -1,7 +1,7 @@
 <?php
 
-require(APPLICATION_PATH . '/modules/auth/models/DbTable/Users.php');
-require(APPLICATION_PATH . '/modules/auth/models/DbTable/Roles.php');
+require_once(APPLICATION_PATH . '/modules/auth/models/DbTable/Users.php');
+require_once(APPLICATION_PATH . '/modules/auth/models/DbTable/Roles.php');
 
 class Auth_UsersController extends Zend_Controller_Action
 {
