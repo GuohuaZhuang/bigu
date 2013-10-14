@@ -1,5 +1,32 @@
 <script src="/include/ckeditor/ckeditor.js"></script>
 <script type="text/javascript">
+function SelectChangedCascade() {
+	Jsoncallback('/post/category/subcategory', 
+    	function (json) {
+	        if (typeof json.err !== 'undefined' && json.err != "") {
+	            alert(json.err);
+	            return false;
+	        }
+	        if (typeof json.subcategorys === 'undefined') {
+	    		return false;
+			}
+			if (json.subcategorys.length > 0) {
+				var option_html = '<option value="0" selected="selected" disabled>--详细类别(可选)--</option>';
+				for (var i = 0; i < json.subcategorys.length; i ++) {
+					var new_option = '<option value="' + json.subcategorys[i] + '">' + json.subcategorys[i] + '</option>';
+					option_html += new_option;
+				}
+				$("#post_select_subcategory").html(option_html);
+				$("#post_select_subcategory").parent().fadeIn();
+			} else {
+				$("#post_select_subcategory").parent().fadeOut();
+			}
+		}, 
+	    'POST', 
+	    {'d': '', 'timestamp' : Date.parse(new Date()), 
+		 'category': $('#post_select_bigcategory').val()}, 
+	    'loading');
+}
 </script>
 <style type="text/css">
 
@@ -136,17 +163,16 @@ text-align: start;
 <form action="/post/post/list" method="POST" id="post_form">
 	<div>
 		<label class="post_add_label">
-		    <select class="post_add_select" id="post_add_select_id">
+		    <select class="post_add_select" id="post_select_bigcategory" onchange="SelectChangedCascade()" >
 		        <option value="0" selected="selected" disabled>--请选择一个类别--</option>
-		        <option>搜索引擎</option>
-		        <option>自然语言处理</option>
+        		<?php foreach($this->bigcategorys as $cgname) { ?>
+        		<option value="<?php echo $cgname; ?>"><?php echo $cgname; ?></option>
+        		<?php } ?>
 		    </select>
 		</label>&nbsp;
-		<label class="post_add_label">
-		    <select class="post_add_select" id="post_add_select_id">
+		<label class="post_add_label" style="display: none">
+		    <select class="post_add_select" id="post_select_subcategory">
 		        <option value="0" selected="selected" disabled>--详细类别(可选)--</option>
-		        <option>搜索引擎</option>
-		        <option>自然语言处理</option>
 		    </select>
 		</label>
 	</div>

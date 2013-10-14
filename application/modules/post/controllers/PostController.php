@@ -1,6 +1,7 @@
 <?php
 
 require_once(APPLICATION_PATH . '/modules/post/models/DbTable/Post.php');
+require_once(APPLICATION_PATH . '/modules/post/models/DbTable/Category.php');
 
 class Post_PostController extends Zend_Controller_Action
 {
@@ -20,7 +21,10 @@ class Post_PostController extends Zend_Controller_Action
 		$this->view->editor = true;
 		$request = $this->getRequest();
 		$post_title = $request->getParam('post_title');
-		if (empty($post_title)) {
+		if (empty($post_title)) { // 没有提交情况下
+			$db_category = new Post_Model_DbTable_Category();
+			$bigcategorys = $db_category->getAllBigCategory();
+			$this->view->bigcategorys = $bigcategorys;
 			return;
 		}
 		// Add one new post item to DBpublic function addAction()

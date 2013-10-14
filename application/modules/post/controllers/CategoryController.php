@@ -14,7 +14,7 @@ class Post_CategoryController extends Zend_Controller_Action
     {
         $this->view->manage = true;
         $db_category = new Post_Model_DbTable_Category();
-        $result = $db_category->fetchAll(null, 'category')->toArray();
+        $result = $db_category->fetchAll(null, 'parent_category')->toArray();
         $this->view->result = $result;
     }
 
@@ -24,7 +24,7 @@ class Post_CategoryController extends Zend_Controller_Action
     	$request = $this->getRequest();
     	$category = $request->getParam('category');
     	$parent_category = $request->getParam('parent_category');
-    	if (empty($category) || ($parent_category == null)) {
+    	if (empty($category)) {
     		echo '{"err": "添加失败，参数不足"}';
     	} else {
     		$db_category = new Post_Model_DbTable_Category();
@@ -78,5 +78,29 @@ class Post_CategoryController extends Zend_Controller_Action
     	$this->_helper->viewRenderer->setNoRender(TRUE);
     }
     
+    public function subcategoryAction()
+    {
+    	$request = $this->getRequest();
+    	$category = $request->getParam('category');
+    	if (empty($category)) {
+    		echo '{"err": "参数不足"}';
+    	} else {
+	    	$db_category = new Post_Model_DbTable_Category();
+	    	$subcategorys = $db_category->getAllSubCategory($category);
+	    	$data_json = "";
+	    	$data_count = count($subcategorys);
+	    	for($i = 0; $i < $data_count; $i ++) {
+	    		if (0 != $i) $data_json .= ',';
+	    		$data_json .= '"';
+	    		$data_json .= $subcategorys[$i];
+	    		$data_json .= '"';
+	    	}
+	    	$json = '{"success": "OK", "subcategorys": [' . $data_json . '] }';
+	    	echo $json;
+    	}
+    	// stop layout and render
+    	$this->_helper->layout->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender(TRUE);
+    }
 }
 
