@@ -1,0 +1,13 @@
+@CHARSET "UTF-8";
+
+.table_manage {
+border-width: 5px 5px 5px 5px;
+border-color: blue rgb(25%,35%,45%) #909090 red;
+border-spacing: 10px;
+border-style: solid;
+border-bottom:1px #999999 solid;
+width: 90%;
+}
+.table_manage tr>td, .table_manage tr>th {
+border:1px solid #ff0000;
+}

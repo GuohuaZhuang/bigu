@@ -1,0 +1,196 @@
+<script type="text/javascript">
+
+function SelectChanged(flag) {
+	if (typeof flag !== 'undefined' && flag) {
+		document.getElementById('btn_list_save').disabled = true;
+		return;
+	}
+	document.getElementById('btn_list_save').disabled = false;
+}
+function SelectChangedValid() {
+	if ('' == event.currentTarget.options[0].value) {
+		event.currentTarget.options[0] = null;
+	}
+	SelectChanged();
+}
+function Save() {
+	var data = new Array();
+	var tr = $('#mlist_table').find('tr');
+	for (var i = 1; i < tr.length; i ++) {
+		var cells = tr[i].cells;
+		var data_line = {
+			'id': ((typeof cells[0].childNodes[0] === 'undefined') ? '' : cells[0].childNodes[0].data),
+			'id_role': cells[1].childNodes[1].value,
+			'id_resource': cells[2].childNodes[1].value,
+			'permission': cells[3].childNodes[1].value
+		};
+		data[i-1] = data_line;
+	}
+
+    Jsoncallback('/auth/permissions/update', 
+    	function (json) {
+	        if (typeof json.err !== 'undefined' && json.err != "") {
+	            alert(json.err);
+	            return false;
+	        }
+	        if (typeof json.success !== 'undefined') {
+	        	SelectChanged(true);
+		        alert(json.success);
+		        return true;
+	        }
+	        if (typeof json.data === 'undefined') {
+	    		return false;
+			}
+		}, 
+	    'POST', 
+	    {'d': data, 'timestamp' : Date.parse(new Date())}, 
+	    'loading');
+}
+
+function TblUnsetAddItem() {
+	$("#btn_list_add").text("添加");
+    $( "#btn_list_add" ).unbind( "click", TblCancelAddItem );
+    $( "#btn_list_add" ).bind( "click", TblAddItem );
+}
+
+function TblCancelAddItem() {
+	$("#mlist_table tbody>tr:last").remove();
+	TblUnsetAddItem();
+}
+
+function TblAddItem() {
+	$("#mlist_table tbody").append("<tr><td></td>"
+		+ "<td>\n"
+		+ "<select onchange='SelectChangedValid()'>"
+		+ "<option value=''>--请选择角色--</option>"
+		<?php foreach($this->rolenames as $id_role => $rolename) { ?>
+		+ "<option value='<?php echo $id_role; ?>'><?php echo $rolename; ?></option>"
+		<?php } ?>
+		+ "</select>\n"
+		+"</td>\n"
+		+ "<td>\n"
+		+ "<select onchange='SelectChangedValid()'>"
+		+ "<option value=''>--请选择资源--</option>"
+		<?php foreach($this->resourcenames as $id_resource => $resourcename) { ?>
+		+ "<option value='<?php echo $id_resource; ?>'><?php echo $resourcename; ?></option>"
+		<?php } ?>
+		+ "</select>\n"
+		+ "</td>\n"
+		+ "<td>\n"
+		+ "<select onchange='SelectChangedValid()'>"
+		+ "<option value=''>--请选择权限控制--</option>"
+		+ "<option value='allow'>allow</option>"
+		+ "<option value='deny'>deny</option>"
+		+ "</select>\n"
+		+ "</td>\n"
+		+ "<td><button onclick='tbl_additem_handler(event)'>确定</button></td></tr>");
+	$("#mlist_table tbody>tr:last>td>input:first").focus();
+    $( "#mlist_table input" ).keydown(function() {
+        if (27 == event.which) { // ESC keyboard
+        	TblCancelAddItem();
+        } else if (13 == event.which) { // Enter keyboard
+            $("#mlist_table tbody>tr:last button").trigger("click");
+        }
+	});
+    $("#btn_list_add").text("取消");
+    $( "#btn_list_add" ).unbind( "click", TblAddItem );
+    $( "#btn_list_add" ).bind( "click", TblCancelAddItem );
+}
+
+function tbl_deleteitem_handler(event) {
+	Jsoncallback('/auth/permissions/delete', 
+	    function (json) {
+	    	if (null == json) return false;
+	        if (typeof json.err !== 'undefined' && json.err != "") {
+	            alert(json.err);
+	            document.location.reload();
+	            return false;
+	        }
+	        if (typeof json.success !== 'undefined') {
+	        	SelectChanged(true);
+	        }
+    	}, 
+        'POST', 
+        {'d': '', 'timestamp' : Date.parse(new Date()), 
+         'id': event.toElement.parentElement.parentElement.cells[0].childNodes[0].data}, 
+        'loading');
+	event.toElement.parentElement.parentElement.remove();
+}
+
+function tbl_additem_handler(event) {
+	Jsoncallback('/auth/permissions/add', 
+	    function (json) {
+	    	if (null == json) return false;
+	        if (typeof json.err !== 'undefined' && json.err != "") {
+	            alert(json.err);
+	            return false;
+	        }
+	        if (typeof json.success !== 'undefined') {
+	        	SelectChanged(true);
+		        // alert(json.success);
+	        }
+	        if (typeof json.id === 'undefined') {
+	    		return false;
+    		}
+	        var id = json.id;
+	        $("#mlist_table tbody>tr:last>td:first").text(id);
+	        $("#mlist_table tbody>tr:last select")[0].disabled = true;
+	        $("#mlist_table tbody>tr:last select")[1].disabled = true;
+	        $("#mlist_table tbody>tr:last>td")[4].innerHTML = "<button onclick=\'tbl_deleteitem_handler(event)\'>删除</button>";
+    	}, 
+        'POST',
+        {'d': '', 'timestamp' : Date.parse(new Date()),
+         'id_role': $("#mlist_table tbody>tr:last>td")[1].childNodes[1].value,
+         'id_resource': $("#mlist_table tbody>tr:last>td")[2].childNodes[1].value,
+         'permission': $("#mlist_table tbody>tr:last>td")[3].childNodes[1].value},
+        'loading');
+	TblUnsetAddItem();
+}
+
+$(function() {
+})
+
+</script>
+
+<span style="font-size: 20px;">角色管理</span><br/><br/>
+<table id="mlist_table" class="table_manage">
+    <thead>
+    <tr>
+    	<th style="width:10%;">id/权限ID</th>
+    	<th style="width:30%;">role/角色</th>
+    	<th style="width:30%;">resource/资源</th>
+    	<th style="width:20%;">permission/权限</th>
+    	<th style="width:10%;"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach($this->result as $row) { ?>
+    <tr>
+        <td><?php echo $row['id'] ?></td>
+        <td>
+        	<select onchange="SelectChanged()" disabled="disabled">
+        		<?php foreach($this->rolenames as $id_role => $rolename) { ?>
+        		<option value="<?php echo $id_role; ?>" <?php if($row['role'] == $rolename) { ?>selected<?php } ?> ><?php echo $rolename; ?></option>
+        		<?php } ?>
+        	</select>
+        </td>
+        <td>
+        	<select onchange="SelectChanged()" disabled="disabled">
+        		<?php foreach($this->resourcenames as $id_resource => $resourcename) { ?>
+        		<option value="<?php echo $id_resource; ?>" <?php if($row['resource'] == $resourcename) { ?>selected<?php } ?> ><?php echo $resourcename; ?></option>
+        		<?php } ?>
+        	</select>
+        </td>
+        <td>
+            <select onchange="SelectChanged()">
+                <option <?php if($row['permission'] == 'allow') { ?>selected<?php } ?> >allow</option>
+                <option <?php if($row['permission'] == 'deny') { ?>selected<?php } ?> >deny</option>
+            </select>
+        </td>
+        <td><button onclick='tbl_deleteitem_handler(event)'>删除</button></td>
+    </tr>
+    <?php } ?>
+    </tbody>
+</table>
+<button id="btn_list_add" type="button" onclick="TblAddItem()">添加</button>
+<button id="btn_list_save" type="button" disabled="disabled" onclick="Save()">保存</button>

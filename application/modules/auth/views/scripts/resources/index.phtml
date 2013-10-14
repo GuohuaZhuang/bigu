@@ -1,0 +1,177 @@
+<script type="text/javascript">
+
+
+function SelectChanged(flag) {
+	if (typeof flag !== 'undefined' && flag) {
+		document.getElementById('btn_list_save').disabled = true;
+		return;
+	}
+	document.getElementById('btn_list_save').disabled = false;
+}
+function Save() {
+	var data = new Array();
+	var tr = $('#mlist_table').find('tr');
+	for (var i = 1; i < tr.length; i ++) {
+		var cells = tr[i].cells;
+		var data_line = {
+			'id': ((typeof cells[0].childNodes[0] === 'undefined') ? '' : cells[0].childNodes[0].data),
+			'resource': ((typeof cells[1].childNodes[0] === 'undefined') ? '' : cells[1].childNodes[0].data)
+		};
+		data[i-1] = data_line;
+	}
+
+    Jsoncallback('/auth/resources/update', 
+    	function (json) {
+	        if (typeof json.err !== 'undefined' && json.err != "") {
+	            alert(json.err);
+	            return false;
+	        }
+	        if (typeof json.success !== 'undefined') {
+	        	SelectChanged(true);
+		        alert(json.success);
+		        return true;
+	        }
+	        if (typeof json.data === 'undefined') {
+	    		return false;
+			}
+	        var data = json.data;
+	        alert(data);// debug
+		}, 
+	    'POST', 
+	    {'d': data, 'timestamp' : Date.parse(new Date())}, 
+	    'loading');
+}
+
+function TblUnsetAddItem() {
+	$("#btn_list_add").text("添加");
+    $( "#btn_list_add" ).unbind( "click", TblCancelAddItem );
+    $( "#btn_list_add" ).bind( "click", TblAddItem );
+}
+
+function TblCancelAddItem() {
+	$("#mlist_table tbody>tr:last").remove();
+	TblUnsetAddItem();
+}
+
+function TblAddItem() {
+	$("#mlist_table tbody").append("<tr><td></td>"
+		+ "<td><input type='text' style='width:100%;text-align:right;' value=''/></td>"
+		+ "<td><button onclick='tbl_additem_handler(event)'>确定</button></td></tr>");
+	$("#mlist_table tbody>tr:last>td>input:first").focus();
+    $( "#mlist_table input" ).keydown(function() {
+        if (27 == event.which) { // ESC keyboard
+        	TblCancelAddItem();
+        } else if (13 == event.which) { // Enter keyboard
+            $("#mlist_table tbody>tr:last button").trigger("click");
+        }
+	});
+    $("#btn_list_add").text("取消");
+    $( "#btn_list_add" ).unbind( "click", TblAddItem );
+    $( "#btn_list_add" ).bind( "click", TblCancelAddItem );
+}
+
+function tbl_deleteitem_handler(event) {
+	Jsoncallback('/auth/resources/delete', 
+	    function (json) {
+	    	if (null == json) return false;
+	        if (typeof json.err !== 'undefined' && json.err != "") {
+	            alert(json.err);
+	            document.location.reload();
+	            return false;
+	        }
+	        if (typeof json.success !== 'undefined') {
+	        	SelectChanged(true);
+	        }
+    	}, 
+        'POST', 
+        {'d': '', 'timestamp' : Date.parse(new Date()), 
+         'id': event.toElement.parentElement.parentElement.cells[0].childNodes[0].data}, 
+        'loading');
+	event.toElement.parentElement.parentElement.remove();
+}
+
+function tbl_additem_handler(event) {
+	Jsoncallback('/auth/resources/add', 
+	    function (json) {
+	    	if (null == json) return false;
+	        if (typeof json.err !== 'undefined' && json.err != "") {
+	            alert(json.err);
+	            return false;
+	        }
+	        if (typeof json.success !== 'undefined') {
+	        	SelectChanged(true);
+		        // alert(json.success);
+	        }
+	        if (typeof json.id === 'undefined') {
+	    		return false;
+    		}
+	        var id = json.id;
+	        $("#mlist_table tbody>tr:last>td:first").text(id);
+	        $("#mlist_table tbody>tr:last>td")[1].innerHTML = $("#mlist_table tbody>tr:last>td")[1].childNodes[0].value;
+	        $("#mlist_table tbody>tr:last>td")[2].innerHTML = "<button onclick=\'tbl_deleteitem_handler(event)\'>删除</button>";
+	        $("#mlist_table tbody>tr:last>td").bind("dblclick", (td_dblclick_handler));
+    	}, 
+        'POST', 
+        {'d': '', 'timestamp' : Date.parse(new Date()), 
+         'resource': $("#mlist_table tbody>tr:last>td")[1].childNodes[0].value}, 
+        'loading');
+	TblUnsetAddItem();
+}
+
+function td_dblclick_handler() {
+    // the first id column can not be editable
+    if (event.srcElement.cellIndex != 1 && event.srcElement.cellIndex != 2 ) {
+        return;
+    }
+    SelectChanged();
+    
+    var inval = $(this).html();
+    $(this).unbind("dblclick", td_dblclick_handler);
+    
+    $(this).html("<input type='text' style='width:100%;text-align:right;' value='"+inval+"'/>");
+    $(this).children().focus();
+    
+    $(this).children().focusout(function() {
+        var editval = $(this).val();
+        $(this).parent().bind("dblclick", (td_dblclick_handler));
+        $(this).parent().html(editval);
+    })
+    $(this).children().keydown(function() {
+        switch(event.which) {
+        case 27: // ESC keyboard
+        case 13: // Enter keyboard
+            var editval = $(this).val();
+            $(this).parent().bind("dblclick", (td_dblclick_handler));
+            $(this).parent().html(editval);
+        	break;
+        }
+	});
+}
+
+$(function() {
+    $("#mlist_table tbody>tr>td").bind("dblclick", (td_dblclick_handler));
+})
+
+</script>
+
+<span style="font-size: 20px;">角色管理</span><br/><br/>
+<table id="mlist_table" class="table_manage">
+    <thead>
+    <tr>
+    	<th style="width:10%;">id/资源ID</th>
+    	<th style="width:60%;">resource/资源</th>
+    	<th style="width:10%;"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach($this->result as $row) { ?>
+    <tr>
+        <td><?php echo $row['id'] ?></td>
+        <td><?php echo $row['resource'] ?></td>
+        <td><button onclick='tbl_deleteitem_handler(event)'>删除</button></td>
+    </tr>
+    <?php } ?>
+    </tbody>
+</table>
+<button id="btn_list_add" type="button" onclick="TblAddItem()">添加</button>
+<button id="btn_list_save" type="button" disabled="disabled" onclick="Save()">保存</button>

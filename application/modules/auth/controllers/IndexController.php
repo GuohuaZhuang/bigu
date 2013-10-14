@@ -67,6 +67,11 @@ class Auth_IndexController extends Zend_Controller_Action
         		'id_role'  => $role_id
         	);
         	$auth->getStorage()->write($data);
+        	
+        	// 清楚register
+        	$registry = Zend_Registry::getInstance();
+        	if ($registry->isRegistered('acl')) $registry->offsetUnset('acl');
+        	
         	$this->redirect($redirect);
         } else {
         	// 验证失败不跳转

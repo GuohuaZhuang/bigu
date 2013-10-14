@@ -36,7 +36,9 @@ class Auth_Plugin_Acladapter extends Zend_Acl
 		$resources = new Auth_Model_DbTable_Resources();
 		$result = $resources->getResources($role);
 		foreach ($result as $resource) {
-			$this->addResource($resource['resource']);
+			if (!$this->has($resource['resource'])) {
+				$this->addResource($resource['resource']);
+			}
 		}
 	}
 	

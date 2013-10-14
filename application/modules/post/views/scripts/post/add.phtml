@@ -1,0 +1,165 @@
+<script src="/include/ckeditor/ckeditor.js"></script>
+<script type="text/javascript">
+</script>
+<style type="text/css">
+
+.edit_title_input:focus {
+    border-color: #D6D6D6;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(198,198,198,0.6);
+    -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(198,198,198,0.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(198,198,198,0.6);
+    outline-offset: -2px;
+    outline-size: 0px;
+    outline-style: none;
+    outline-color: grey;
+}
+
+input::-webkit-input-placeholder {
+    color: rgba(0,0,0,0.2);
+}
+input:-moz-placeholder {
+    color: rgba(0,0,0,0.2);
+}
+
+.edit_title_input {
+	width: 100%;
+vertical-align: middle;
+word-spacing: 0px;
+writing-mode: lr-tb;
+background-color: rgb(255, 255, 255);
+border-bottom-color: rgb(204, 204, 204);
+border-bottom-left-radius: 1px;
+border-bottom-right-radius: 0px;
+border-bottom-style: solid;
+border-bottom-width: 1px;
+border-left-color: rgb(204, 204, 204);
+border-left-style: solid;
+border-left-width: 1px;
+border-right-color: rgb(204, 204, 204);
+border-right-style: solid;
+border-right-width: 1px;
+border-top-color: rgb(204, 204, 204);
+border-top-left-radius: 1px;
+border-top-right-radius: 0px;
+border-top-style: solid;
+border-top-width: 1px;
+box-sizing: border-box;
+color: rgb(85, 85, 85);
+display: inline-block;
+float: none;
+font-family: 'Microsoft YaHei', 微软雅黑, Lucida, Verdana, 'Hiragino Sans GB', STHeiti, 'WenQuanYi Micro Hei', 'Droid Sans Fallback', SimSun, sans-serif;
+font-size: 20px;
+font-weight: normal;
+height: 40px;
+letter-spacing: normal;
+line-height: 20px;
+margin-bottom: 0px;
+margin-left: 0px;
+margin-right: 0px;
+margin-top: 0px;
+padding-bottom: 4px;
+padding-left: 10px;
+padding-right: 10px;
+padding-top: 4px;
+text-align: start;
+}
+
+.post_add_select {
+	width: 200px;
+	font-size: 16px;
+    padding:3px;
+    padding-top:5px;
+    margin: 0;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+    -webkit-box-shadow: 0px 3px 0 #ccc, 0 -1px #fff inset;
+    -moz-box-shadow: 0px 3px 0 #ccc, 0 -1px #fff inset;
+    box-shadow: 0px 3px 0 #ccc, 0 -1px #fff inset;
+    background: -webkit-gradient(linear, left top, left 15, from(#F8F8F8), color-stop(4%, #CCCCCC), to(#F8F8F8));
+    background: -moz-linear-gradient(top, #F8F8F8, #CCCCCC 1px, #F8F8F8 15px);
+    color:#888;
+    border:none;
+    outline:none;
+    display: inline-block;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+    cursor:pointer;
+}
+
+.post_add_select option {
+	color: rgb(116, 116, 116);
+}
+.post_add_select option[disabled]:first-child {
+	display: none;
+}
+.post_add_select:focus {
+	border:none;
+	outline: none!important;
+    outline-offset: -2px;
+    outline-size: 0px;
+    outline-style: none;
+    outline-color: blue;
+}
+.post_add_label {
+	position:relative;
+}
+.post_add_label:after {
+    content:'<>';
+    font:11px "Consolas", monospace;
+    color:#aaa;
+    -webkit-transform:rotate(90deg);
+    -moz-transform:rotate(90deg);
+    -ms-transform:rotate(90deg);
+    transform:rotate(90deg);
+    right:8px;
+    top:5px;
+    padding:0 0 2px;
+    border-bottom:1px solid #ddd;
+    position:absolute;
+    pointer-events:none;
+}
+.post_add_label:before {
+    content:'';
+    right:5px; top:0px;
+    width:20px; height: 28px;
+    background: -webkit-gradient(linear, left top, left 15, from(#F8F8F8), color-stop(4%, #CCCCCC), to(#F8F8F8));
+    background: -moz-linear-gradient(top, #F8F8F8, #CCCCCC 1px, #F8F8F8 15px);
+    position:absolute;
+    pointer-events:none;
+    display:block;
+}
+
+</style>
+<form action="/post/post/list" method="POST" id="post_form">
+	<div>
+		<label class="post_add_label">
+		    <select class="post_add_select" id="post_add_select_id">
+		        <option value="0" selected="selected" disabled>--请选择一个类别--</option>
+		        <option>搜索引擎</option>
+		        <option>自然语言处理</option>
+		    </select>
+		</label>&nbsp;
+		<label class="post_add_label">
+		    <select class="post_add_select" id="post_add_select_id">
+		        <option value="0" selected="selected" disabled>--详细类别(可选)--</option>
+		        <option>搜索引擎</option>
+		        <option>自然语言处理</option>
+		    </select>
+		</label>
+	</div>
+	<br/>
+	<div>
+		<input type="text" id="post_title" name="post_title" class="edit_title_input" placeholder="在这里输入一个响亮的标题"><br/><br/>
+	</div>
+	<p>
+		<textarea class="ckeditor" cols="80" id="post_content" name="post_content" rows="10"></textarea><br/>
+	</p>
+		<input type="hidden" id="dispatch" name="isview" value="">
+	<p style="text-align: start;">
+		<input type="submit" onclick="{document.getElementById('post_form').action='/post/post/add';}" value="发布"><!-- 预览跳至/post/post/list -->
+		<input type="submit" onclick="{document.getElementById('post_form').action='/post/post/view';}" value="预览"><!-- 预览跳至/post/post/view -->
+	</p>
+</form>

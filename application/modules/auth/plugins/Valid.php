@@ -52,13 +52,13 @@ class Auth_Plugin_Valid extends Zend_Controller_Plugin_Abstract
 			require_once(APPLICATION_PATH . '/modules/auth/plugins/Acladapter.php');
 			
 			// 不用每次都初始化acl权限对照表
-// 			$registry = Zend_Registry::getInstance();
-// 			if (!$registry->isRegistered('acl')) {
+			$registry = Zend_Registry::getInstance();
+			if (!$registry->isRegistered('acl')) {
 				$acl = new Auth_Plugin_Acladapter($this->_role);
-// 				$registry->set('acl', $acl);
-// 			} else {
-// 				$acl = $registry->get('acl');
-// 			}
+				$registry->set('acl', $acl);
+			} else {
+				$acl = $registry->get('acl');
+			}
 			
 			if ($this->_isAllowed($auth, $acl)) {
 				$redirect = false;

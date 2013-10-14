@@ -41,6 +41,7 @@
 		  		<?php include(APPLICATION_PATH . "/../public/html/top_links.html"); ?>
 		  	</td>
 	  	</tr>
+	  	<?php if (empty($this->editor)) { ?>
 	  	<tr>
 		  	<td>
 		  		<!-- 右上子导航栏 -->
@@ -51,6 +52,7 @@
 		  		<?php include(APPLICATION_PATH . "/../public/html/top_search.html"); ?>
 		  	</td>
 	  	</tr>
+	  	<?php } // end for editor judgement ?>
 	  	<tr>
 		  	<td colspan="2" style="text-align:left;align:left;">
 		  		<!-- 右中内容正文/列表栏 -->
