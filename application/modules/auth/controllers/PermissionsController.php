@@ -66,7 +66,7 @@ class Auth_PermissionsController extends Zend_Controller_Action
     		if ($permissions->delete($where) == 1) {
     			echo '{"success": "删除成功"}';
     		} else {
-    			echo '{"err": "删除失败，没有这个角色"}';
+    			echo '{"err": "删除失败，没有这个权限控制"}';
     		}
     	}
     	// stop layout and render

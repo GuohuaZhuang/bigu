@@ -44,8 +44,8 @@ class ErrorController extends Zend_Controller_Action
         $this->view->request   = $errors->request;
         
         // stop layout and render
-        $this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender(TRUE);
+//         $this->_helper->layout->disableLayout();
+//         $this->_helper->viewRenderer->setNoRender(TRUE);
     }
 
     public function getLog()
@@ -58,6 +58,4 @@ class ErrorController extends Zend_Controller_Action
         return $log;
     }
 
-
 }
-

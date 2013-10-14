@@ -52,14 +52,15 @@
 		  	</td>
 	  	</tr>
 	  	<tr>
-		  	<td>
+		  	<td colspan="2" style="text-align:left;align:left;">
 		  		<!-- 右中内容正文/列表栏 -->
-		  		内容正文
+				<?php if (!empty($this->error)) { ?>Error: <?php echo $this->error; ?><br/><?php } ?>
+				<?php if (!empty($this->success)) { ?>Success: <?php echo $this->success; ?><br/><?php } ?>
+				<?php echo $this->layout()->content; ?>
 		  	</td>
-		  	<td>
-		  		<!-- 右中右列最新评论列表 -->
+		  	<!--<td>
 		  		最新评论
-		  	</td>
+		  	</td>-->
 	  	</tr>
 	</table>
 	

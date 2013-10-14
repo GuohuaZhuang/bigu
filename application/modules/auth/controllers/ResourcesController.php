@@ -52,7 +52,7 @@ class Auth_ResourcesController extends Zend_Controller_Action
     		if ($resources->delete($where) == 1) {
     			echo '{"success": "删除成功"}';
     		} else {
-    			echo '{"err": "删除失败，没有这个角色"}';
+    			echo '{"err": "删除失败，没有这个资源"}';
     		}
     	}
     	// stop layout and render
