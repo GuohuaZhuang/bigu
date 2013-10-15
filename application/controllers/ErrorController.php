@@ -21,6 +21,9 @@ class ErrorController extends Zend_Controller_Action
                 $priority = Zend_Log::NOTICE;
                 $this->view->message = 'Page not found';
                 $this->renderScript('error/404.phtml');
+                // stop layout and render
+                $this->_helper->layout->disableLayout();
+                $this->_helper->viewRenderer->setNoRender(TRUE);
                 break;
             default:
                 // application error

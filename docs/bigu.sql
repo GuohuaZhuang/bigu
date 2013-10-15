@@ -71,6 +71,7 @@ CREATE TABLE `tbl_post` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(256) NOT NULL,
   `content` text NOT NULL,
+  `abstract` varchar(1024) NOT NULL,
   `pub_datetime` DATETIME NOT NULL,
   `author` varchar(40) NOT NULL,
   `category` varchar(60) DEFAULT NULL,
@@ -78,7 +79,7 @@ CREATE TABLE `tbl_post` (
   `source` varchar(256) DEFAULT NULL,
   `view_count` INT DEFAULT 0,
   `comment_count` INT DEFAULT 0,
-  `image_path` varchar(128) DEFAULT NULL,-- 以分号分隔，图片路径都存到服务端指定目录下
+  `image_path` varchar(128) DEFAULT NULL,-- 以分号分隔，图片路径都存到服务端指定目录下 -- 暂时不用
   `index_thumb` varchar(128) DEFAULT NULL,-- 主List显示的缩略图片路径也在服务端另外指定目录下
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=UTF8;
@@ -88,7 +89,7 @@ DROP TABLE IF EXISTS `tbl_category`;
 CREATE TABLE `tbl_category` (
   `category` varchar(60) NOT NULL,
   `parent_category` varchar(60) DEFAULT NULL,
-  `post_count` INT DEFAULT 0
+  `post_count` INT DEFAULT 0,
   PRIMARY KEY (`category`)
 ) ENGINE=MyISAM DEFAULT CHARSET=UTF8;
 
