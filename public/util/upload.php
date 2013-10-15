@@ -101,7 +101,8 @@ function generatethumb($filename, $filetype, $filetmp, $fn)
 		
 		// Load
 		if ($filetype == 'jpg') $filetype = 'jpeg';
-		$thumb = imagecreatetruecolor($tw, $th);
+		$thumb = imagecreate($tw, $th);
+		$white = imagecolorallocate($thumb, 255, 255, 255);
 		$f_create = 'imagecreatefrom' . $filetype;
 		$source = $f_create($filetmp);
 		// Resize

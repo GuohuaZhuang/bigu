@@ -1,5 +1,19 @@
 <script src="/include/ckeditor/ckeditor.js"></script>
 <script type="text/javascript">
+
+function PostPublishHandler() {
+	document.getElementById('post_form').action='/post/post/add';
+	if ($('#post_title').val() == '') {
+		alert('文章标题不能为空');
+		return false;
+	}
+}
+
+function PostPreviewHandler() {
+	document.getElementById('post_form').action='/post/post/view';
+	return false;
+}
+
 function SelectChangedCascade() {
 	Jsoncallback('/post/category/subcategory', 
     	function (json) {
@@ -163,7 +177,8 @@ text-align: start;
 <form action="/post/post/list" method="POST" id="post_form">
 	<div>
 		<label class="post_add_label">
-		    <select class="post_add_select" id="post_select_bigcategory" onchange="SelectChangedCascade()" >
+		    <select class="post_add_select" id="post_select_bigcategory" name="post_select_bigcategory"
+		    	 onchange="SelectChangedCascade()" >
 		        <option value="0" selected="selected" disabled>--请选择一个类别--</option>
         		<?php foreach($this->bigcategorys as $cgname) { ?>
         		<option value="<?php echo $cgname; ?>"><?php echo $cgname; ?></option>
@@ -171,7 +186,7 @@ text-align: start;
 		    </select>
 		</label>&nbsp;
 		<label class="post_add_label" style="display: none">
-		    <select class="post_add_select" id="post_select_subcategory">
+		    <select class="post_add_select" id="post_select_subcategory" name="post_select_subcategory">
 		        <option value="0" selected="selected" disabled>--详细类别(可选)--</option>
 		    </select>
 		</label>
@@ -185,7 +200,7 @@ text-align: start;
 	</p>
 		<input type="hidden" id="dispatch" name="isview" value="">
 	<p style="text-align: start;">
-		<input type="submit" onclick="{document.getElementById('post_form').action='/post/post/add';}" value="发布"><!-- 预览跳至/post/post/list -->
-		<input type="submit" onclick="{document.getElementById('post_form').action='/post/post/view';}" value="预览"><!-- 预览跳至/post/post/view -->
+		<input type="submit" onclick="return PostPublishHandler();" value="发布"><!-- 预览跳至/post/post/list -->
+		<input type="submit" onclick="return PostPreviewHandler();" value="预览"><!-- 预览跳至/post/post/view -->
 	</p>
 </form>
