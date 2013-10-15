@@ -9,6 +9,9 @@
 		<?php if (!empty($this->manage)) { ?>
 		<link href="/css/manage.css" rel="stylesheet" type="text/css">
 		<?php } ?>
+		<?php if (!empty($this->editor)) { ?>
+		<link href="/css/editor.css" rel="stylesheet" type="text/css">
+		<?php } ?>
 	</head>
 	
 	<body>
@@ -54,15 +57,19 @@
 	  	</tr>
 	  	<?php } // end for editor judgement ?>
 	  	<tr>
-		  	<td colspan="2" style="text-align:left;align:left;">
+		  	<td colspan="<?php echo (empty($this->editor)) ? 1 : 2; ?>" style="text-align:left;align:left;">
+		  		<div <?php echo (empty($this->editor)) ? 'style="width: 665px"' : ''; ?>>
 		  		<!-- 右中内容正文/列表栏 -->
 				<?php if (!empty($this->error)) { ?>Error: <?php echo $this->error; ?><br/><?php } ?>
 				<?php if (!empty($this->success)) { ?>Success: <?php echo $this->success; ?><br/><?php } ?>
 				<?php echo $this->layout()->content; ?>
+				</div>
 		  	</td>
-		  	<!--<td>
+		  	<?php if (empty($this->editor)) { ?>
+		  	<td>
 		  		最新评论
-		  	</td>-->
+		  	</td>
+		  	<?php } // end for editor judgement ?>
 	  	</tr>
 	</table>
 	

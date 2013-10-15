@@ -69,6 +69,7 @@ INSERT INTO `tbl_permissions` (`id`, `id_role`, `id_resource`, `permission`) VAL
 DROP TABLE IF EXISTS `tbl_post`;
 CREATE TABLE `tbl_post` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  -- `url` varchar(256) NOT NULL, -- /post/post/view?id= -- [暂时不用]
   `title` varchar(256) NOT NULL,
   `content` text NOT NULL,
   `abstract` varchar(1280) NOT NULL,-- 系统抽取摘要
@@ -84,7 +85,7 @@ CREATE TABLE `tbl_post` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=UTF8;
 
-INSERT INTO `tbl_post` VALUES (1,'这是我的测试标题１','<p>这是正文<strong><em><u>内容</u></em></strong>测试。<img alt=\"\" src=\"/upload/img/20131015/63f617ce3dfa72d681f3ab4a7f2963e1.png\" style=\"height:65px; width:114px\" /></p>\r\n','这是正文内容测试。\r\n','2013-10-15 15:43:19','admin','搜索技术','数据存储技术',NULL,0,0,NULL,'/upload/thumb/20131015/a78be6bf724a9c0589297e0abf8c20fd.jpg'),(2,'这是我的测试标题２','<p>这可<strong><s><u>是新</u></s></strong>内容<img alt=\"\" src=\"/upload/img/20131015/fbd1474c9044c4bd215ce9e2337618bf.jpg\" style=\"height:80px; width:665px\" /></p>\r\n','这可是新内容\r\n','2013-10-15 16:19:21','admin',NULL,NULL,NULL,0,0,NULL,'/upload/thumb/20131015/fbd1474c9044c4bd215ce9e2337618bf.jpg'),(3,'我爱自然语言处理１','<p><u><em><img alt=\"cool\" src=\"http://bigu1.local/include/ckeditor/plugins/smiley/images/shades_smile.gif\" style=\"height:20px; width:20px\" title=\"cool\" /></em></u></p>\r\n\r\n<p>/upload/thumb/20131015/fbd1474c9044c4bd215ce9e2337618bf.jpg</p>\r\n\r\n<p><em><u><strong>啦啦啦</strong></u></em></p>\r\n\r\n<p><img alt=\"\" src=\"/upload/img/20131015/050ef24d95ab9cd59d620fdcc2e991e7.png\" style=\"height:32px; width:88px\" /></p>\r\n','\r\n\r\n/upload/thumb/20131015/fbd1474c9044c4bd215ce9e2337618bf.jpg\r\n\r\n啦啦啦\r\n\r\n\r\n','2013-10-15 16:22:08','admin','搜索引擎','自然语言处理',NULL,0,0,NULL,'/upload/thumb/20131015/050ef24d95ab9cd59d620fdcc2e991e7.png');
+INSERT INTO `tbl_post` VALUES (1,'这是我的测试标题１','<p>这是正文<strong><em><u>内容</u></em></strong>测试。<img alt=\"\" src=\"/upload/img/20131015/63f617ce3dfa72d681f3ab4a7f2963e1.png\" style=\"height:65px; width:114px\" /></p>\r\n','这是正文内容测试。\r\n','2013-10-15 15:43:19','admin','搜索技术','数据存储技术',NULL,0,0,NULL,'/upload/thumb/20131015/a78be6bf724a9c0589297e0abf8c20fd.jpg'),(2,'这是我的测试标题２','<p>这可<strong><s><u>是新</u></s></strong>内容<img alt=\"\" src=\"/upload/img/20131015/fbd1474c9044c4bd215ce9e2337618bf.jpg\" style=\"height:80px; width:665px\" /></p>\r\n','这可是新内容\r\n','2013-10-15 16:19:21','admin',NULL,NULL,NULL,0,0,NULL,'/upload/thumb/20131015/fbd1474c9044c4bd215ce9e2337618bf.jpg'),(3,'我爱自然语言处理１','<p><u><em><img alt=\"cool\" src=\"http://bigu1.local/include/ckeditor/plugins/smiley/images/shades_smile.gif\" style=\"height:20px; width:20px\" title=\"cool\" /></em></u></p>\r\n\r\n<em><u><strong>啦啦啦</strong></u></em></p>\r\n\r\n<p><img alt=\"\" src=\"/upload/img/20131015/050ef24d95ab9cd59d620fdcc2e991e7.png\" style=\"height:32px; width:88px\" /></p>\r\n','\r\n\r\n啦啦啦\r\n\r\n\r\n','2013-10-15 16:22:08','admin','搜索引擎','自然语言处理',NULL,0,0,NULL,'/upload/thumb/20131015/050ef24d95ab9cd59d620fdcc2e991e7.png');
 
 
 -- 分类类别 -- ---------------------------------------------------------------------

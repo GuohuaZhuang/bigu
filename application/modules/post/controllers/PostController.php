@@ -34,14 +34,22 @@ class Post_PostController extends Zend_Controller_Action
     
     private function _find_thumbpath($html)
     {
-    	$rule = "#src=\"/upload/img/(20[0-9]{6}/[0-9a-fA-F]{32}\.(png|jpg|jpeg|gif))#x";
+//     	$rule = "#src=\"/upload/img/(20[0-9]{6}/[0-9a-fA-F]{32}\.(png|jpg|jpeg|gif))#x";
+//     	if (preg_match($rule, $html, $match)) {
+//     		return '/upload/thumb/' . $match[1];
+//     	}
+    	$rule = "#(<img alt=\"[^(smiley)].*?\" style)#";
     	if (preg_match($rule, $html, $match)) {
-    		return '/upload/thumb/' . $match[1];
+    		$html = $match[0];
+    		$rule_src = "#src=\"([^\"]*)\"#";
+    		if (preg_match($rule_src, $html, $match)) {
+    			return $match[1];
+    		}
     	}
     	return null;
     }
     
-    private function _addpost($request)
+    private function _addpost($request, $post_id)
     {
     	// title
     	$post_title = $request->getParam('post_title');
@@ -54,68 +62,107 @@ class Post_PostController extends Zend_Controller_Action
     	$user = $auth->getStorage()->read();
     	$post_author = $user['username'];
     	// category and sub_category
-    	$category = $request->getParam('post_select_bigcategory');
-    	$sub_category = $request->getParam('post_select_subcategory');
+    	$post_category = $request->getParam('post_select_bigcategory');
+    	$post_sub_category = $request->getParam('post_select_subcategory');
     	// abstract
-    	$abstract = $this->_extract_abstract($post_content);
+    	$post_abstract = $this->_extract_abstract($post_content);
     	// index_thumb
-    	$index_thumb = $this->_find_thumbpath($post_content);
+    	$post_index_thumb = $this->_find_thumbpath($post_content);
     	// Insert to DB
-    	$data = array('title' => $post_title,
-    			'content' => $post_content,
-    			'pub_datetime' => $post_pub_datetime,
-    			'author' => $post_author, 
-    			'category' => $category,
-    			'sub_category' => $sub_category,
-    			'abstract' => $abstract,
-    			'index_thumb' => $index_thumb);
     	$dbpost = new Post_Model_DbTable_Post();
-    	$dbpost->insert($data);
+    	if (empty($post_id)) {
+	    	$data = array('title' => $post_title,
+	    			'content' => $post_content,
+	    			'pub_datetime' => $post_pub_datetime,
+	    			'author' => $post_author, 
+	    			'category' => $post_category,
+	    			'sub_category' => $post_sub_category,
+	    			'abstract' => $post_abstract,
+	    			'index_thumb' => $post_index_thumb);
+	    	$dbpost->insert($data);
+    	} else {
+    		$data = array('title' => $post_title,
+    				'content' => $post_content,
+    				'category' => $post_category,
+    				'sub_category' => $post_sub_category,
+    				'abstract' => $post_abstract,
+    				'index_thumb' => $post_index_thumb);
+    		$where = $dbpost->getAdapter()->quoteInto('id=?', $post_id);
+    		$dbpost->update($data, $where);
+    	}
     }
-
-	public function addAction()
-	{
-		$this->view->editor = true;
+    
+    public function addAction()
+    {
+    	$this->view->editor = true;
+    	$request = $this->getRequest();
+    	$post_title = $request->getParam('post_title');
+    	if (empty($post_title)) { // 没有提交情况下
+    		$db_category = new Post_Model_DbTable_Category();
+    		$bigcategorys = $db_category->getAllBigCategory();
+    		$this->view->bigcategorys = $bigcategorys;
+    		return;
+    	}
+    	// add post to db
+    	$post_id = $request->getParam('post_id');
+    	$this->_addpost($request, $post_id);
+    
+    	// forwart to list posts
+    	$this->forward('list');
+    }
+    
+    public function editAction()
+    {
+    	$this->view->editor = true;
 		$request = $this->getRequest();
-		$post_title = $request->getParam('post_title');
-		if (empty($post_title)) { // 没有提交情况下
-			$db_category = new Post_Model_DbTable_Category();
-			$bigcategorys = $db_category->getAllBigCategory();
-			$this->view->bigcategorys = $bigcategorys;
-			return;
-		}
-		// add post to db
-		$this->_addpost($request);
+		$post_id = $request->getParam('post_id');
+		$db_post = new Post_Model_DbTable_Post();
+		$where = $db_post->getAdapter()->quoteInto('id=?', $post_id);
+		$result = $db_post->fetchRow($where);
+		if (empty($result)) return false;
+		$result = $result->toArray();
+		$this->view->result = $result;
 		
-		// forwart to list posts
-		$this->forward('list');
-	}
-	
+		$db_category = new Post_Model_DbTable_Category();
+		$bigcategorys = $db_category->getAllBigCategory();
+		$this->view->bigcategorys = $bigcategorys;
+		
+		if (!empty($result['category'])) {
+			$db_category = new Post_Model_DbTable_Category();
+			$subcategorys = $db_category->getAllSubCategory($result['category']);
+			$this->view->subcategorys = $subcategorys;
+		}
+    }
+    
 	public function deleteAction()
 	{
-	}
-	
-	public function updateAction()
-	{
+		$request = $this->getRequest();
+		$post_id = $request->getParam('post_id');
+		$db_post = new Post_Model_DbTable_Post();
+		$where = $db_post->getAdapter()->quoteInto('id=?', $post_id);
+		$num = $db_post->delete($where);
+// 		if (empty($num)) return false;
+		
+    	// forwart to list posts
+    	$this->forward('list');
 	}
 	
 	public function listAction()
 	{
-		$request = $this->getRequest();
-		$post_title = $request->getParam('post_title');
-		$post_content = $request->getParam('post_content');
-		
-		if (get_magic_quotes_gpc())
-			$pcontent = htmlspecialchars(stripslashes((string)$post_content));
-		else
-			$pcontent = htmlspecialchars((string)$post_content);
-		
-		echo $post_title. '<br/>';
-		echo $pcontent. '<br/>';
+		$db_post = new Post_Model_DbTable_Post();
+		$result = $db_post->fetchAll(null, 'pub_datetime DESC')->toArray();
+		$this->view->result = $result;
 	}
 	
 	public function viewAction()
 	{
-		echo '这里是view电视台<br/>';
+		$request = $this->getRequest();
+		$post_id = $request->getParam('post_id');
+		$db_post = new Post_Model_DbTable_Post();
+		$where = $db_post->getAdapter()->quoteInto('id=?', $post_id);
+		$result = $db_post->fetchRow($where);
+		if (empty($result)) return false;
+		$result = $result->toArray();
+		$this->view->result = $result;
 	}
 }

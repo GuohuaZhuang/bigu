@@ -1,1 +1,7 @@
+
 <h1>单个文章显示</h1>
+<?php if (empty($this->result)) {
+	echo '<br/>找不到这篇文章<br/>';
+} else {
+	print_r($this->result);
+} ?>

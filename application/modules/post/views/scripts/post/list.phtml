@@ -1,1 +1,35 @@
-<h1>文章列表</h1>
+<style>
+<!--
+h4 a:link, h4 a:visited {
+font: 20px/1.2em "微软雅黑", "黑体", Tahoma, Arial, Geneva, sans-serif;
+color: #000;
+}
+-->
+</style>
+
+<div style="width: 665px">
+	<?php if (empty($this->result)) { echo '<br/>找不到任何文章<br/>'; } ?>
+    <?php foreach($this->result as $row) { ?>
+    <div style="padding-top: 10px;
+				width: 100%;
+				float: left;
+				border-bottom: #ccc 1px dotted;
+				padding-bottom: 10px;">
+    	<h4>
+    		<a href="/post/post/view?post_id=<?php echo $row['id'] ?>">
+    			<?php echo $row['title'] ?>
+    		</a>
+        </h4>
+        <div style="float:left;">
+        <p><?php echo $row['abstract'] ?></p>
+        <p><img src="<?php echo $row['index_thumb'] ?>" style="width: 210px; height: 140px;"/></p>
+        <p><?php echo $row['pub_datetime'] ?></p>
+        <p><?php echo $row['author'] ?></p>
+        <p><?php echo $row['category'] ?></p>
+        <p><?php echo $row['sub_category'] ?></p>
+        <p><a href='/post/post/edit?post_id=<?php echo $row['id'] ?>'>编辑</a></p>
+        <p><a href='/post/post/delete?post_id=<?php echo $row['id'] ?>'>删除</a></p>
+        </div>
+    </div>
+    <?php } ?>
+</div>
