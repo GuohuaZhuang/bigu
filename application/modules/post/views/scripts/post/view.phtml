@@ -1,3 +1,13 @@
+<script type="text/javascript">
+<!--
+function ConfirmHandler() {
+	if (confirm("确认要删除吗？")) {
+		return true;
+	}
+	return false;
+}
+//-->
+</script>
 <style>
 <!--
 .div_post_view_title h1 {
@@ -40,6 +50,17 @@
 	overflow: hidden;
 }
 
+.div_post_view_edit {
+	float: right;
+	margin-right: 2px;
+}
+.div_post_view_edit a {
+	letter-spacing: 2px;
+	margin-left: 10px;
+	font-size: 14px;
+	color: rgb(108, 115, 122);
+	text-decoration: none;
+}
 -->
 </style>
 
@@ -64,5 +85,18 @@
 <div class="div_post_view_abstract">
 	<?php echo $this->result['content'] ?>
 </div>
+
+<?php if (array_key_exists('id', $this->result) && !empty($this->result['id'])) { ?>
+	<?php $auth = Zend_Auth::getInstance();
+	if ($auth->hasIdentity()) {
+	    $user = $auth->getStorage()->read();
+	    if ($user['username'] == $this->result['author']) { ?>
+	    <div class="div_post_view_edit">
+	    	<a href='/post/post/edit?post_id=<?php echo $this->result['id'] ?>'>编辑</a>
+	    	<a onclick="return ConfirmHandler();" href='/post/post/delete?post_id=<?php echo $this->result['id'] ?>'>删除</a>
+	    </div>
+	<?php }
+	} ?>
+<?php } ?>
 
 <?php } ?>

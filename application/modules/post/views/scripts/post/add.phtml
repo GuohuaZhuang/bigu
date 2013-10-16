@@ -10,8 +10,11 @@ function PostPublishHandler() {
 }
 
 function PostPreviewHandler() {
-	document.getElementById('post_form').action='/post/post/view';
-	return false;
+	document.getElementById('post_form').action='/post/post/preview';
+	if ($('#post_title').val() == '') {
+		alert('文章标题不能为空');
+		return false;
+	}
 }
 
 function SelectChangedCascade() {
@@ -69,7 +72,7 @@ function SelectChangedCascade() {
 	</p>
 		<input type="hidden" id="post_id" name="post_id" value="">
 	<p style="text-align: start;">
-		<input type="submit" onclick="return PostPublishHandler();" value="发布"><!-- 预览跳至/post/post/list -->
-		<input type="submit" onclick="return PostPreviewHandler();" value="预览"><!-- 预览跳至/post/post/view -->
+		<input type="submit" onclick="return PostPublishHandler();" value="发布">
+		<input type="submit" onclick="return PostPreviewHandler();" value="预览">
 	</p>
 </form>

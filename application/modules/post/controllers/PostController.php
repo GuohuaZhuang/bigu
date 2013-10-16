@@ -117,12 +117,29 @@ class Post_PostController extends Zend_Controller_Action
     	$this->view->editor = true;
 		$request = $this->getRequest();
 		$post_id = $request->getParam('post_id');
-		$db_post = new Post_Model_DbTable_Post();
-		$where = $db_post->getAdapter()->quoteInto('id=?', $post_id);
-		$result = $db_post->fetchRow($where);
-		if (empty($result)) return false;
-		$result = $result->toArray();
-		$this->view->result = $result;
+		if (empty($post_id)) {
+			// title
+			$post_title = $request->getParam('post_title');
+			// content
+			$post_content = $this->_transform_content($request->getParam('post_content'));
+			// category and sub_category
+			$post_category = $request->getParam('post_select_bigcategory');
+			$post_sub_category = $request->getParam('post_select_subcategory');
+			
+			$result = array(
+				'title' => $post_title,
+				'content' => $post_content,
+				'category' => $post_category,
+				'sub_category' => $post_sub_category);
+			$this->view->result = $result;
+		} else {
+			$db_post = new Post_Model_DbTable_Post();
+			$where = $db_post->getAdapter()->quoteInto('id=?', $post_id);
+			$result = $db_post->fetchRow($where);
+			if (empty($result)) return false;
+			$result = $result->toArray();
+			$this->view->result = $result;
+		}
 		
 		$db_category = new Post_Model_DbTable_Category();
 		$bigcategorys = $db_category->getAllBigCategory();
@@ -166,5 +183,31 @@ class Post_PostController extends Zend_Controller_Action
 		if (empty($result)) return false;
 		$result = $result->toArray();
 		$this->view->result = $result;
+	}
+	
+	public function previewAction()
+	{
+		$request = $this->getRequest();
+		// title
+		$post_title = $request->getParam('post_title');
+		// content
+		$post_content = $this->_transform_content($request->getParam('post_content'));
+		// pub_datetime
+		$post_pub_datetime = date('Y-m-d H:i:s');
+		// author
+		$auth = Zend_Auth::getInstance();
+		$user = $auth->getStorage()->read();
+		$post_author = $user['username'];
+		// category and sub_category
+		$post_category = $request->getParam('post_select_bigcategory');
+		$post_sub_category = $request->getParam('post_select_subcategory');
+		
+		$this->view->result = array(
+			'title' => $post_title,
+			'content' => $post_content,
+			'pub_datetime' => $post_pub_datetime,
+			'author' => $post_author, 
+			'category' => $post_category,
+			'sub_category' => $post_sub_category);
 	}
 }

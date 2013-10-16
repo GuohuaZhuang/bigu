@@ -1,0 +1,36 @@
+<script type="text/javascript">
+
+function PostPublishHandler() {
+	document.getElementById('post_form').action='/post/post/add';
+}
+
+function PostConeditHandler() {
+	document.getElementById('post_form').action='/post/post/edit';
+}
+</script>
+
+<?php include(APPLICATION_PATH . "/modules/post/views/scripts/post/view.phtml"); ?>
+<div>
+	<form action="/post/post/list" method="POST" id="post_form">
+		<input type="hidden" id="post_id" name="post_id" 
+			value="<?php if (!empty($this->result) && array_key_exists('id', $this->result)) {
+				echo $this->result['id'];
+			} else if (!empty($_POST['post_id'])) {
+				echo $_POST['post_id'];
+			} ?>">
+		<input type="hidden" id="post_title" name="post_title" 
+			value="<?php echo $this->result['title']; ?>">
+		<input type="hidden" id="post_content" name="post_content" 
+			value="<?php
+			echo ( get_magic_quotes_gpc() ) ? 
+				htmlspecialchars(stripslashes($this->result['content']))
+				: htmlspecialchars($this->result['content']);
+			?>">
+		<input type="hidden" id="post_select_bigcategory" name="post_select_bigcategory" 
+			value="<?php echo $this->result['category']; ?>">
+		<input type="hidden" id="post_select_subcategory" name="post_select_subcategory" 
+			value="<?php echo $this->result['sub_category']; ?>">
+		<input type="submit" onclick="return PostPublishHandler();" value="确认发布">
+		<input type="submit" onclick="return PostConeditHandler();" value="继续编辑">
+	</form>
+</div>
