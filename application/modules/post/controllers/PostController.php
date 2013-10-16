@@ -251,9 +251,18 @@ class Post_PostController extends Zend_Controller_Action
 	
 	public function listAction()
 	{
+		$request = $this->getRequest();
+		$page = $request->getParam('page');
+		$author = $request->getParam('author');
+		$category = $request->getParam('category');
+		$sub_category = $request->getParam('sub_category');
+		
 		$db_post = new Post_Model_DbTable_Post();
-		$result = $db_post->fetchAll(null, 'pub_datetime DESC')->toArray();
+		$result = $db_post->fetch_list($page, 10, $author, $category, $sub_category);
 		$this->view->result = $result;
+		
+		$total_count = $db_post->fetch_count($author, $category, $sub_category);
+		$this->view->total_count = $total_count;
 	}
 	
 	public function viewAction()

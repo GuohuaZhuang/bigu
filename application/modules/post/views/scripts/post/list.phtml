@@ -100,7 +100,7 @@ function ConfirmHandler() {
         
         <div class="div_post_list_info">
         	<!-- 跳转到个人博客列表 -->
-        	<span><a href="/account/index/list"><?php echo $row['author'] ?></a></span>｜
+        	<span><a href="/post/post/list?author=<?php echo $row['author'] ?>"><?php echo $row['author'] ?></a></span>｜
         	<span style="color: #999;"><?php echo $row['pub_datetime'] ?></span>
         	<?php if (!empty($row['category'])) { ?>｜
         	<span><a href="/post/post/list?category=<?php echo $row['category'] ?>"><?php echo $row['category'] ?></a></span>
@@ -135,4 +135,173 @@ function ConfirmHandler() {
     } ?>
     </div>
     <?php } ?>
+    
+    <!-- 翻页页码 -->
+
+<style type="text/css">
+
+.div_pg_container {
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    display: block;
+    float: left;
+    font-family: 'Microsoft YaHei', 微软雅黑;
+    font-size: 14px;
+    height: 46px;
+    line-height: 20px;
+    margin-left: 0px;
+    margin-top: 30px;
+    min-height: 30px;
+    width: 100%;
+}
+.div_pg_list {
+    height: 36px;
+    line-height: 20px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 10px;
+    text-align: center;
+}
+.div_pg_list ul {
+    margin: 0 auto;
+    float: right;
+}
+.div_pg_list li {
+    display: inline;
+    line-height: 20px;
+    color: #333333;
+}
+.div_pg_list a {
+    margin: 0 5px;
+    padding: 0px 10px;
+    border: 1px solid #cbcbcb;
+    background: #fefefe;
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fff), color-stop(100%, #e7e7e7));
+    background-image: -webkit-linear-gradient(top, #fff, #e7e7e7);
+    background-image: -moz-linear-gradient(top, #fff, #e7e7e7);
+    background-image: -o-linear-gradient(top, #fff, #e7e7e7);
+    background-image: linear-gradient(top, #fff, #e7e7e7);
+    -webkit-box-shadow: 0 0 0 1px rgba(255,255,255,0.3) inset;
+    -moz-box-shadow: 0 0 0 1px rgba(255,255,255,0.3) inset;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.3) inset;
+    -webkit-border-radius: 3px 3px;
+    -moz-border-radius: 3px/3px;
+    border-radius: 3px/3px;
+    height: 25px;
+    line-height: 25px;
+    color: #666;
+    text-shadow: 0 1px #fff;
+    float: left;
+    padding: 0 14px;
+    line-height: 26px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    border-left-width: 0;
+}
+.div_pg_list a:hover {
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fff), color-stop(100%, #B5B9BC));
+    background-image: -webkit-linear-gradient(top, #fff, #B5B9BC);
+    background-image: -moz-linear-gradient(top, #fff, #B5B9BC);
+    background-image: -o-linear-gradient(top, #fff, #B5B9BC);
+    background-image: linear-gradient(top, #fff, #B5B9BC);
+}
+.div_pg_list li:first-child a, .div_pg_list li:last-child a {
+    -webkit-border-radius: 3px 3px;
+    -moz-border-radius: 3px/3px;
+    border-radius: 3px/3px;
+    border-left-width: 1px;
+    -webkit-border-radius: 3px 0 0 3px;
+    -moz-border-radius: 3px 0 0 3px;
+    border-radius: 3px 0 0 3px;
+}
+.div_pg_list .disabled a, .div_pg_list .disabled a:hover {
+	background: none;
+	border: none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+.div_pg_list .active a, .div_pg_list li:active a {
+	background: #fefefe;
+	-webkit-box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.1) inset;
+	-moz-box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.1) inset;
+	box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.1) inset;
+}
+</style>
+
+<?php
+	$_get_str = '';
+	$_get_page = isset($_GET['page']) ? $_GET['page'] : 1;
+	$_get_author = isset($_GET['author']) ? $_GET['author'] : null;
+	$_get_category = isset($_GET['category']) ? $_GET['category'] : null;
+	$_get_sub_category = isset($_GET['sub_category']) ? $_GET['sub_category'] : null;
+	if (!empty($_get_author)) $_get_str .= ('&author=' . $_get_author);
+	if (!empty($_get_category)) $_get_str .= ('&category=' . $_get_category);
+	if (!empty($_get_sub_category)) $_get_str .= ('&sub_category=' . $_get_sub_category);
+?>
+
+<div class="div_pg_container">
+    <div class="div_pg_list">
+    <ul>
+<?php 
+$x = $_get_page;
+$n = ceil($this->total_count/10);
+$line = '';
+if ($x <= 0 || $n <= 0 || $x > $n) {
+	$line = '页码数出错，系统正在变更文章数量，请刷新页面，谢谢！';
+	return $line;
+}
+/*
+ 显示第１页时不显示“上一页”按钮。
+显示最后一页时不显示“下一页”按钮。
+中间的页数最多这样放：(当前选择x，总页数n)
+>10 ==> 1,2,...,x-1,x,x+1,...,n-1,n
+如果x-1 <= 2+1，则不显示左中间省略号。左边显示1,2,3,4,5。最大不能超过n。
+如果x+1 >= n-2，则不显示右中间省略号。右边显示n-4,n-3,n-2,n-1,n。最小不能小于1。
+*/
+if ($x > 1) echo '<li class="prev previous_page"><a rel="prev" href="/post/post/list?page='.($x-1).$_get_str.'">← 上一页</a></li>';
+
+for ($i = 1, $c = 1; $i <= $n; ) {
+	if($i == 3 && $x-1 > 2+1) {
+		if ($n-4 > 3) {
+			echo '<li class="disabled"><a><span class="gap">…</span></a></li>';
+			if ($x+1 > $n-2) $i = $n - 4;
+			else $i = $x - 1;
+			continue;
+		}
+	}
+	if ($x == $i) echo '<li class="active"><a>'.$i.'</a></li>';
+	else echo '<li><a href="/post/post/list?page='.$i.$_get_str.'">'.$i.'</a></li>';
+	$i ++; $c ++;
+	
+	if ($c == 5+1 && $x+1 < $n-2 && $i < $n-1) {
+		echo '<li class="disabled"><a><span class="gap">…</span></a></li>';
+		$i = $n - 1;
+		continue;
+	}
+	if ($c > 7) break;
+}
+
+if ($x < $n) echo '<li class="next next_page "><a rel="next" href="/post/post/list?page='.($x+1).$_get_str.'">下一页 →</a></li>';
+?>
+    
+    <!-- 
+        <li class="prev previous_page"><a rel="prev" href="/?page=2">← 上一页</a></li>
+        <li><a rel="start" href="/post/post/list?page=1<?php echo $_get_str; ?>">1</a></li>
+        <li><a rel="prev" href="/post/post/list?page=2<?php echo $_get_str; ?>">2</a></li>
+        <li class="active"><a href="/post/post/list?page=3<?php echo $_get_str; ?>">3</a></li>
+        <li><a rel="next" href="/?page=4">4</a></li>
+        <li><a href="/?page=5">5</a></li>
+        <li class="disabled"><a><span class="gap">…</span></a></li>
+        <li><a href="/?page=99">99</a></li>
+        <li><a href="/?page=100">100</a></li>
+        <li class="next next_page "><a rel="next" href="/?page=4">下一页 →</a></li>
+	 -->
+		</ul>
+    </div>
+</div>
+
+
 </div>

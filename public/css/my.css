@@ -484,8 +484,11 @@ box-sizing: border-box;
     font-size: 14px;
     margin: 10px;
     line-height: 30px;
-}
+    color: #0664B0;
+    text-decoration: none;
+    font-family: 'Microsoft YaHei', 微软雅黑;
 .footContent a:hover {
     color: #2375BE;
+    text-decoration: underline;
 }
 
