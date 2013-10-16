@@ -1,8 +1,72 @@
 <style>
 <!--
-h4 a:link, h4 a:visited {
+.h4_post_list_title {
+width: 100%;
+margin-bottom: 10px;
+float: left;
+}
+
+.h4_post_list_title a:link, .h4_post_list_title a:visited {
 font: 20px/1.2em "微软雅黑", "黑体", Tahoma, Arial, Geneva, sans-serif;
 color: #000;
+text-decoration: none;
+}
+
+.h4_post_list_title a:hover {
+    color: #2375BE;
+    text-decoration: underline;
+}
+
+.div_post_list_info {
+	margin-top: 5px;
+	margin-bottom: 10px;
+	font-size: 14px;
+	font-family: Microsoft YaHei,"微软雅黑",Lucida,Verdana,Hiragino Sans GB,STHeiti,WenQuanYi Micro Hei,Droid Sans Fallback,SimSun,sans-serif;
+	line-height: 20px;
+}
+.div_post_list_info a {
+	color: #2375BE;
+}
+.div_post_list_info a:hover {
+	color: #0664B0;
+	text-decoration: underline;
+	outline: 0;
+}
+
+.div_post_list_thumb {
+	float: left;
+	margin-right: 20px;
+}
+.div_post_list_thumb img {
+	width: 210px; 
+	height: 140px;
+	max-height: 150px;
+	border-radius: 5px;
+	display: inline;
+}
+.div_post_list_abstract {
+	width: 435px;
+	float: left;
+	margin-bottom: 10px;
+}
+
+.div_post_list_edit {
+	float: right;
+	margin-right: 2px;
+}
+.div_post_list_edit a {
+	letter-spacing: 2px;
+	margin-left: 10px;
+	font-size: 14px;
+	color: rgb(108, 115, 122);
+	text-decoration: none;
+}
+.post_list_item {
+	padding-top: 10px;
+	width: 100%;
+	float: left;
+	border-bottom: #ccc 1px dotted;
+	padding-bottom: 10px;
 }
 -->
 </style>
@@ -10,25 +74,37 @@ color: #000;
 <div style="width: 665px">
 	<?php if (empty($this->result)) { echo '<br/>找不到任何文章<br/>'; } ?>
     <?php foreach($this->result as $row) { ?>
-    <div style="padding-top: 10px;
-				width: 100%;
-				float: left;
-				border-bottom: #ccc 1px dotted;
-				padding-bottom: 10px;">
-    	<h4>
-    		<a href="/post/post/view?post_id=<?php echo $row['id'] ?>">
+    <div class="post_list_item">
+    
+    	<h4 class="h4_post_list_title">
+    		<a href="/post/post/view?post_id=<?php echo $row['id'] ?>" title="<?php echo $row['title'] ?>">
     			<?php echo $row['title'] ?>
     		</a>
         </h4>
-        <div style="float:left;">
-        <p><?php echo $row['abstract'] ?></p>
-        <p><img src="<?php echo $row['index_thumb'] ?>" style="width: 210px; height: 140px;"/></p>
-        <p><?php echo $row['pub_datetime'] ?></p>
-        <p><?php echo $row['author'] ?></p>
-        <p><?php echo $row['category'] ?></p>
-        <p><?php echo $row['sub_category'] ?></p>
-        <p><a href='/post/post/edit?post_id=<?php echo $row['id'] ?>'>编辑</a></p>
-        <p><a href='/post/post/delete?post_id=<?php echo $row['id'] ?>'>删除</a></p>
+        
+        <div class="div_post_list_info">
+        	<!-- 跳转到个人博客列表 -->
+        	<span><a href="/account/index/list"><?php echo $row['author'] ?></a></span>｜
+        	<span><?php echo $row['pub_datetime'] ?></span>｜
+        	<span><a href="/post/post/list?category=<?php echo $row['category'] ?>"><?php echo $row['category'] ?></a></span>
+        	<?php if (!empty($row['sub_category'])) { ?>/
+        	<span><a href="/post/post/list?sub_category=<?php echo $row['sub_category'] ?>"><?php echo $row['sub_category'] ?></a></span>
+        	<?php } ?>
+        </div>
+        
+        <div class="div_post_list_thumb">
+        	<a href="/post/post/view?post_id=<?php echo $row['id'] ?>" title="<?php echo $row['title'] ?>">
+        		<img src="<?php echo $row['index_thumb'] ?>"/>
+        	</a>
+        </div>
+        
+        <div class="div_post_list_abstract">
+        	<?php echo $row['abstract'] ?>
+        </div>
+        
+        <div class="div_post_list_edit">
+        	<a href='/post/post/edit?post_id=<?php echo $row['id'] ?>'>编辑</a>
+        	<a href='/post/post/delete?post_id=<?php echo $row['id'] ?>'>删除</a>
         </div>
     </div>
     <?php } ?>

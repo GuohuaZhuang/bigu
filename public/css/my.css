@@ -28,7 +28,7 @@ body {
 .head_div {
     display: inline;
 }
-a {
+.affix a, .biaoqian a, .head_div a {
     letter-spacing: 2px;
     text-align: center;
     font-family: 'Microsoft YaHei', CenturyGothic, AppleGothic, sans-serif;

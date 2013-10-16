@@ -29,7 +29,7 @@ class Post_PostController extends Zend_Controller_Action
     private function _extract_abstract($html)
     {
     	$value = strip_tags($html);
-    	return mb_substr($value, 0, 400, 'UTF-8');
+    	return mb_substr($value, 0, 200, 'UTF-8');
     }
     
     private function _find_thumbpath($html)
