@@ -38,15 +38,96 @@ class Post_PostController extends Zend_Controller_Action
 //     	if (preg_match($rule, $html, $match)) {
 //     		return '/upload/thumb/' . $match[1];
 //     	}
-    	$rule = "#(<img alt=\"[^(smiley)].*?\" style)#";
-    	if (preg_match($rule, $html, $match)) {
-    		$html = $match[0];
-    		$rule_src = "#src=\"([^\"]*)\"#";
-    		if (preg_match($rule_src, $html, $match)) {
-    			return $match[1];
+//     	$rule = "#(<img alt=\"[^(smiley)].*?\" style)#";
+//     	if (preg_match($rule, $html, $match)) {
+//     		$html = $match[0];
+//     		$rule_src = "#src=\"([^\"]*)\"#";
+//     		if (preg_match($rule_src, $html, $match)) {
+//     			return $match[1];
+//     		}
+//     	}
+		// 去除表情符号，可以是上传的，也可以是网络上图片
+    	$rule = '#(<img[^>]*?>)#';
+    	if (preg_match_all($rule, $html, $match)) {
+    		$match = $match[0];
+    		foreach ($match as $m) {
+    			if (false != strstr($m, 'height:20px; width:20px')) continue;
+    			$rule_src = "#src=\"([^\"]*)\"#";
+    			if (preg_match($rule_src, $m, $match_src)) {
+    				if ('/upload/img/' == substr($match_src[1], 0, 12)) {
+    					return '/upload/thumb/' . substr($match_src[1], 12);
+    				} else {
+    					return $this->_generatethumb($match_src[1]);
+    					// return $match_src[1];
+    				}
+    			}
     		}
     	}
     	return null;
+    }
+    
+    function _generatethumb($filetmp)
+    {
+    	// thumb_dir
+    	$thumb_dir = '/upload/thumb/' . date("Ymd");
+    	// filetype
+    	$_tmp_arr_v5 = explode('.', $filetmp);
+    	$filetype = strtolower(end($_tmp_arr_v5));
+    	// filename
+    	$filename = md5(microtime().rand(0, 100)) . $filetype;
+    	
+    	$thumb_path = $_SERVER['DOCUMENT_ROOT'].$thumb_dir;
+    	if (!file_exists($thumb_path))
+    	{
+    		mkdir($thumb_path, 0777);
+    	}
+    	// Save thumb image file to thumb_path
+    	if (!is_writeable($thumb_path)) {
+    		return false;
+    	} else {
+    		// 缩略图大小为210px*140px
+    		$tw = 210;
+    		$th = 140;
+    		// Load
+    		if ($filetype == 'jpg') $filetype = 'jpeg';
+    		$thumb = imagecreatetruecolor($tw, $th);
+    		$white = imagecolorallocate($thumb, 255, 255, 255);
+    		imagefill($thumb, 0, 0, $white);
+    		$f_create = 'imagecreatefrom' . $filetype;
+    		$source = $f_create($filetmp);
+    		// Get source image width and height
+    		$w = imagesx($source);
+    		$h = imagesy($source);
+    		// 计算imagecopyresampled压缩参数值
+    		$wrate = $w / $tw;
+    		$hrate = $h / $th;
+    		if ($wrate > $hrate) {
+    			$minh = $h;
+    			$minw = $tw * $hrate;
+    		} else {
+    			$minh = $th * $wrate;
+    			$minw = $w;
+    		}
+    		$sx = ($w - $minw) / 2;
+    		$sy = ($h - $minh) / 2;
+    
+    		// Resize
+    		imagecopyresampled($thumb, $source, 0, 0, $sx, $sy, $tw, $th,
+    				$minw, $minh);
+    		// Output
+    		$f_save = 'image' . $filetype;
+    		$f_save($thumb, $thumb_path.'/'.$filename);
+    		imagedestroy($thumb);
+    		imagedestroy($source);
+    	}
+    	return ($thumb_dir . '/' . $filename);
+    }
+    
+    private function _remove_prethumb($id)
+    {
+    	$dbpost = new Post_Model_DbTable_Post();
+    	$pre_thumb = $dbpost->get_index_thumb($id);
+    	if (!empty($pre_thumb)) unlink($_SERVER['DOCUMENT_ROOT'].$pre_thumb);
     }
     
     private function _addpost($request, $post_id)
@@ -81,6 +162,8 @@ class Post_PostController extends Zend_Controller_Action
 	    			'index_thumb' => $post_index_thumb);
 	    	$dbpost->insert($data);
     	} else {
+    		// update record and remove thumb
+    		$this->_remove_prethumb($post_id);
     		$data = array('title' => $post_title,
     				'content' => $post_content,
     				'category' => $post_category,
