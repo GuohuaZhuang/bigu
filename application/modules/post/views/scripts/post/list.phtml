@@ -1,17 +1,25 @@
+<script type="text/javascript">
+<!--
+function ConfirmHandler() {
+	if (confirm("确认要删除吗？")) {
+		return true;
+	}
+	return false;
+}
+//-->
+</script>
 <style>
 <!--
 .h4_post_list_title {
-width: 100%;
-margin-bottom: 10px;
-float: left;
+	width: 100%;
+	margin-bottom: 10px;
+	float: left;
 }
-
 .h4_post_list_title a:link, .h4_post_list_title a:visited {
-font: 20px/1.2em "微软雅黑", "黑体", Tahoma, Arial, Geneva, sans-serif;
-color: #000;
-text-decoration: none;
+	font: 20px/1.2em "微软雅黑", "黑体", Tahoma, Arial, Geneva, sans-serif;
+	color: #000;
+	text-decoration: none;
 }
-
 .h4_post_list_title a:hover {
     color: #2375BE;
     text-decoration: underline;
@@ -26,6 +34,7 @@ text-decoration: none;
 }
 .div_post_list_info a {
 	color: #2375BE;
+	text-decoration: none;
 }
 .div_post_list_info a:hover {
 	color: #0664B0;
@@ -48,6 +57,7 @@ text-decoration: none;
 	width: 435px;
 	float: left;
 	margin-bottom: 10px;
+	color: #656565;
 }
 
 .div_post_list_edit {
@@ -85,26 +95,30 @@ text-decoration: none;
         <div class="div_post_list_info">
         	<!-- 跳转到个人博客列表 -->
         	<span><a href="/account/index/list"><?php echo $row['author'] ?></a></span>｜
-        	<span><?php echo $row['pub_datetime'] ?></span>｜
+        	<span style="color: #999;"><?php echo $row['pub_datetime'] ?></span>
+        	<?php if (!empty($row['category'])) { ?>｜
         	<span><a href="/post/post/list?category=<?php echo $row['category'] ?>"><?php echo $row['category'] ?></a></span>
+        	<?php } ?>
         	<?php if (!empty($row['sub_category'])) { ?>/
         	<span><a href="/post/post/list?sub_category=<?php echo $row['sub_category'] ?>"><?php echo $row['sub_category'] ?></a></span>
         	<?php } ?>
         </div>
         
+        <?php if (!empty($row['index_thumb'])) { ?>
         <div class="div_post_list_thumb">
         	<a href="/post/post/view?post_id=<?php echo $row['id'] ?>" title="<?php echo $row['title'] ?>">
         		<img src="<?php echo $row['index_thumb'] ?>"/>
         	</a>
         </div>
+        <?php } ?>
         
-        <div class="div_post_list_abstract">
+        <div class="div_post_list_abstract" <?php echo (empty($row['index_thumb']) ? 'style="width:100%"' : "");  ?>>
         	<?php echo $row['abstract'] ?>
         </div>
         
         <div class="div_post_list_edit">
         	<a href='/post/post/edit?post_id=<?php echo $row['id'] ?>'>编辑</a>
-        	<a href='/post/post/delete?post_id=<?php echo $row['id'] ?>'>删除</a>
+        	<a onclick="return ConfirmHandler();" href='/post/post/delete?post_id=<?php echo $row['id'] ?>'>删除</a>
         </div>
     </div>
     <?php } ?>

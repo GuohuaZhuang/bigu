@@ -12,10 +12,10 @@ tbody, tfoot, thead, tr, th, td {
     padding: 0;
     border: 0;
     outline: 0;
-    font-weight: inherit;
+/*    font-weight: inherit;
     font-style: inherit;
     font-size: 100%;
-    font-family: inherit;
+    font-family: inherit;*/
     vertical-align: baseline;
 }
 body {
@@ -41,7 +41,8 @@ body {
     text-decoration: none;
 }
 .head_div a:hover {
-    color: #BC8F8F;
+    color: #2375BE;
+    text-decoration: underline;
 }
 #head_links_container {
     float: right;

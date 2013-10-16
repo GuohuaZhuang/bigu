@@ -67,7 +67,50 @@
 		  	</td>
 		  	<?php if (empty($this->editor)) { ?>
 		  	<td>
-		  		最新评论
+		  		<div style="border-color: #ececec #ececec #cacaca;
+							border-image: none;
+							border-radius: 5px 5px 5px 5px;
+							border-style: solid;
+							border-width: 1px;
+							padding-bottom: 5px;
+							background: #ffffff;
+							color: #555555;
+">
+			  		<h6 style="	color: #555555;
+								font-size: 14px;
+								font-weight: bolder;
+								border-top: 1px solid #ebebeb;
+								box-shadow: 0 0px 1px rgba(0,0,0,0.15);
+								margin-top: -1px;
+								padding: 6px;
+								text-indent: 10px;
+								display: block;
+								line-height: 20px;
+								padding: 6px;
+								text-indent: 10px;
+								background: #fcfcfc;
+								background: -moz-linear-gradient(top, #fcfcfc 0%, #f5f5f5 100%);
+								background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fcfcfc), color-stop(100%, #f5f5f5));
+								background: -webkit-linear-gradient(top, #fcfcfc 0%, #f5f5f5 100%);
+								background: -o-linear-gradient(top, #fcfcfc 0%, #f5f5f5 100%);
+								background: -ms-linear-gradient(top, #fcfcfc 0%, #f5f5f5 100%);
+								background: linear-gradient(top, #fcfcfc 0%, #f5f5f5 100%);
+								filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#f5f5f5',GradientType=0 );
+								">最新评论</h6>
+					<div style="padding:0 15px 0 15px;
+								zoom: 1;
+								font-size: 14px;
+								line-height: 20px;
+								color: #333333;
+								margin-top: 15px;
+								border-bottom: 1px dashed rgb(238, 238, 238);
+								width: 100%;
+								overflow: hidden;">
+						<?php for ($_i = 0; $_i < 40; $_i ++) { ?>
+						<p style="margin-top: 15px;">哈哈，这里是评论专区</p>
+						<?php } ?>
+					</div>
+				</div>
 		  	</td>
 		  	<?php } // end for editor judgement ?>
 	  	</tr>

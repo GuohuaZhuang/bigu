@@ -108,7 +108,8 @@ class Post_PostController extends Zend_Controller_Action
     	$this->_addpost($request, $post_id);
     
     	// forwart to list posts
-    	$this->forward('list');
+    	// $this->forward('list');
+    	$this->redirect('/post/post/list');
     }
     
     public function editAction()
@@ -144,7 +145,8 @@ class Post_PostController extends Zend_Controller_Action
 // 		if (empty($num)) return false;
 		
     	// forwart to list posts
-    	$this->forward('list');
+    	// $this->forward('list');
+    	$this->redirect('/post/post/list');
 	}
 	
 	public function listAction()

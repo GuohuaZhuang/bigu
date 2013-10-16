@@ -1,7 +1,68 @@
+<style>
+<!--
+.div_post_view_title h1 {
+	font-size: 26px;
+	color: #000;
+	text-align: left;
+	line-height: 100%;
+	margin-bottom: 24px;
+	margin-top: 10px;
+	font-weight: bold;
+	text-rendering: optimizelegibility;
+}
 
-<h1>单个文章显示</h1>
+.div_post_view_info {
+	margin-top: 5px;
+	margin-bottom: 10px;
+	font-size: 14px;
+	font-family: Microsoft YaHei,"微软雅黑",Lucida,Verdana,Hiragino Sans GB,STHeiti,WenQuanYi Micro Hei,Droid Sans Fallback,SimSun,sans-serif;
+	line-height: 20px;
+	border-bottom: 1px solid #eee;
+	margin-bottom: 16px;
+	padding: 6px 0;
+}
+.div_post_view_info a {
+	color: #2375BE;
+	text-decoration: none;
+}
+.div_post_view_info a:hover {
+	color: #0664B0;
+	text-decoration: underline;
+	outline: 0;
+}
+
+.div_post_view_abstract {
+/* 	font-size: 12px; */
+/* 	color: #999; */
+	padding: 7px 0;
+	border-bottom: 1px solid #eee;
+	margin-bottom: 23px;
+	overflow: hidden;
+}
+
+-->
+</style>
+
 <?php if (empty($this->result)) {
 	echo '<br/>找不到这篇文章<br/>';
-} else {
-	print_r($this->result);
-} ?>
+} else { ?>
+
+<div class="div_post_view_title">
+	<h1><?php echo $this->result['title']; ?></h1>
+</div>
+
+<div class="div_post_view_info">
+	<!-- 跳转到个人博客列表 -->
+	<span><a href="/account/index/list"><?php echo $this->result['author'] ?></a></span>｜
+	<span style="color: #999;"><?php echo $this->result['pub_datetime'] ?></span>｜
+	<span><a href="/post/post/list?category=<?php echo $this->result['category'] ?>"><?php echo $this->result['category'] ?></a></span>
+	<?php if (!empty($this->result['sub_category'])) { ?>/
+	<span><a href="/post/post/list?sub_category=<?php echo $this->result['sub_category'] ?>"><?php echo $this->result['sub_category'] ?></a></span>
+	<?php } ?>
+</div>
+
+<div class="div_post_view_abstract">
+	<?php echo $this->result['content'] ?>
+</div>
+
+<?php } ?>
