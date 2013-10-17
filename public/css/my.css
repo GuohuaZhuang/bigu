@@ -16,6 +16,7 @@ tbody, tfoot, thead, tr, th, td {
     font-style: inherit;
     font-size: 100%;
     font-family: inherit;*/
+    font-family: 'Microsoft YaHei', CenturyGothic, AppleGothic, sans-serif;
     vertical-align: baseline;
 }
 body {
@@ -329,6 +330,7 @@ z-index: 2;
 display: inline-block;
 }
 .form-search .input-append .search-query {
+font-size: 16px;
 -webkit-border-radius: 14px 0 0 14px;
 -moz-border-radius: 14px 0 0 14px;
 border-radius: 14px 0 0 14px;
@@ -406,7 +408,7 @@ margin-top: 0px;
 padding-bottom: 4px;
 padding-left: 14px;
 padding-right: 14px;
-padding-top: 4px;
+padding-top: 5px;
 text-align: start;
 }
 /*

@@ -60,6 +60,10 @@ function ConfirmHandler() {
 .div_post_view_edit {
 	float: right;
 	margin-right: 2px;
+	border-bottom: 1px solid #eee;
+	margin-bottom: 23px;
+	width: 100%;
+	text-align: right;
 }
 .div_post_view_edit a {
 	letter-spacing: 2px;
@@ -67,6 +71,114 @@ function ConfirmHandler() {
 	font-size: 14px;
 	color: rgb(108, 115, 122);
 	text-decoration: none;
+}
+.div_post_view_edit a:hover {
+	color: #0664B0;
+	text-decoration: underline;
+	outline: 0;
+}
+
+.div_comment_add {
+	padding-bottom: 10px;
+	padding-top: 10px;
+	width: 100%;
+	float: right;
+	margin-left: 10px;
+	margin-right: 2px;
+	border-bottom: 1px solid #eee;
+	margin-bottom: 23px;
+	background: none repeat scroll 0 0 #eee;
+	border-radius: 4px 4px 4px 4px;
+	box-shadow: 0 0 1px #aaa inset,0 1px 0 #fff;
+	font-size: 12px !important;
+}
+.div_comment_add span>a {
+	padding: 5px 5px 0px 0px;
+	padding-bottom: 0px;
+	font-family: 'Microsoft YaHei', 微软雅黑;
+	margin-left: 5px;
+	color: #2375BE;
+}
+.div_comment_add span,.div_comment_add textarea {
+	margin: 10px;
+}
+.div_comment_add textarea {
+	float: left;
+	height: auto;
+	overflow-y:hidden;
+	width: 96%;
+	background-color: #ffffff;
+	border: 1px solid #ccc;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+	-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+	-webkit-transition: border linear 0.2s,box-shadow linear 0.2s;
+	-moz-transition: border linear 0.2s,box-shadow linear 0.2s;
+	-o-transition: border linear 0.2s,box-shadow linear 0.2s;
+	transition: border linear 0.2s,box-shadow linear 0.2s;
+	display: inline-block;
+	padding: 4px 6px;
+	margin-bottom: 9px;
+	font-size: 14px;
+	line-height: 20px;
+	color: #555555;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+.btn_comment_submit {
+	background-color: rgb(35, 117, 190);
+	background-image: linear-gradient(rgb(60, 171, 244), rgb(14, 114, 195));
+	background-repeat: repeat-x;
+	border-bottom-color: rgba(0, 0, 0, 0.247059);
+	border-bottom-left-radius: 1px;
+	border-bottom-right-radius: 1px;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-left-color: rgba(0, 0, 0, 0.0980392);
+	border-left-style: solid;
+	border-left-width: 1px;
+	border-right-color: rgba(0, 0, 0, 0.0980392);
+	border-right-style: solid;
+	border-right-width: 1px;
+	border-top-color: rgba(0, 0, 0, 0.0980392);
+	border-top-left-radius: 1px;
+	border-top-right-radius: 1px;
+	border-top-style: solid;
+	border-top-width: 1px;
+	box-shadow: rgba(255, 255, 255, 0.2) 0px 1px 0px 0px inset, rgba(0, 0, 0, 0.0470588) 0px 1px 2px 0px;
+	box-sizing: border-box;
+	color: rgb(255, 255, 255);
+	cursor: pointer;
+	display: block;
+	float: right;
+	font-family: 'Microsoft YaHei', 微软雅黑, Lucida, Verdana, 'Hiragino Sans GB', STHeiti, 'WenQuanYi Micro Hei', 'Droid Sans Fallback', SimSun, sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+	height: 30px;
+	letter-spacing: normal;
+	line-height: 20px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 16px;
+	margin-top: 0px;
+	min-height: 30px;
+	padding-bottom: 4px;
+	padding-left: 14px;
+	padding-right: 14px;
+	padding-top: 4px;
+	text-align: center;
+	text-indent: 0px;
+	text-shadow: rgba(0, 0, 0, 0.247059) 0px -1px 0px;
+	text-transform: none;
+	vertical-align: top;
+	white-space: nowrap;
+	word-spacing: 0px;
+	writing-mode: lr-tb;
+}
+.div_comment h5 {
+	color: rgb(108, 115, 122);
+	padding-bottom: 10px;
 }
 -->
 </style>
@@ -107,5 +219,99 @@ function ConfirmHandler() {
 	<?php }
 	} ?>
 <?php } ?>
+
+	<!-- 评论发表及列表 -->
+<div class="div_comment">
+<h5 class="btn-block tohide sep30">文章评论</h5>
+
+<div class="div_comment_add">
+    <span class="name"><a href="/center/comment/list?id=" class="uname" target="_blank">firstboy</a></span>
+    <form accept-charset="UTF-8" action="/p/206971/replies" class="new_reply" data-remote="true" id="new_reply" method="post">
+    <textarea class="topic_editor span10" id="reply_body" 
+        placeholder="在这里输入评论……" tabindex="1" 
+        onpropertychange="{if (this.scrollHeight > 50) this.style.height=(this.scrollHeight)+'px'}" 
+        oninput="{if (this.scrollHeight > 50) this.style.height=(this.scrollHeight)+'px'}"></textarea>
+    <input type="submit" class="btn_comment_submit" value="评论"/>
+    </form>
+</div>
+
+<style>
+<!--
+.div_comment_avatar {
+	font-family: 'Microsoft YaHei', 微软雅黑, Lucida, Verdana, 'Hiragino Sans GB', STHeiti, 'WenQuanYi Micro Hei', 'Droid Sans Fallback', SimSun, sans-serif;
+	font-size: 15px;
+}
+.div_comment_avatar img {
+	border-radius: 6px;
+	margin-left: 10px;
+	float: left;
+}
+.div_comment_item a {
+	margin-left: 10px;
+	text-decoration: none;
+	margin-right: 8px;
+	color: #2375BE;
+	outline: 0;
+	font-size: 13px;
+}
+.div_comment_item p {
+	font-size: 16px;
+	line-height: 180%;
+	margin-bottom: 15px;
+	margin-left: 66px;
+}
+.div_comment_item em {
+	margin-left: 66px;
+	font-size: 14px;
+}
+.div_comment_item {
+	margin-bottom: 10px;
+	margin-right: 56px;
+	border-bottom: 1px dashed #eee !important;
+	margin: 0 -10px;
+	padding: 10px 10px 20px 10px;
+}
+-->
+</style>
+
+<div class="div_comment_list">
+    <div class="div_comment_item" id="reply2">
+        <div class="div_comment_avatar" >
+          <img alt="firstboy" src="/image/default_avatar.jpg" style="width:48px;height:48px;">
+        </div>
+        <div>
+        
+          <div>
+            <span><a href="/center/comment/list?id=" class="uname" target="_blank">firstboy</a></span>
+          </div>
+          
+          <div>
+            <p>看来中国古老的面相学可以发扬光大了！计算机算命是科学</p>
+            <em style="color: rgb(108, 115, 122);">2013-10-17 11:32:06</em>
+          </div>
+          
+        </div>
+    </div>
+    
+    <div class="div_comment_item" id="reply2">
+        <div class="div_comment_avatar" >
+          <img alt="firstboy" src="/image/default_avatar.jpg" style="width:48px;height:48px;">
+        </div>
+        <div>
+        
+          <div>
+            <span><a href="/center/comment/list?id=" class="uname" target="_blank">firstboy</a></span>
+          </div>
+          
+          <div>
+            <p>看来中国古老的面相学可以发扬光大了！计算机算命是科学</p>
+            <em style="color: rgb(108, 115, 122);">2013-10-17 11:32:06</em>
+          </div>
+          
+        </div>
+    </div>
+    
+</div>
+</div><!-- 文章评论结束div -->
 
 <?php } ?>

@@ -74,7 +74,7 @@ class Post_PostController extends Zend_Controller_Action
     	$_tmp_arr_v5 = explode('.', $filetmp);
     	$filetype = strtolower(end($_tmp_arr_v5));
     	// filename
-    	$filename = md5(microtime().rand(0, 100)) . $filetype;
+    	$filename = md5(microtime().rand(0, 100)) . '.' . $filetype;
     	
     	$thumb_path = $_SERVER['DOCUMENT_ROOT'].$thumb_dir;
     	if (!file_exists($thumb_path))

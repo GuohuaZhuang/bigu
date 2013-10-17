@@ -45,13 +45,24 @@ function ConfirmHandler() {
 .div_post_list_thumb {
 	float: left;
 	margin-right: 20px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.35),0 1px 3px rgba(0,0,0,0.45);
+	-moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.35),0 1px 3px rgba(0,0,0,0.45);
+	box-shadow: inset 0 1px 0 rgba(255,255,255,0.35),0 1px 3px rgba(0,0,0,0.45);
 }
 .div_post_list_thumb img {
 	width: 210px; 
 	height: 140px;
 	max-height: 150px;
-	border-radius: 5px;
 	display: inline;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.35),0 1px 3px rgba(0,0,0,0.45);
+	-moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.35),0 1px 3px rgba(0,0,0,0.45);
+	box-shadow: inset 0 1px 0 rgba(255,255,255,0.35),0 1px 3px rgba(0,0,0,0.45);
 }
 .div_post_list_abstract {
 	width: 435px;
@@ -82,7 +93,7 @@ function ConfirmHandler() {
 	width: 100%;
 	float: left;
 	border-bottom: #ccc 1px dotted;
-	padding-bottom: 10px;
+	padding-bottom: 30px;
 }
 -->
 </style>
@@ -286,22 +297,8 @@ for ($i = 1, $c = 1; $i <= $n; ) {
 
 if ($x < $n) echo '<li class="next next_page "><a rel="next" href="/post/post/list?page='.($x+1).$_get_str.'">下一页 →</a></li>';
 ?>
-    
-    <!-- 
-        <li class="prev previous_page"><a rel="prev" href="/?page=2">← 上一页</a></li>
-        <li><a rel="start" href="/post/post/list?page=1<?php echo $_get_str; ?>">1</a></li>
-        <li><a rel="prev" href="/post/post/list?page=2<?php echo $_get_str; ?>">2</a></li>
-        <li class="active"><a href="/post/post/list?page=3<?php echo $_get_str; ?>">3</a></li>
-        <li><a rel="next" href="/?page=4">4</a></li>
-        <li><a href="/?page=5">5</a></li>
-        <li class="disabled"><a><span class="gap">…</span></a></li>
-        <li><a href="/?page=99">99</a></li>
-        <li><a href="/?page=100">100</a></li>
-        <li class="next next_page "><a rel="next" href="/?page=4">下一页 →</a></li>
-	 -->
 		</ul>
     </div>
 </div>
-
 
 </div>
