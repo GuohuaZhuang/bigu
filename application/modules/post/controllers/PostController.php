@@ -15,7 +15,7 @@ class Post_PostController extends Zend_Controller_Action
     {
         // action body
     }
-    
+
     private function _transform_content($html)
     {
     	$value = '';
@@ -279,6 +279,7 @@ class Post_PostController extends Zend_Controller_Action
 	
 	public function previewAction()
 	{
+		$this->view->preview = true;
 		$request = $this->getRequest();
 		// title
 		$post_title = $request->getParam('post_title');

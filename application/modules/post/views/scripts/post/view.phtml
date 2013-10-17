@@ -8,7 +8,7 @@ function ConfirmHandler() {
 }
 //-->
 </script>
-<style>
+<style type="text/css">
 <!--
 .div_post_view_title h1 {
 	font-size: 26px;
@@ -42,8 +42,6 @@ function ConfirmHandler() {
 }
 
 .div_post_view_abstract {
-/* 	font-size: 12px; */
-/* 	color: #999; */
 	padding: 7px 0;
 	border-bottom: 1px solid #eee;
 	margin-bottom: 23px;
@@ -220,22 +218,120 @@ function ConfirmHandler() {
 	} ?>
 <?php } ?>
 
+<?php if (empty($this->preview)) { ?>
 	<!-- 评论发表及列表 -->
+<script type="text/javascript">
+<!--
+Date.prototype.format = function(format) //author: meizz
+{
+  var o = {
+    "M+" : this.getMonth()+1, //month
+    "d+" : this.getDate(),    //day
+    "h+" : this.getHours(),   //hour
+    "m+" : this.getMinutes(), //minute
+    "s+" : this.getSeconds(), //second
+    "q+" : Math.floor((this.getMonth()+3)/3),  //quarter
+    "S" : this.getMilliseconds() //millisecond
+  }
+
+  if(/(y+)/.test(format)) format=format.replace(RegExp.$1,
+    (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+  for(var k in o)if(new RegExp("("+ k +")").test(format))
+    format = format.replace(RegExp.$1,
+      RegExp.$1.length==1 ? o[k] :
+        ("00"+ o[k]).substr((""+ o[k]).length));
+  return format;
+}
+
+function _AppendCommentItemIntoList(author, content, date) {
+	var new_comment = '';
+	new_comment += "<div class=\"div_comment_item\"><div class=\"div_comment_avatar\" >";
+	new_comment += "<img alt=\"firstboy\" src=\"/image/default_avatar.jpg\" style=\"width:48px;height:48px;\">";
+	new_comment += "</div><div>";
+	new_comment += "<div><span><a href=\"/center/comment/list?id=\" class=\"uname\" target=\"_blank\">";
+	new_comment += author; // author
+	new_comment += "</a></span></div>";
+	new_comment += "<div>";
+	new_comment += "<p>";
+	new_comment += content; // content
+	new_comment += "</p>";
+	new_comment += "<em style=\"color: rgb(108, 115, 122);\">";
+	new_comment += date; // nowdate
+	new_comment += "</em>";
+	new_comment += "</div></div></div>";
+	
+	$('#view_comment_list').append(new_comment);
+}
+
+function CommentAddHandler() {
+	Jsoncallback('/post/comment/add', 
+    	function (json) {
+	        if (typeof json.err !== 'undefined' && json.err != "") {
+	            alert(json.err);
+	            return false;
+	        }
+	        if (typeof json.success === 'undefined') {
+	    		return false;
+			}
+			if (json.id !== 'undefined') {
+				var nowdate = new Date().format("yyyy-MM-dd h:mm:ss");
+				var author = '<?php echo (array_key_exists('author', $this->result))?$this->result['author']:'';?>';
+				var content = $('#comment_content').val();
+				_AppendCommentItemIntoList(author, content, nowdate);
+				$('#comment_content').val("");
+			} else {
+				alert('添加评论失败');
+			}
+		}, 
+	    'POST', 
+	    {'d': '', 'timestamp' : Date.parse(new Date()), 
+		 'comment_id_post': '<?php echo (array_key_exists('id', $this->result))?$this->result['id']:'';?>', 
+		 'comment_author': '<?php echo (array_key_exists('author', $this->result))?$this->result['author']:'';?>', 
+		 'comment_content': $('#comment_content').val() }, 
+	    'loading');
+    
+    return false;
+}
+
+function CommentListHandler() {
+	Jsoncallback('/post/comment/list', 
+		function (json) {
+		    if (typeof json.err !== 'undefined' && json.err != "") {
+		        alert(json.err);
+		        return false;
+		    }
+		    if (typeof json.success === 'undefined') {
+				return false;
+			}
+			if (json.d !== 'undefined') {
+				var d = json.d;
+				$('#view_comment_list').html('');
+				for (var i = 0; i < d.length; i ++) {
+					_AppendCommentItemIntoList(d[i].author, d[i].content, d[i].pub_datetime);
+				}
+				$('#comment_content').val("");
+			} else {
+				alert('添加评论失败');
+			}
+		}, 
+		'POST', 
+		{'d': '', 'timestamp' : Date.parse(new Date()), 
+		'comment_id_post': '<?php echo (array_key_exists('id', $this->result))?$this->result['id']:'';?>' }, 
+		'loading');
+
+    return false;
+}
+
+$(document).ready(function() {
+	CommentListHandler();
+});
+
+//-->
+</script>
 <div class="div_comment">
 <h5 class="btn-block tohide sep30">文章评论</h5>
 
-<div class="div_comment_add">
-    <span class="name"><a href="/center/comment/list?id=" class="uname" target="_blank">firstboy</a></span>
-    <form accept-charset="UTF-8" action="/p/206971/replies" class="new_reply" data-remote="true" id="new_reply" method="post">
-    <textarea class="topic_editor span10" id="reply_body" 
-        placeholder="在这里输入评论……" tabindex="1" 
-        onpropertychange="{if (this.scrollHeight > 50) this.style.height=(this.scrollHeight)+'px'}" 
-        oninput="{if (this.scrollHeight > 50) this.style.height=(this.scrollHeight)+'px'}"></textarea>
-    <input type="submit" class="btn_comment_submit" value="评论"/>
-    </form>
-</div>
-
-<style>
+<style style="text/css">
 <!--
 .div_comment_avatar {
 	font-family: 'Microsoft YaHei', 微软雅黑, Lucida, Verdana, 'Hiragino Sans GB', STHeiti, 'WenQuanYi Micro Hei', 'Droid Sans Fallback', SimSun, sans-serif;
@@ -274,10 +370,11 @@ function ConfirmHandler() {
 -->
 </style>
 
-<div class="div_comment_list">
+<div class="div_comment_list" id="view_comment_list">
+
     <div class="div_comment_item" id="reply2">
         <div class="div_comment_avatar" >
-          <img alt="firstboy" src="/image/default_avatar.jpg" style="width:48px;height:48px;">
+          <img alt="firstboy" src="/image/default_avatar.jpg" style="width:48px;height:48px;"/>
         </div>
         <div>
         
@@ -292,26 +389,23 @@ function ConfirmHandler() {
           
         </div>
     </div>
-    
-    <div class="div_comment_item" id="reply2">
-        <div class="div_comment_avatar" >
-          <img alt="firstboy" src="/image/default_avatar.jpg" style="width:48px;height:48px;">
-        </div>
-        <div>
-        
-          <div>
-            <span><a href="/center/comment/list?id=" class="uname" target="_blank">firstboy</a></span>
-          </div>
-          
-          <div>
-            <p>看来中国古老的面相学可以发扬光大了！计算机算命是科学</p>
-            <em style="color: rgb(108, 115, 122);">2013-10-17 11:32:06</em>
-          </div>
-          
-        </div>
-    </div>
-    
 </div>
+
+
+<div class="div_comment_add">
+    <span class="name"><a <?php echo (array_key_exists('author', $this->result))?'href="/center/comment/list?author='.$this->result['author'].'"':'';?>
+    	class="uname" target="_blank"><?php echo (array_key_exists('author', $this->result))?$this->result['author']:'匿名';?></a></span>
+    <form accept-charset="UTF-8" action="/post/comment/add" data-remote="true" id="form_comment" method="POST">
+    <textarea class="topic_editor span10" id="comment_content" name="comment_content" 
+        placeholder="在这里输入评论……" tabindex="1" 
+        onpropertychange="{if (this.scrollHeight > 50) this.style.height=(this.scrollHeight)+'px'}" 
+        oninput="{if (this.scrollHeight > 50) this.style.height=(this.scrollHeight)+'px'}"></textarea>
+    <input type="submit" class="btn_comment_submit" onclick="return CommentAddHandler();" value="评论"/>
+    </form>
+</div>
+
+
 </div><!-- 文章评论结束div -->
 
-<?php } ?>
+<?php } // end of preview ?>
+<?php } // end of result ?>
