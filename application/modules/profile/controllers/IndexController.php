@@ -1,6 +1,6 @@
 <?php
 
-class IndexController extends Zend_Controller_Action
+class Profile_IndexController extends Zend_Controller_Action
 {
 
     public function init()
@@ -10,12 +10,9 @@ class IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        // action body
-    	$this->redirect('/post/post/list');
+    	$this->view->profile = true;
     }
 
 
 }
-
-
 

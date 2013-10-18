@@ -55,8 +55,8 @@ function TblCancelAddItem() {
 
 function TblAddItem() {
 	$("#mlist_table tbody").append("<tr><td></td>"
-		+ "<td><input type='text' style='width:100%;text-align:right;' value=''/></td>"
-		+ "<td><input type='text' style='width:100%;text-align:right;' value=''/></td>"
+		+ "<td><input type='text' style='width:100%;text-align:left;' value=''/></td>"
+		+ "<td><input type='text' style='width:100%;text-align:left;' value=''/></td>"
 		+ "<td><button onclick='tbl_additem_handler(event)'>确定</button></td></tr>");
 	$("#mlist_table tbody>tr:last>td>input:first").focus();
     $( "#mlist_table input" ).keydown(function() {
