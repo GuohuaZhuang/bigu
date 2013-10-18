@@ -267,6 +267,10 @@ class Post_PostController extends Zend_Controller_Action
 	
 	public function viewAction()
 	{
+		$auth = Zend_Auth::getInstance();
+		$user = $auth->getStorage()->read();
+		$this->view->username = $user['username'];
+		
 		$request = $this->getRequest();
 		$post_id = $request->getParam('post_id');
 		$db_post = new Post_Model_DbTable_Post();
@@ -279,7 +283,11 @@ class Post_PostController extends Zend_Controller_Action
 	
 	public function previewAction()
 	{
+		$auth = Zend_Auth::getInstance();
+		$user = $auth->getStorage()->read();
+		$this->view->username = $user['username'];
 		$this->view->preview = true;
+		
 		$request = $this->getRequest();
 		// title
 		$post_title = $request->getParam('post_title');

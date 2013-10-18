@@ -1,6 +1,7 @@
 <?php
 
 require_once(APPLICATION_PATH . '/modules/post/models/DbTable/Category.php');
+require_once(APPLICATION_PATH . '/util/Json.php');
 
 class Post_CategoryController extends Zend_Controller_Action
 {
@@ -10,6 +11,37 @@ class Post_CategoryController extends Zend_Controller_Action
         /* Initialize action controller here */
     }
 
+    public function listAction()
+    {
+    	$this->view->manage = true;
+    	$db_category = new Post_Model_DbTable_Category();
+    	$where = $db_category->getAdapter()->quoteInto('parent_category=?', '');
+    	$result = $db_category->fetchAll($where, 'parent_category')->toArray();
+    	$this->view->result = $result;
+    	$_oi = 0;
+    	$json = '{"success": "OK", "d": [';
+    	foreach ($result as $record) {
+    		if (0 != $_oi) $json .= ', ';
+    		$subcategorys = $db_category->getAllSubCategory($record['category']);
+    		$data_json = "";
+    		$data_count = count($subcategorys);
+    		for($i = 0; $i < $data_count; $i ++) {
+    			if (0 != $i) $data_json .= ',';
+    			$data_json .= '"';
+    			$data_json .= $subcategorys[$i];
+    			$data_json .= '"';
+    		}
+    		$json .= '{"category": "'.$record['category'].'", "subcategorys": [' . $data_json . '] }';
+    		$_oi ++;
+    	}
+    	$json .= '] }';
+    	echo $json;
+    	
+    	// stop layout and render
+    	$this->_helper->layout->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender(TRUE);
+    }
+    
     public function indexAction()
     {
         $this->view->manage = true;

@@ -92,7 +92,8 @@ class Post_CommentController extends Zend_Controller_Action
     	$this->_helper->viewRenderer->setNoRender(TRUE);
     }
     
-    private function _jsonReadable($json, $html=FALSE) {
+    private function _jsonReadable($json, $html=FALSE)
+    {
     	$tabcount = 0;
     	$result = '';
     	$inquote = false;

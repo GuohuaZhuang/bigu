@@ -21,7 +21,7 @@
 	<?php include(APPLICATION_PATH . "/../public/html/left_mnav.html"); ?>
 	<?php } else { ?>
 	<!-- 主页左面板 -->
-	<?php include(APPLICATION_PATH . "/../public/html/left_nav.html"); ?>
+	<?php include(APPLICATION_PATH . "/../public/html/left_nav.phtml"); ?>
 	<?php } ?>
 	
 	<!-- 右边面板(采用table作布局) -->
@@ -46,9 +46,9 @@
 	  	</tr>
 	  	<?php if (empty($this->editor)) { ?>
 	  	<tr>
-		  	<td>
+		  	<td style="height: 45px;">
 		  		<!-- 右上子导航栏 -->
-		  		<?php include(APPLICATION_PATH . "/../public/html/top_subnav.html"); ?>
+		  		<?php include(APPLICATION_PATH . "/../public/html/top_subnav.phtml"); ?>
 		  	</td>
 		  	<td>
 		  		<!-- 右上子搜索框 -->
@@ -79,6 +79,7 @@
 			  		<h6 style="	color: #555555;
 								font-size: 14px;
 								font-weight: bolder;
+								border-radius: 5px;
 								border-top: 1px solid #ebebeb;
 								box-shadow: 0 0px 1px rgba(0,0,0,0.15);
 								margin-top: -1px;

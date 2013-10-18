@@ -92,7 +92,7 @@ CREATE TABLE `tbl_comment` (
   `id_post` int(11) NOT NULL,
   `content` text NOT NULL,
   `pub_datetime` DATETIME NOT NULL,
-  `author` varchar(40) NOT NULL,
+  `author` varchar(40) DEFAULT NULL,-- NULL means 匿名
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=UTF8;
 
@@ -115,21 +115,6 @@ CREATE TABLE `tbl_category` (
 
 -- 类别查询的话可以这样做：点击大类查询按大类做left like，按小类查询就按小类查询吧
 INSERT INTO `tbl_category` VALUES ('搜索引擎','',0),('爬虫技术','搜索引擎',0),('自然语言处理','搜索引擎',0),('数据存储','搜索引擎',0),('互联网金融','',0);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

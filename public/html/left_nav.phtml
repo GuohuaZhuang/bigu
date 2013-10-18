@@ -1,0 +1,138 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript">
+
+function _AppendCategoryItemIntoList(category) {
+	var new_item = '';
+	new_item += '<li class="menu_category"><figure><div class="menuText">';
+	new_item += '<a style="font-weight: bold" href="/post/post/list?category=';
+	new_item += category;
+	new_item += '">';
+	new_item += category;
+	new_item += '</a>';
+	new_item += '</div><i class="icon-home"></i></figure></li>';
+	$('#ul_category_list').append(new_item);
+}
+
+function _AppendSubcategoryItemIntoList(subcategory) {
+	var new_item = '';
+	new_item += '<li><a href="/post/post/list?sub_category=';
+	new_item += subcategory;
+	new_item += '">';
+	new_item += subcategory;
+	new_item += '</a></li>';
+	$('#ul_subcategory_list').append(new_item);
+}
+
+function CategoryListHandler(vcurr_category) {
+	Jsoncallback('/post/category/list', 
+		function (json) {
+		    if (typeof json.err !== 'undefined' && json.err != "") {
+		        alert(json.err);
+		        return false;
+		    }
+		    if (typeof json.success === 'undefined') {
+				return false;
+			}
+			if (json.d !== 'undefined') {
+				var d = json.d;
+				$('#ul_category_list>.menu_category').remove();
+				if (vcurr_category == '' && d.length > 0) {
+					curr_category = d[0].category;
+				} else {
+					curr_category = vcurr_category;
+				}
+				for (var i = 0; i < d.length; i ++) {
+					_AppendCategoryItemIntoList(d[i].category);
+					if (curr_category == d[i].category) {
+						var subcategorys = d[i].subcategorys;
+						$('#ul_subcategory_list>li').remove();
+						if (subcategorys.length == 0) {
+							$('#div_subcategory').fadeOut();
+						} else {
+							$('#div_subcategory').fadeIn();
+						}
+						for (var j = 0; j < subcategorys.length; j ++) {
+							_AppendSubcategoryItemIntoList(subcategorys[j]);
+						}
+					}
+				}
+				// set font-weight to bold which category is selected
+				if (vcurr_category != '') {
+					$("#ul_category_list a").filter(":not(.menuText_a_hover)").css('font-weight', 'normal');
+					$("#ul_category_list a").filter(":contains('"+vcurr_category+"')").css('font-weight', 'bold');
+				}
+			} else {
+				alert('加载类别失败');
+			}
+		}, 
+		'POST', 
+		{'d': '', 'timestamp' : Date.parse(new Date()) }, 
+		'loading');
+
+    return false;
+}
+
+$(document).ready(function() {
+	var curr_category = '<?php echo isset($_GET['category']) ? $_GET['category']: ''; ?>';
+	CategoryListHandler(curr_category);
+});
+
+</script>
+</head>
+<body>
+
+<div class="left_div">
+<nav class="sideBar hidden-phone pull-left">
+<ul data-spy="affix" class="side_nav affix" id="ul_category_list">
+    <li><figure>
+        <div class="menuText">
+        <a href="/">
+            <img width="114" height="65" src="/image/bigu.png" alt="比咕网" title="点击回到比咕网首页">
+        </a>
+        </div>
+    </figure></li>
+    <!-- 
+    <li class="menu_category"><figure>
+        <div class="menuText">
+            <a href="/">搜索技术</a>
+        </div>
+        <i class="icon-home"></i>
+    </figure></li>
+    
+    <li class="menu_category"><figure>
+        <div class="menuText">
+            <a href="/post/post/list">自然语言处理</a>
+        </div>
+        <i class="icon-flag"></i>
+    </figure></li>
+    
+    <li class="menu_category"><figure>
+        <div class="menuText">
+            <a href="/topics">互联网金融</a>
+        </div>
+        <i class="icon-group"></i>
+    </figure></li>
+    
+    <li class="menu_category"><figure>
+        <div class="menuText">
+            <a href="/topics">编程</a>
+        </div>
+        <i class="icon-group"></i>
+    </figure></li>
+    
+    <li class="menu_category"><figure>
+        <div class="menuText">
+            <a href="/topics">比咕实验室</a>
+        </div>
+        <i class="icon-group"></i>
+    </figure></li>
+    -->
+    </ul>
+</nav>
+</div>
+
+</body>
+</html>
