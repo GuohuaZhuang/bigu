@@ -1,0 +1,29 @@
+<link href="/css/profile.css" rel="stylesheet" type="text/css" />
+
+<div>
+<?php if (!isset($this->error) && !isset($this->success)) { ?>
+<form accept-charset="UTF-8" action="/profile/index/pwdmod" enctype="multipart/form-data" id="form_pwdmod" method="POST">
+  <fieldset>
+    <legend>密码修改</legend>
+    <br/>
+    <div class="div_profile_value">
+    	<label class="label_profile_name" for="profile_old_pwd">旧密码</label>
+    	<div><input id="profile_old_pwd" name="profile_old_pwd" type="password" size="20" maxlength="85" /></div>
+    </div><br/>
+    <div class="div_profile_value">
+    	<label class="label_profile_name" for="profile_new_pwd">新密码</label>
+    	<div><input id="profile_new_pwd" name="profile_new_pwd" type="password" size="20" maxlength="85" /></div>
+    </div><br/>
+    <div class="div_profile_value">
+    	<label class="label_profile_name" for="profile_new_pwd_again">再次确认新密码</label>
+    	<div><input id="profile_new_pwd_again" name="profile_new_pwd_again" type="password" size="20" maxlength="85" /></div>
+    </div><br/>
+    <hr style="border-color: rgb(240, 237, 237); margin: 0px; padding: 0px;" noshade="noshade"/><br/>
+    <div class="div_profile_value">
+    	<label class="label_profile_name"></label>
+    	<div><input type="submit" value="确认修改" /></div>
+    </div><br/>
+  </fieldset>
+</form>
+<?php } ?>
+</div>

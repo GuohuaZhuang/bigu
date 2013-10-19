@@ -148,8 +148,8 @@ INSERT INTO tbl_profile(username, pname, pvalue) VALUES('admin', 'city', '上海
 -- weibo -- Weibo
 -- qq -- QQ
 -- phone -- 电话
--- company -- 公司
--- school -- 学校
+
+-- company -- 公司/学校
 -- title -- 职位
 -- industry -- 行业
 -- homepage -- 个人主页

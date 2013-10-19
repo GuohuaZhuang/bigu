@@ -1,5 +1,11 @@
 <?php
 
+require_once(APPLICATION_PATH . '/modules/auth/models/DbTable/Users.php');
+require_once(APPLICATION_PATH . '/modules/auth/forms/Login.php');
+require_once(APPLICATION_PATH . '/modules/auth/plugins/Authadapter.php');
+require_once(APPLICATION_PATH . '/modules/auth/forms/Register.php');
+require_once(APPLICATION_PATH . '/util/Global.php');
+
 class Auth_IndexController extends Zend_Controller_Action
 {
 
@@ -40,7 +46,6 @@ class Auth_IndexController extends Zend_Controller_Action
     		$redirect = '/auth/index/index';
     	
     	// 读取表单
-    	require(APPLICATION_PATH . '/modules/auth/forms/Login.php');
     	$form = new Auth_Form_Login();
     	if (!$form->isValid($_POST)) {
     		$this->view->form = $form;
@@ -50,7 +55,6 @@ class Auth_IndexController extends Zend_Controller_Action
     	$password = $this->getRequest()->getParam('password');
     	
     	// 使用Auth_Adapter来实现验证
-        require(APPLICATION_PATH . '/modules/auth/plugins/Authadapter.php');
         $auth_adapter = new Auth_Plugin_Authadapter();
         $auth_adapter->setIdentity($username);
         $auth_adapter->setCredential($password);
@@ -59,7 +63,6 @@ class Auth_IndexController extends Zend_Controller_Action
 
         if ($result->isValid()) {
         	// 验证成功的话把用户身份存储到auth的storage中
-        	require(APPLICATION_PATH . '/modules/auth/models/DbTable/Users.php');
         	$user= new Auth_Model_DbTable_Users();
         	$role_id = $user->getRoleId($username);
         	$data= array(
@@ -98,7 +101,6 @@ class Auth_IndexController extends Zend_Controller_Action
     	}
     	
         // 读取表单
-    	require(APPLICATION_PATH . '/modules/auth/forms/Register.php');
     	$form = new Auth_Form_Register();
     	if (!$form->isValid($_POST)) {
     		$this->view->form = $form;
@@ -108,7 +110,6 @@ class Auth_IndexController extends Zend_Controller_Action
     	$data = $form->getValues();
     	
     	// 查验后存库
-    	require(APPLICATION_PATH . '/modules/auth/models/DbTable/Users.php');
         $user= new Auth_Model_DbTable_Users();
         if ($user->hasEmail($data['email'])) { /// email 是否已有
         	$this->view->error = 'Email已经注册过了';
@@ -142,7 +143,7 @@ class Auth_IndexController extends Zend_Controller_Action
         	$mail->setBodyHtml($html, 'UTF-8');
         	$mail->addTo($data['email'], $data['real_name']);
         	if ($mail->send()) {
-        		$data['password_salt'] = $this->_generateSalt();//'xcNsdaAd73328aDs73oQw223hd';
+        		$data['password_salt'] = Util_Global::generateSalt();//'xcNsdaAd73328aDs73oQw223hd';
         		$data['id_role'] = 2;
         		$data['password'] = sha1($data['password_salt'] . $data['password']);
         		// JUST FOR DEBUG 
@@ -164,7 +165,6 @@ class Auth_IndexController extends Zend_Controller_Action
     {
         $request = $this->getRequest();
 	    $users = $this->_getTableUser();
-	    require(APPLICATION_PATH . '/modules/auth/models/DbTable/Users.php');
 	    if (empty($users) || !($users instanceof Auth_Model_DbTable_Users)) {
 	    	$users = new Auth_Model_DbTable_Users();
 	    }
@@ -191,28 +191,6 @@ class Auth_IndexController extends Zend_Controller_Action
 	    }
     }
 
-    private function _generateSalt($length = 32, $chars = '1234567890abcdef') {
-    	// LENGTH OF CHARACTER LIST
-    	$charsLength = (strlen($chars) - 1);
-    	
-    	// START OUR STRING
-    	$string = $chars{rand(0, $charsLength)};
-    	
-    	// GENERATE RANDOM STRING
-    	for ($i = 1; $i < $length; $i = strlen($string)) {
-    		// GRAB A RANDOM CHARACTER FROM OUR LIST
-    		$r = $chars{rand(0, $charsLength)};
-    		// MAKE SURE THE SAME TWO CHARACTERS DON'T APPEAR NEXT TO EACH OTHER
-    		if ($r != $string{$i - 1}) {
-    			$string .=  $r;
-    		} else {
-    			$i--;
-    		}
-    	}
-    	
-    	// RETURN THE STRING
-    	return $string;
-    }
     
 }
 
