@@ -1,4 +1,72 @@
-<br /><br />
-<div id="view-content">
-	<p>View script for controller <b>Index</b> and script/action name <b>index</b></p>
+<style>
+<!--
+.label_profile_name {
+	float: left;
+	width: 120px;
+	padding-top: 5px;
+	text-align: right;
+	display: block;
+	margin-bottom: 5px;
+	font-size: 16px;
+	font-weight: normal;
+	line-height: 20px;
+}
+.div_profile_value {
+	font-size: 16px;
+	line-height: 20px;
+	color: #333333;
+}
+.div_profile_value input {
+	display: inline-block;
+	height: 30px;
+	font-size: 16px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	padding: 5px;
+	font-family: Microsoft YaHei,"微软雅黑",Lucida,Verdana,Hiragino Sans GB,STHeiti,WenQuanYi Micro Hei,Droid Sans Fallback,SimSun,sans-serif;
+	margin: 0px 0px 5px 15px;
+}
+.div_profile_value input:focus {
+	border-color: #0664B0;
+	outline: 0;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(82,168,236,0.6);
+	-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(82,168,236,0.6);
+	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(82,168,236,0.6);
+}
+-->
+</style>
+
+<div>
+<form>
+  <fieldset>
+  	<?php if (empty($this->profile_users)) echo '用户被删除了'; else { ?>
+    <legend>个人资料</legend>
+    <br/>
+    <div class="div_profile_value">
+    	<label class="label_profile_name" for="profile_username">用户名</label>
+    	<div><input id="profile_username" type="text" size="16" disabled="disabled"
+    		value="<?php echo $this->profile_users['username']; ?>"
+    	/></div>
+    </div><br/>
+    <div class="div_profile_value">
+    	<label class="label_profile_name" for="profile_real_name">真实姓名/别名</label>
+    	<div><input id="profile_real_name" type="text" size="16" /></div>
+    </div><br/>
+    <div class="div_profile_value">
+    	<label class="label_profile_name" for="profile_email">Email/邮箱</label>
+    	<div><input id="profile_email" type="text" size="22" /></div>
+    </div><br/>
+    <div class="div_profile_value">
+    	<label class="label_profile_name" for="profile_avatar">Avatar(Upload)</label>
+    	<div><input id="profile_avatar" type="text" size="22" /></div>
+    </div><br/>
+    <hr style="border-color: rgb(240, 237, 237); margin: 0px; padding: 0px;" noshade="noshade"/><br/>
+    <div class="div_profile_value">
+    	<label class="label_profile_name" for="profile_gender">Email/邮箱</label>
+    	<div><input id="profile_gender" type="text" size="22" /></div>
+    </div><br/>
+    <?php } ?>
+  </fieldset>
+</form>
 </div>
