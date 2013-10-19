@@ -1,5 +1,10 @@
 @CHARSET "UTF-8";
 
+.profile_title {
+	font-size: 20px;
+	font-weight: bold;
+	color: #2375BE;
+}
 .label_profile_name {
 	float: left;
 	width: 120px;

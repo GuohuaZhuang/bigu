@@ -1,11 +1,11 @@
 <link href="/css/profile.css" rel="stylesheet" type="text/css" />
 
 <div>
-<form>
+<form accept-charset="UTF-8" action="/profile/index/save" enctype="multipart/form-data" id="form_profilesave" method="POST">
   <fieldset>
   	<?php if (empty($this->profile_users)) echo '没找到个人资料'; else { ?>
-    <legend>个人资料</legend>
-    <br/>
+    <legend><span class="profile_title">个人资料</span></legend>
+    <hr style="border-color: rgb(240, 237, 237); margin: 0px; padding: 0px;" noshade="noshade"/><br/>
     <div class="div_profile_value">
     	<label class="label_profile_name" for="profile_username">用户名</label>
     	<div><input id="profile_username" type="text" size="16" disabled="disabled"
@@ -14,19 +14,19 @@
     </div><br/>
     <div class="div_profile_value">
     	<label class="label_profile_name" for="profile_real_name">真实姓名/别名</label>
-    	<div><input id="profile_real_name" type="text" size="16" maxlength="85" 
+    	<div><input id="profile_real_name" name="profile_real_name" type="text" size="16" maxlength="85" 
     		value="<?php echo $this->profile_users['real_name']; ?>"
     	/></div>
     </div><br/>
     <div class="div_profile_value">
     	<label class="label_profile_name" for="profile_email">Email/邮箱</label>
-    	<div><input id="profile_email" type="text" size="22" maxlength="85" 
+    	<div><input id="profile_email" name="profile_email" type="text" size="22" maxlength="85" 
     		value="<?php echo $this->profile_users['email']; ?>"
     	/></div>
     </div><br/>
     <div class="div_profile_value">
     	<label class="label_profile_name" for="profile_avatar">Avatar(Upload)</label>
-    	<div><input id="profile_avatar" type="text" size="22" 
+    	<div><input id="profile_avatar" name="profile_avatar" type="text" size="22" 
     		value="<?php echo $this->profile_users['avatar']; ?>"
     	/></div>
     </div><br/>
@@ -34,7 +34,7 @@
     <div class="div_profile_value">
     	<label class="label_profile_name" for="profile_gender">性别</label>
     	<div>
-            <select>
+            <select id="profile_gender" name="profile_gender">
             	<option <?php echo (empty($this->profile_profiles['gender'])) ? 'selected' : ''; ?>>未知</option>
                 <option <?php echo ($this->profile_profiles['gender'] == '男') ? 'selected' : ''; ?>>男</option>
                 <option <?php echo ($this->profile_profiles['gender'] == '女') ? 'selected' : ''; ?>>女</option>
@@ -43,73 +43,70 @@
     </div><br/>
     <div class="div_profile_value">
     	<label class="label_profile_name" for="profile_address">地址</label>
-    	<div><input id="profile_address" type="text" size="40" maxlength="85" 
+    	<div><input id="profile_address" name="profile_address" type="text" size="40" maxlength="85" 
     		value="<?php echo (isset($this->profile_profiles['address']) ? $this->profile_profiles['address'] : ''); ?>"
     	/></div>
     </div><br/>
 	<div class="div_profile_value">
     	<label class="label_profile_name" for="profile_intro">一句话介绍</label>
-    	<div><input id="profile_intro" type="text" size="40" maxlength="85" 
+    	<div><input id="profile_intro" name="profile_intro" type="text" size="40" maxlength="85" 
     		value="<?php echo (isset($this->profile_profiles['intro']) ? $this->profile_profiles['intro'] : ''); ?>"
     	/></div>
     </div><br/>
 	<div class="div_profile_value">
     	<label class="label_profile_name" for="profile_city">城市</label>
-    	<div><input id="profile_city" type="text" size="20" maxlength="85" 
+    	<div><input id="profile_city" name="profile_city" type="text" size="20" maxlength="85" 
     		value="<?php echo (isset($this->profile_profiles['city']) ? $this->profile_profiles['city'] : ''); ?>"
     	/></div>
     </div><br/>
 	<div class="div_profile_value">
     	<label class="label_profile_name" for="profile_weibo">新浪微博</label>
-    	<div><input id="profile_weibo" type="text" size="20" maxlength="85" 
+    	<div><input id="profile_weibo" name="profile_weibo" type="text" size="20" maxlength="85" 
     		value="<?php echo (isset($this->profile_profiles['weibo']) ? $this->profile_profiles['weibo'] : ''); ?>"
     	/></div>
     </div><br/>
 	<div class="div_profile_value">
     	<label class="label_profile_name" for="profile_qq">腾讯ＱＱ</label>
-    	<div><input id="profile_qq" type="text" size="20" maxlength="85" 
+    	<div><input id="profile_qq" name="profile_qq" type="text" size="20" maxlength="85" 
     		value="<?php echo (isset($this->profile_profiles['qq']) ? $this->profile_profiles['qq'] : ''); ?>"
     	/></div>
     </div><br/>
 	<div class="div_profile_value">
     	<label class="label_profile_name" for="profile_phone">电话/手机号码</label>
-    	<div><input id="profile_phone" type="text" size="20" maxlength="20" 
+    	<div><input id="profile_phone" name="profile_phone" type="text" size="20" maxlength="20" 
     		value="<?php echo (isset($this->profile_profiles['phone']) ? $this->profile_profiles['phone'] : ''); ?>"
     	/></div>
     </div><br/>
     <hr style="border-color: rgb(240, 237, 237); margin: 0px; padding: 0px;" noshade="noshade"/><br/>
 	<div class="div_profile_value">
     	<label class="label_profile_name" for="profile_company">公司/学校</label>
-    	<div><input id="profile_company" type="text" size="20" maxlength="20" 
+    	<div><input id="profile_company" name="profile_company" type="text" size="20" maxlength="20" 
     		value="<?php echo (isset($this->profile_profiles['company']) ? $this->profile_profiles['company'] : ''); ?>"
     	/></div>
     </div><br/>
 	<div class="div_profile_value">
     	<label class="label_profile_name" for="profile_title">职位</label>
-    	<div><input id="profile_title" type="text" size="20" maxlength="20" 
+    	<div><input id="profile_title" name="profile_title" type="text" size="20" maxlength="20" 
     		value="<?php echo (isset($this->profile_profiles['title']) ? $this->profile_profiles['title'] : ''); ?>"
     	/></div>
     </div><br/>
 	<div class="div_profile_value">
     	<label class="label_profile_name" for="profile_industry">行业</label>
-    	<div><input id="profile_industry" type="text" size="20" maxlength="20" 
+    	<div><input id="profile_industry" name="profile_industry" type="text" size="20" maxlength="20" 
     		value="<?php echo (isset($this->profile_profiles['industry']) ? $this->profile_profiles['industry'] : ''); ?>"
     	/></div>
     </div><br/>
 	<div class="div_profile_value">
     	<label class="label_profile_name" for="profile_homepage">个人主页</label>
-    	<div><input id="profile_homepage" type="text" size="40" maxlength="20" 
+    	<div><input id="profile_homepage" name="profile_homepage" type="text" size="40" maxlength="20" 
     		value="<?php echo (isset($this->profile_profiles['homepage']) ? $this->profile_profiles['homepage'] : ''); ?>"
     	/></div>
     </div><br/>
     <hr style="border-color: rgb(240, 237, 237); margin: 0px; padding: 0px;" noshade="noshade"/><br/>
     <div class="div_profile_value">
     	<label class="label_profile_name"></label>
-    	<div>
-    		<input type="submit" value="保存资料" />
-    	</div>
+    	<div><input type="submit" value="保存资料" /></div>
     </div><br/>
-        
 	<?php } ?>
   </fieldset>
 </form>

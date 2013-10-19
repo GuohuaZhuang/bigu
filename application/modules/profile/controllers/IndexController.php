@@ -13,6 +13,54 @@ class Profile_IndexController extends Zend_Controller_Action
         /* Initialize action controller here */
     }
     
+    public function saveAction()
+    {
+    	$request = $this->getRequest();
+    	$data = $request->getParams();
+    	
+    	// 保证当前用户登录
+    	$username = Util_Global::getUsername();
+    	if (empty($username)) {
+    		$this->view->error = '当前用户没有登录';
+    		return false;
+    	}
+    	
+    	$db_user= new Auth_Model_DbTable_Users();
+    	$where = $db_user->getAdapter()->quoteInto('username=?', $username);
+    	$db_user->update(array('real_name' => $data['profile_real_name'], 
+    			'email' => $data['profile_email'], 
+    			'avatar' => $data['profile_avatar']), $where);
+    	
+    	$pdata = array(
+    			'gender' => $data['profile_gender'], 
+    			'address' => $data['profile_address'], 
+    			'intro' => $data['profile_intro'], 
+    			'city' => $data['profile_city'], 
+    			'weibo' => $data['profile_weibo'], 
+    			'qq' => $data['profile_qq'], 
+    			'phone' => $data['profile_phone'], 
+    			'company' => $data['profile_company'], 
+    			'title' => $data['profile_title'], 
+    			'industry' => $data['profile_industry'], 
+    			'homepage' => $data['profile_homepage']);
+    	$db = new Profile_Model_DbTable_Profile();
+    	foreach ($pdata as $key => $value) {
+	    	$where = array();
+	    	$where[] = $db->getAdapter()->quoteInto('username=?', $username);
+	    	$where[] = $db->getAdapter()->quoteInto('pname=?', $key);
+	    	$isexits = $db->fetchRow($where);
+	    	if (!empty($isexits)) {
+	    		$db->update(array('pvalue' => $value), $where);
+	    	} else {
+	    		$db->insert(array(
+    				'username' => $username, 
+    				'pname' => $key, 
+    				'pvalue' => $value));
+	    	}
+    	}
+    	$this->redirect('/profile/index/index');
+    }
+    
     public function indexAction()
     {
     	$this->view->profile = true;
@@ -30,11 +78,12 @@ class Profile_IndexController extends Zend_Controller_Action
     		$profiles[$item['pname']] = $item['pvalue'];
     	}
     	$this->view->profile_profiles = $profiles;
-    	 
+    	
     	$db_users = new Auth_Model_DbTable_Users();
     	$select = $db_users->getAdapter()->select();
     	$select->where('username=?', $username);
-    	$select->from(array('U' => 'tbl_users'), array('username', 'real_name', 'email', 'avatar'));
+    	$select->from(array('U' => 'tbl_users'), 
+    			array('username', 'real_name', 'email', 'avatar'));
     	$stmt = $db_users->getAdapter()->query($select);
     	$result_user = $stmt->fetchAll();
     	if (!empty($result_user)) $this->view->profile_users = $result_user[0];
