@@ -6,7 +6,7 @@
 <body>
 
 <div id="head_links_container" class="head_div">
-    <a href="/auth/index/index">主页</a>
+    <a href="/post/post/list">主页</a>
     <?php $auth = Zend_Auth::getInstance();
     if ($auth->hasIdentity()) {
         $user = $auth->getStorage()->read();
