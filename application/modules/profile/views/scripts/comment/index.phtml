@@ -14,19 +14,19 @@
     <div>
         <div>
             <span>
-                <a class="div_comment_item_title" 
+                <a class="div_comment_item_title" style="font-size: 18px;"
                 	href="/post/post/view?post_id=<?php echo $row['id_post']?>" target="_blank"><?php echo $row['title']?></a>
             </span>
         </div>
         
         <div>
-            <p><?php echo $row['content']?></p>
+            <pre><?php echo $row['content']?></pre>
             <em style="color: rgb(108, 115, 122);"><?php echo $row['pub_datetime']?></em>
         </div>
         
     </div>
     <div class="div_post_view_edit">
-        <a onclick="return ConfirmDeleteCommentHandler('<?php echo $row['id']?>');" href="/post/comment/delete">删除</a>
+        <a onclick="return ConfirmDeleteCommentHandler('<?php echo $row['id']?>');" href="/post/comment/delete">删除该评论</a>
     </div>
 </div>
 <?php } } ?>

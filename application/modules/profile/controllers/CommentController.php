@@ -23,7 +23,7 @@ class Profile_CommentController extends Zend_Controller_Action
     		return false;
     	}
     	$db = new Post_Model_DbTable_Comment();
-    	$result = $db->fetchAllByAuthor($username);
+    	$result = $db->fetchAllByAuthor($username, $page, 10);
     	$this->view->result = $result;
     	
     	$total_count = $db->fetch_count($username);

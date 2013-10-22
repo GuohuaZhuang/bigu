@@ -1,6 +1,7 @@
 <?php
 
 require_once(APPLICATION_PATH . '/modules/post/models/DbTable/Comment.php');
+require_once(APPLICATION_PATH . '/util/Global.php');
 
 class Post_CommentController extends Zend_Controller_Action
 {
@@ -75,7 +76,7 @@ class Post_CommentController extends Zend_Controller_Action
 	    			$rstr .= '{"id": "';
 	    			$rstr .= $item['id'];
 	    			$rstr .= '", "content": "';
-	    			$rstr .= $this->_jsonReadable(trim($item['content']), TRUE);
+	    			$rstr .= Util_Global::JsonReadable(trim($item['content']), TRUE);
 	    			$rstr .= '", "author": "';
 	    			$rstr .= $item['author'];
 	    			$rstr .= '", "avatar": "';
@@ -94,59 +95,5 @@ class Post_CommentController extends Zend_Controller_Action
     	$this->_helper->viewRenderer->setNoRender(TRUE);
     }
     
-    private function _jsonReadable($json, $html=FALSE)
-    {
-    	$tabcount = 0;
-    	$result = '';
-    	$inquote = false;
-    	$ignorenext = false;
-    	$tab = '';
-    	$newline = '';
-    	if ($html) {
-    		$tab = "&nbsp;&nbsp;&nbsp;&nbsp;";
-    		$newline = "<br/>";
-    	} else {
-    		$tab = "\t";
-    		$newline = "\n";
-    	}
-    	$len = strlen($json);
-    	for($i = 0; $i < $len; $i++) {
-    		$char = $json[$i];
-    		
-    		if ($ignorenext) {
-    			$result .= $char;
-    			$ignorenext = false;
-    		} else {
-    			switch($char) {
-    				case '{':
-    					$tabcount++;
-    					$result .= $char . $newline . str_repeat($tab, $tabcount);
-    					break;
-    				case '}':
-    					$tabcount--;
-    					$result = trim($result) . $newline . str_repeat($tab, $tabcount) . $char;
-    					break;
-    				case ',':
-    					$result .= $char . $newline . str_repeat($tab, $tabcount);
-    					break;
-    				case '"':
-    					$inquote = !$inquote;
-    					$result .= $char;
-    					break;
-    				case "\n":
-    				case "\r":
-    					$result .= $newline;
-    					break;
-    				case "\\":
-    					if ($inquote) $ignorenext = true;
-    					$result .= $char;
-    					break;
-    				default:
-    					$result .= $char;
-    			}
-    		}
-    	}
-    	 
-    	return $result;
-    }
+    
 }
