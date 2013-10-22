@@ -41,12 +41,12 @@ class Post_CommentController extends Zend_Controller_Action
     public function deleteAction()
     {
     	$request = $this->getRequest();
-    	$id_post = $request->getParam('id');
-    	if (empty($id_post)) {
+    	$id = $request->getParam('id');
+    	if (empty($id)) {
     		echo '{"err": "删除失败，参数不足"}';
     	} else {
 	    	$db = new Post_Model_DbTable_Comment();
-	    	$where = $db->getAdapter()->quoteInto('id=?', $post_id);
+	    	$where = $db->getAdapter()->quoteInto('id=?', $id);
 	    	$num = $db->delete($where);
 	    	echo '{"success": "删除成功", "num": "'.$num.'"}';
     	}
@@ -78,6 +78,8 @@ class Post_CommentController extends Zend_Controller_Action
 	    			$rstr .= $this->_jsonReadable(trim($item['content']), TRUE);
 	    			$rstr .= '", "author": "';
 	    			$rstr .= $item['author'];
+	    			$rstr .= '", "avatar": "';
+	    			$rstr .= $item['avatar'];
 	    			$rstr .= '", "pub_datetime": "';
 	    			$rstr .= $item['pub_datetime'];
 	    			$rstr .= '"}';

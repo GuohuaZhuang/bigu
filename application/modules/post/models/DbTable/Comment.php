@@ -7,12 +7,13 @@ class Post_Model_DbTable_Comment extends Zend_Db_Table_Abstract
 
     
     public function fetchAllByPostid($id_post) {
-    	$select = $this->select();
-    	$select->from(array('r' => 'tbl_comment'));
-    	$select->where('r.id_post=?', $id_post);
-    	
-    	$result = $this->fetchAll($select, 'pub_datetime ASC');
-    	return $result;
+    	$select = $this->getAdapter()->select();
+    	$select->from(array('C' => 'tbl_comment'), array('id', 'id_post', 'content', 'pub_datetime', 'author'));
+    	$select->joinLeft(array('U' => 'tbl_users'), 'C.author=U.username', array('avatar'));
+    	$select->where('C.id_post=?', $id_post);
+    	$select->order('pub_datetime ASC');
+    	$stmt = $this->getAdapter()->query($select);
+    	return $stmt->fetchAll();
     }
     
 }

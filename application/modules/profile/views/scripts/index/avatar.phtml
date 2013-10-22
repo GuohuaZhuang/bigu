@@ -1,0 +1,21 @@
+<link href="/css/profile.css" rel="stylesheet" type="text/css" />
+
+<div>
+<form accept-charset="UTF-8" action="/profile/index/save" enctype="multipart/form-data" id="form_profilesave" method="POST">
+  <fieldset>
+  	<?php if (empty($this->profile_users)) echo '没找到个人资料'; else { ?>
+    <legend><span class="profile_title">修改头像</span></legend>
+    <hr style="border-color: rgb(240, 237, 237); margin: 0px; padding: 0px;" noshade="noshade"/><br/>
+    <div class="div_profile_value">
+	    <div class="div_profile_avatar">
+			<iframe src="/util/jquery_php_avatar/index.php?thumbpath=<?php echo
+			$this->profile_users['avatar'] = str_replace("/util/jquery_php_avatar/thumb/","./thumb/",
+					$this->profile_users['avatar']);
+			$this->profile_users['avatar']; ?>" width="100%" >
+			</iframe>
+		</div>
+	</div><br/>
+	<?php } ?>
+  </fieldset>
+</form>
+</div>

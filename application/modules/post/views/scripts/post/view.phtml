@@ -6,6 +6,26 @@ function ConfirmHandler() {
 	}
 	return false;
 }
+function ConfirmDeleteCommentHandler(id) {
+	if (confirm("确认要删除吗？")) {
+		Jsoncallback('/post/comment/delete', 
+	    	function (json) {
+		        if (typeof json.err !== 'undefined' && json.err != "") {
+		            alert(json.err);
+		            return false;
+		        }
+		        if (typeof json.success === 'undefined') {
+		    		return false;
+				}
+			}, 
+		    'POST', 
+		    {'d': '', 'timestamp' : Date.parse(new Date()), 
+			 'id': id }, 
+		    'loading');
+	    $('#comment_item_'+id).remove();
+	}
+	return false;
+}
 //-->
 </script>
 <style type="text/css">
@@ -251,13 +271,16 @@ Date.prototype.format = function(format) //author: meizz
   return format;
 }
 
-function _AppendCommentItemIntoList(author, content, date) {
+function _AppendCommentItemIntoList(author, avatar, content, date, id) {
+	if (avatar == '') avatar = '/image/default_avatar.jpg';
 	var new_comment = '';
-	new_comment += "<div class=\"div_comment_item\"><div class=\"div_comment_avatar\" >";
-	new_comment += "<img alt=\"firstboy\" src=\"/image/default_avatar.jpg\" style=\"width:48px;height:48px;\">";
+	new_comment += "<div class=\"div_comment_item\" id=\"comment_item_"+id+"\"><div class=\"div_comment_avatar\" >";
+	new_comment += "<img alt=\"firstboy\" src=\"";
+	new_comment += avatar; // avatar
+	new_comment += "\" style=\"width:48px;height:48px;\">";
 	new_comment += "</div><div>";
 	new_comment += "<div><span><a ";
-	if (author && author != "匿名") new_comment += "href=\"/center/comment/list?id=\"" + author;
+	if (author != '' && author != "匿名") new_comment += ("href=\"/center/comment/list?id=" + author + "\"");
 	new_comment += " class=\"uname\" target=\"_blank\">";
 	new_comment += author; // author
 	new_comment += "</a></span></div>";
@@ -268,7 +291,13 @@ function _AppendCommentItemIntoList(author, content, date) {
 	new_comment += "<em style=\"color: rgb(108, 115, 122);\">";
 	new_comment += date; // nowdate
 	new_comment += "</em>";
-	new_comment += "</div></div></div>";
+	new_comment += "</div></div>";
+	if (author == '<?php echo $this->username; ?>') {
+		new_comment += "<div class=\"div_post_view_edit\">";
+		new_comment += "<a onclick=\"return ConfirmDeleteCommentHandler(\'"+id+"\');\" href=\"/post/comment/delete\">删除</a>";
+		new_comment += "</div>";
+	}
+	new_comment += "</div>";
 	
 	$('#view_comment_list').append(new_comment);
 }
@@ -288,7 +317,7 @@ function CommentAddHandler() {
 				var author = '<?php echo (!empty($this->username))?$this->username:'匿名';?>';
 				var content = $('#comment_content').val();
 				content = content.replaceAll('\n', '<br/>');
-				_AppendCommentItemIntoList(author, content, nowdate);
+				_AppendCommentItemIntoList(author, '<?php echo (!empty($this->avatar))?$this->avatar:'';?>', content, nowdate, json.id);
 				$('#comment_content').val("");
 			} else {
 				alert('添加评论失败');
@@ -318,9 +347,9 @@ function CommentListHandler() {
 				var d = json.d;
 				$('#view_comment_list').html('');
 				for (var i = 0; i < d.length; i ++) {
-					console.log(d[i].content);
+					// console.log(d[i].content);
 					_AppendCommentItemIntoList(('' != d[i].author ? d[i].author : '匿名'), 
-						d[i].content, d[i].pub_datetime);
+						d[i].avatar, d[i].content, d[i].pub_datetime, d[i].id);
 				}
 				$('#comment_content').val("");
 			} else {
@@ -406,6 +435,14 @@ $(document).ready(function() {
 
 
 <div class="div_comment_add">
+	<div class="pull-left face">
+	    <a class="ulink" target="_blank" 
+	    	<?php echo (!empty($this->username))?'href="/center/comment/list?author='.$this->username.'"':'';?>>
+	        <img src="<?php echo (!empty($this->avatar))?$this->avatar:'/image/default_avatar.jpg';?>" 
+	        	style="width:48px;height:48px;border-radius: 6px;margin-left: 10px;float: left;" 
+	        	title="<?php echo (!empty($this->username))?$this->username:'匿名';?>" />
+	    </a>
+	</div>
     <span class="name"><a <?php echo (!empty($this->username))?'href="/center/comment/list?author='.$this->username.'"':'';?>
     	class="uname" target="_blank"><?php echo (!empty($this->username))?$this->username:'匿名';?></a></span>
     <form accept-charset="UTF-8" action="/post/comment/add" data-remote="true" id="form_comment" method="POST">

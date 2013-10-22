@@ -2,6 +2,7 @@
 
 require_once(APPLICATION_PATH . '/modules/post/models/DbTable/Post.php');
 require_once(APPLICATION_PATH . '/modules/post/models/DbTable/Category.php');
+require_once(APPLICATION_PATH . '/modules/auth/models/DbTable/Users.php');
 
 class Post_PostController extends Zend_Controller_Action
 {
@@ -270,6 +271,8 @@ class Post_PostController extends Zend_Controller_Action
 		$auth = Zend_Auth::getInstance();
 		$user = $auth->getStorage()->read();
 		$this->view->username = $user['username'];
+		$db_users = new Auth_Model_DbTable_Users();
+		$this->view->avatar = $db_users->fetchAvatar($user['username']);
 		
 		$request = $this->getRequest();
 		$post_id = $request->getParam('post_id');

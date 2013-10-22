@@ -13,6 +13,30 @@ class Profile_IndexController extends Zend_Controller_Action
         /* Initialize action controller here */
     }
     
+    public function saveavatarAction()
+    {
+    	$request = $this->getRequest();
+    	$data = $request->getParams();
+    	
+    	// 保证当前用户登录
+    	$username = Util_Global::getUsername();
+    	if (empty($username) || empty($data['profile_avatar']) 
+    			|| strpos($data['profile_avatar'], '/thumb/') == FALSE) {
+    		echo '{"err": "更新图像数据失败"}';
+    	} else {
+	    	$data['profile_avatar'] = str_replace("./thumb/","/util/jquery_php_avatar/thumb/",
+	    			$data['profile_avatar']);
+	    	
+	    	$db_user= new Auth_Model_DbTable_Users();
+	    	$where = $db_user->getAdapter()->quoteInto('username=?', $username);
+	    	$db_user->update(array('avatar' => $data['profile_avatar']), $where);
+	    	echo '{"success": "更新图像数据成功"}';
+    	}
+    	// stop layout and render
+    	$this->_helper->layout->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender(TRUE);
+    }
+    
     public function saveAction()
     {
     	$request = $this->getRequest();
@@ -28,8 +52,7 @@ class Profile_IndexController extends Zend_Controller_Action
     	$db_user= new Auth_Model_DbTable_Users();
     	$where = $db_user->getAdapter()->quoteInto('username=?', $username);
     	$db_user->update(array('real_name' => $data['profile_real_name'], 
-    			'email' => $data['profile_email'], 
-    			'avatar' => $data['profile_avatar']), $where);
+    			'email' => $data['profile_email']), $where);
     	
     	$pdata = array(
     			'gender' => $data['profile_gender'], 
@@ -61,6 +84,27 @@ class Profile_IndexController extends Zend_Controller_Action
     	$this->redirect('/profile/index/index');
     }
     
+    public function avatarAction()
+    {
+    	$this->view->profile = true;
+    	$profiles = array();
+    	
+    	$username = Util_Global::getUsername();
+    	if (empty($username)) {
+    		return false;
+    	}
+    	
+    	$db_users = new Auth_Model_DbTable_Users();
+    	$select = $db_users->getAdapter()->select();
+    	$select->where('username=?', $username);
+    	$select->from(array('U' => 'tbl_users'),
+    			array('username', 'avatar'));
+    	$stmt = $db_users->getAdapter()->query($select);
+    	$result_user = $stmt->fetchAll();
+    	if (!empty($result_user)) $this->view->profile_users = $result_user[0];
+    	else $this->view->profile_users = null;
+    }
+    
     public function indexAction()
     {
     	$this->view->profile = true;
@@ -83,7 +127,7 @@ class Profile_IndexController extends Zend_Controller_Action
     	$select = $db_users->getAdapter()->select();
     	$select->where('username=?', $username);
     	$select->from(array('U' => 'tbl_users'), 
-    			array('username', 'real_name', 'email', 'avatar'));
+    			array('username', 'real_name', 'email'));
     	$stmt = $db_users->getAdapter()->query($select);
     	$result_user = $stmt->fetchAll();
     	if (!empty($result_user)) $this->view->profile_users = $result_user[0];

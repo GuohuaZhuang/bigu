@@ -85,4 +85,14 @@ class Auth_Model_DbTable_Users extends Zend_Db_Table_Abstract
 		$stmt = $this->getAdapter()->query($select);
 		return $stmt->fetchAll();
 	}
+	public function fetchAvatar($username) {
+		$select = $this->select();
+		$select->from(array('U' => 'tbl_users'), array('avatar'));
+		$select->where('U.username=?', $username);
+		$result = $this->fetchRow($select);
+    	if (!empty($result) && isset($result['avatar'])) {
+    		return $result['avatar'];
+    	}
+    	return null;
+	}
 }
