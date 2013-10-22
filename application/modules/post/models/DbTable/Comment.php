@@ -4,7 +4,6 @@ class Post_Model_DbTable_Comment extends Zend_Db_Table_Abstract
 {
 
     protected $_name = 'tbl_comment';
-
     
     public function fetchAllByPostid($id_post) {
     	$select = $this->getAdapter()->select();
@@ -21,8 +20,9 @@ class Post_Model_DbTable_Comment extends Zend_Db_Table_Abstract
     	if (empty($count) || $count <= 0) $count = 10;
     	$select = $this->getAdapter()->select();
     	$select->from(array('C' => 'tbl_comment'), array('id', 'id_post', 'content', 'pub_datetime', 'author'));
+    	$select->joinLeft(array('U' => 'tbl_users'), 'C.author=U.username', array('avatar'));
     	$select->joinLeft(array('P' => 'tbl_post'), 'C.id_post=P.id', array('title'));
-    	$select->where('C.author=?', $author);
+    	if (!empty($author)) $select->where('C.author=?', $author);
     	$select->order('pub_datetime DESC');
     	$select->limitPage($page, $count);
     	$stmt = $this->getAdapter()->query($select);

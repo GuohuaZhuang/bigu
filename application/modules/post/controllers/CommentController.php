@@ -55,6 +55,41 @@ class Post_CommentController extends Zend_Controller_Action
     	$this->_helper->layout->disableLayout();
     	$this->_helper->viewRenderer->setNoRender(TRUE);
 	}
+	
+	public function topAction()
+	{
+		$db = new Post_Model_DbTable_Comment();
+		$result = $db->fetchAllByAuthor(null);
+		if (empty($result)) {
+			echo '{"success": "加载完成", "num": "'.'0'.'"}';
+		} else {
+			$rstr = '{"success": "加载完成", "num": "'.count($result).'", "d": [';
+			$i = 0;
+			foreach ($result as $item) {
+				if (0 != $i) $rstr .= ', ';
+				// {"id": "XXX", "content": "XXX", "pub_datetime": "XXX"}
+				$rstr .= '{"id": "';
+				$rstr .= $item['id'];
+				$rstr .= '", "content": "';
+				$rstr .= Util_Global::JsonReadable(trim($item['content']), TRUE);
+				$rstr .= '", "author": "';
+				$rstr .= $item['author'];
+				$rstr .= '", "id_post": "';
+				$rstr .= $item['id_post'];
+				$rstr .= '", "avatar": "';
+				$rstr .= $item['avatar'];
+				$rstr .= '", "pub_datetime": "';
+				$rstr .= $item['pub_datetime'];
+				$rstr .= '"}';
+				$i ++;
+			}
+			$rstr .= ']}';
+			echo $rstr;
+		}
+		// stop layout and render
+		$this->_helper->layout->disableLayout();
+		$this->_helper->viewRenderer->setNoRender(TRUE);
+	}
     
     public function listAction()
     {

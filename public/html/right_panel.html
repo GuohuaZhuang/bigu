@@ -3,57 +3,242 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-</head>
-<body>
+<script type="text/javascript">
+
+function _AppendCommentItemIntoRightPanel(author, avatar, content, date, id, id_post) {
+	if (avatar == '') avatar = '/image/default_avatar.jpg';
+	var new_comment = '';
+    var author_href = ((author != '' && author != "匿名") ? (" href=\"/profile/comment/list?id=" + author + "\"") : "");
+    
+	new_comment += "<li class=\"active\">";
+	new_comment += "<a class=\"ulink\" target=\"_blank\" ";
+	new_comment += author_href;
+	new_comment += ">";
+	new_comment += "<img class=\"uface\" src=\"";
+	new_comment += avatar;
+	new_comment += "\" style=\"width:48px;height:48px;\">";
+	new_comment += "</a>";
+	new_comment += "<span class=\"commentor\">";
+	new_comment += "<a ";
+	new_comment += author_href;
+	new_comment += " class=\"uname\" target=\"_blank\">";
+	new_comment += author;
+	new_comment += "</a>";
+	new_comment += "</span>";
+	new_comment += "<a target=\"_blank\" href=\"/post/post/view?post_id=";
+	new_comment += id_post;
+	new_comment += "\" class=\"right\">";
+	new_comment += content;
+	new_comment += "</a>";
+	new_comment += "</li>";
+	
+	$('#right_panel_content').append(new_comment);
+}
+
+function CommentPanelHandler() {
+	Jsoncallback('/post/comment/top', 
+		function (json) {
+		    if (typeof json.err !== 'undefined' && json.err != "") {
+		        alert(json.err);
+		        return false;
+		    }
+		    if (typeof json.success === 'undefined') {
+				return false;
+			}
+			if (json.d !== 'undefined') {
+				var d = json.d;
+				$('#right_panel_content').html('');
+				for (var i = 0; i < d.length; i ++) {
+					_AppendCommentItemIntoRightPanel(('' != d[i].author ? d[i].author : '匿名'), 
+						d[i].avatar, d[i].content, d[i].pub_datetime, d[i].id, d[i].id_post);
+				}
+			} else {
+				alert('添加评论失败');
+			}
+		}, 
+		'POST', 
+		{'d': '', 'timestamp' : Date.parse(new Date()), 
+		'comment_id_post': '<?php echo (array_key_exists('id', $this->result))?$this->result['id']:'';?>' }, 
+		'loading');
+
+    return false;
+}
+
+$(document).ready(function() {
+	CommentPanelHandler();
+});
 
 
-
-<div style="border-color: #ececec #ececec #cacaca;
+</script>
+<style type="text/css">
+.right_panel {
+	border-color: #ececec #ececec #cacaca;
 	border-image: none;
 	border-radius: 5px 5px 5px 5px;
 	border-style: solid;
 	border-width: 1px;
-	padding-bottom: 5px;
+	padding-bottom: 10px;
 	background: #ffffff;
 	color: #555555;
-">
-	<h6 style="	color: #555555;
-	    font-size: 14px;
-	    font-weight: bolder;
-	    border-radius: 5px;
-	    border-top: 1px solid #ebebeb;
-	    box-shadow: 0 0px 1px rgba(0,0,0,0.15);
-	    margin-top: -1px;
-	    padding: 6px;
-	    text-indent: 10px;
-	    display: block;
-	    line-height: 20px;
-	    padding: 6px;
-	    text-indent: 10px;
-	    background: #fcfcfc;
-	    background: -moz-linear-gradient(top, #fcfcfc 0%, #f5f5f5 100%);
-	    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fcfcfc), color-stop(100%, #f5f5f5));
-	    background: -webkit-linear-gradient(top, #fcfcfc 0%, #f5f5f5 100%);
-	    background: -o-linear-gradient(top, #fcfcfc 0%, #f5f5f5 100%);
-	    background: -ms-linear-gradient(top, #fcfcfc 0%, #f5f5f5 100%);
-	    background: linear-gradient(top, #fcfcfc 0%, #f5f5f5 100%);
-	    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#f5f5f5',GradientType=0 );
-	    ">最新评论</h6>
-    <div style="padding:0 15px 0 15px;
-	    zoom: 1;
-	    font-size: 14px;
-	    line-height: 20px;
-	    color: #333333;
-	    margin-top: 15px;
-	    border-bottom: 1px dashed rgb(238, 238, 238);
-	    width: 95%;
-	    overflow: hidden;">
-		<?php for ($_i = 0; $_i < 40; $_i ++) { ?>
-		<p style="margin-top: 15px;">哈哈，这里是评论专区</p>
-		<?php } ?>
+	margin-bottom: 10px;
+}
+.right_panel_title {
+	color: #555555;
+    font-size: 14px;
+    font-weight: bolder;
+    border-radius: 5px;
+    border-top: 1px solid #ebebeb;
+    box-shadow: 0 0px 1px rgba(0,0,0,0.15);
+    margin-top: -1px;
+    padding: 6px;
+    text-indent: 10px;
+    display: block;
+    line-height: 20px;
+    padding: 6px;
+    text-indent: 10px;
+    background: #fcfcfc;
+    background: -moz-linear-gradient(top, #fcfcfc 0%, #f5f5f5 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fcfcfc), color-stop(100%, #f5f5f5));
+    background: -webkit-linear-gradient(top, #fcfcfc 0%, #f5f5f5 100%);
+    background: -o-linear-gradient(top, #fcfcfc 0%, #f5f5f5 100%);
+    background: -ms-linear-gradient(top, #fcfcfc 0%, #f5f5f5 100%);
+    background: linear-gradient(top, #fcfcfc 0%, #f5f5f5 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#f5f5f5',GradientType=0 );
+}
+.right_panel_content_div {
+	padding:0 15px 0 15px;
+    zoom: 1;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333333;
+    border-bottom: 1px dashed rgb(238, 238, 238);
+    width: 95%;
+    overflow: hidden;
+}
+
+
+.right_panel_content_div li {
+	min-height: 70px;
+	margin-bottom: 10px;
+	margin-top: 20px;
+}
+.right_panel_content_div .ulink {
+	display: block;
+	float: left;
+	width: 48px;
+	height: 48px;
+}
+.right_panel_content_div .uface {
+	border-radius: 5px;
+}
+.right_panel_content_div .uname {
+	color: #4187D5;
+	text-decoration: none;
+}
+.right_panel_content_div .uname:hover {
+	color: #0664B0;
+	text-decoration: underline;
+}
+.right_panel_content_div .right {
+	text-decoration: none;
+}
+span.commentor {
+	padding-left: 12px;
+}
+.aside-menu li.active a.right {
+	position: relative;
+	color: #404040;
+	background: #fff;
+	border: 1px solid #ddd;
+	-webkit-border-radius: 2px 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px 2px;
+	-webkit-box-shadow: 0 4px 3px -3px rgba(0,0,0,0.1);
+	-moz-box-shadow: 0 4px 3px -3px rgba(0,0,0,0.1);
+	box-shadow: 0 4px 3px -3px rgba(0,0,0,0.1);
+	padding: 7px 10px;
+	text-shadow: 0 1px #fff;
+}
+.aside-menu li a.right {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	display: block;
+	padding: 7px 10px;
+	margin: -43px 10px 10px 60px;
+	border: 1px solid transparent;
+	color: #808080;
+	text-shadow: 0 1px #fff;
+	margin-top: 5px;
+}
+.aside-menu {
+	list-style: none;
+}
+.aside-menu li.active a.right:before {
+	border-color: transparent #ddd transparent transparent;
+	border-width: 6px;
+	top: 15px;
+	margin-top: -6px;
+	right: 100%;
+	border-style: solid;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+}
+.aside-menu li.active a.right:after {
+	border-color: transparent #fff transparent transparent;
+	border-width: 5px;
+	top: 15px;
+	margin-top: -5px;
+	right: 100%;
+	border-style: solid;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+}
+</style>
+</head>
+<body>
+
+<!-- <div class="right_panel">
+	<h6 class="right_panel_title">最新评论</h6>
+    <div class="right_panel_content_div">
+    <ul class="aside-menu">
+		<li class="active">
+		    <a class="ulink" target="_blank" href="/u1380007335">
+		        <img class="uface" src="/image/default_avatar.jpg" style="width:48px;height:48px;">
+		    </a>
+		    <span class="commentor">
+		        <a href="/u1380007335" class="uname" target="_blank">firstboy0513</a>
+		    </span>
+			
+			<a target="_blank" href="/p/207097.html" class="right">评论内容哈</a>
+		</li>
+		
+		<li class="active">
+		    <a class="ulink" target="_blank" href="/u1380007335">
+		        <img class="uface img-rounded" src="/image/default_avatar.jpg" style="width:48px;height:48px;">
+		    </a>
+		    <span class="commentor">
+		        <a href="/u1380007335" class="uname user_u1380007335" target="_blank">firstboy0513</a>
+		    </span>
+			
+			<a rel="twipsy" target="_blank" href="/p/207097.html" class="right cmt">评论内容哈</a>
+		</li>
+    </ul>
 	</div>
 </div>
+ -->
 
+<div class="right_panel">
+	<h6 class="right_panel_title">最新评论</h6>
+    <div class="right_panel_content_div">
+    <ul class="aside-menu" id="right_panel_content">
+    </ul>
+	</div>
+</div>
 
 </body>
 </html>
