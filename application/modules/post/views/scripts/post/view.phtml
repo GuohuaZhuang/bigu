@@ -1,3 +1,6 @@
+<link href="/css/view_post.css" rel="stylesheet" type="text/css">
+<link href="/css/view_comment.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="/js/comment.js" ></script>
 <script type="text/javascript">
 <!--
 function ConfirmHandler() {
@@ -6,200 +9,8 @@ function ConfirmHandler() {
 	}
 	return false;
 }
-function ConfirmDeleteCommentHandler(id) {
-	if (confirm("确认要删除吗？")) {
-		Jsoncallback('/post/comment/delete', 
-	    	function (json) {
-		        if (typeof json.err !== 'undefined' && json.err != "") {
-		            alert(json.err);
-		            return false;
-		        }
-		        if (typeof json.success === 'undefined') {
-		    		return false;
-				}
-			}, 
-		    'POST', 
-		    {'d': '', 'timestamp' : Date.parse(new Date()), 
-			 'id': id }, 
-		    'loading');
-	    $('#comment_item_'+id).remove();
-	}
-	return false;
-}
 //-->
 </script>
-<style type="text/css">
-<!--
-.div_post_view_title h1 {
-	font-size: 26px;
-	color: #000;
-	text-align: left;
-	line-height: 100%;
-	margin-bottom: 24px;
-	margin-top: 10px;
-	font-weight: bold;
-	text-rendering: optimizelegibility;
-}
-
-.div_post_view_info {
-	margin-top: 5px;
-	margin-bottom: 10px;
-	font-size: 14px;
-	font-family: Microsoft YaHei,"微软雅黑",Lucida,Verdana,Hiragino Sans GB,STHeiti,WenQuanYi Micro Hei,Droid Sans Fallback,SimSun,sans-serif;
-	line-height: 20px;
-	border-bottom: 1px solid #eee;
-	margin-bottom: 16px;
-	padding: 6px 0;
-}
-.div_post_view_info a {
-	color: #2375BE;
-	text-decoration: none;
-}
-.div_post_view_info a:hover {
-	color: #0664B0;
-	text-decoration: underline;
-	outline: 0;
-}
-
-.div_post_view_abstract {
-	padding: 7px 0;
-	border-bottom: 1px solid #eee;
-	margin-bottom: 23px;
-	overflow: hidden;
-	font-size: 16px;
-	font-family: 'Microsoft YaHei', 微软雅黑, Lucida, Verdana, 'Hiragino Sans GB', STHeiti, 'WenQuanYi Micro Hei', 'Droid Sans Fallback', SimSun, sans-serif;
-	line-height: 1.6em;
-}
-.div_post_view_abstract p {
-	line-height: 1.6;
-	margin-bottom: 24px;
-}
-
-.div_post_view_edit {
-	float: right;
-	margin-right: 2px;
-	border-bottom: 1px solid #eee;
-	margin-bottom: 23px;
-	width: 100%;
-	text-align: right;
-}
-.div_post_view_edit a {
-	letter-spacing: 2px;
-	margin-left: 10px;
-	font-size: 14px;
-	color: rgb(108, 115, 122);
-	text-decoration: none;
-}
-.div_post_view_edit a:hover {
-	color: #0664B0;
-	text-decoration: underline;
-	outline: 0;
-}
-
-.div_comment_add {
-	padding-bottom: 10px;
-	padding-top: 10px;
-	width: 100%;
-	float: right;
-	margin-left: 10px;
-	margin-right: 2px;
-	border-bottom: 1px solid #eee;
-	margin-bottom: 23px;
-	background: none repeat scroll 0 0 #eee;
-	border-radius: 4px 4px 4px 4px;
-	box-shadow: 0 0 1px #aaa inset,0 1px 0 #fff;
-	font-size: 12px !important;
-}
-.div_comment_add span>a {
-	padding: 5px 5px 0px 0px;
-	padding-bottom: 0px;
-	font-family: 'Microsoft YaHei', 微软雅黑;
-	margin-left: 5px;
-	color: #2375BE;
-}
-.div_comment_add span,.div_comment_add textarea {
-	margin: 10px;
-}
-.div_comment_add textarea {
-	float: left;
-	height: auto;
-	overflow-y:hidden;
-	width: 96%;
-	background-color: #ffffff;
-	border: 1px solid #ccc;
-	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-	-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-	-webkit-transition: border linear 0.2s,box-shadow linear 0.2s;
-	-moz-transition: border linear 0.2s,box-shadow linear 0.2s;
-	-o-transition: border linear 0.2s,box-shadow linear 0.2s;
-	transition: border linear 0.2s,box-shadow linear 0.2s;
-	display: inline-block;
-	padding: 4px 6px;
-	margin-bottom: 9px;
-	font-size: 14px;
-	line-height: 20px;
-	color: #555555;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-}
-.btn_comment_submit {
-	background-color: rgb(35, 117, 190);
-	background-image: linear-gradient(rgb(60, 171, 244), rgb(14, 114, 195));
-	background-repeat: repeat-x;
-	border-bottom-color: rgba(0, 0, 0, 0.247059);
-	border-bottom-left-radius: 1px;
-	border-bottom-right-radius: 1px;
-	border-bottom-style: solid;
-	border-bottom-width: 1px;
-	border-left-color: rgba(0, 0, 0, 0.0980392);
-	border-left-style: solid;
-	border-left-width: 1px;
-	border-right-color: rgba(0, 0, 0, 0.0980392);
-	border-right-style: solid;
-	border-right-width: 1px;
-	border-top-color: rgba(0, 0, 0, 0.0980392);
-	border-top-left-radius: 1px;
-	border-top-right-radius: 1px;
-	border-top-style: solid;
-	border-top-width: 1px;
-	box-shadow: rgba(255, 255, 255, 0.2) 0px 1px 0px 0px inset, rgba(0, 0, 0, 0.0470588) 0px 1px 2px 0px;
-	box-sizing: border-box;
-	color: rgb(255, 255, 255);
-	cursor: pointer;
-	display: block;
-	float: right;
-	font-family: 'Microsoft YaHei', 微软雅黑, Lucida, Verdana, 'Hiragino Sans GB', STHeiti, 'WenQuanYi Micro Hei', 'Droid Sans Fallback', SimSun, sans-serif;
-	font-size: 14px;
-	font-weight: normal;
-	height: 30px;
-	letter-spacing: normal;
-	line-height: 20px;
-	margin-bottom: 0px;
-	margin-left: 0px;
-	margin-right: 16px;
-	margin-top: 0px;
-	min-height: 30px;
-	padding-bottom: 4px;
-	padding-left: 14px;
-	padding-right: 14px;
-	padding-top: 4px;
-	text-align: center;
-	text-indent: 0px;
-	text-shadow: rgba(0, 0, 0, 0.247059) 0px -1px 0px;
-	text-transform: none;
-	vertical-align: top;
-	white-space: nowrap;
-	word-spacing: 0px;
-	writing-mode: lr-tb;
-}
-.div_comment h5 {
-	color: rgb(108, 115, 122);
-	padding-bottom: 10px;
-}
--->
-</style>
 
 <?php if (empty($this->result)) {
 	echo '<br/>找不到这篇文章<br/>';
@@ -280,7 +91,7 @@ function _AppendCommentItemIntoList(author, avatar, content, date, id) {
 	new_comment += "\" style=\"width:48px;height:48px;\">";
 	new_comment += "</div><div>";
 	new_comment += "<div><span><a ";
-	if (author != '' && author != "匿名") new_comment += ("href=\"/center/comment/list?id=" + author + "\"");
+	if (author != '' && author != "匿名") new_comment += ("href=\"/profile/comment/list?id=" + author + "\"");
 	new_comment += " class=\"uname\" target=\"_blank\">";
 	new_comment += author; // author
 	new_comment += "</a></span></div>";
@@ -373,77 +184,21 @@ $(document).ready(function() {
 <div class="div_comment">
 <h5 class="btn-block tohide sep30">文章评论</h5>
 
-<style style="text/css">
-<!--
-.div_comment_avatar {
-	font-family: 'Microsoft YaHei', 微软雅黑, Lucida, Verdana, 'Hiragino Sans GB', STHeiti, 'WenQuanYi Micro Hei', 'Droid Sans Fallback', SimSun, sans-serif;
-	font-size: 15px;
-}
-.div_comment_avatar img {
-	border-radius: 6px;
-	margin-left: 10px;
-	float: left;
-}
-.div_comment_item a {
-	margin-left: 10px;
-	text-decoration: none;
-	margin-right: 8px;
-	color: #2375BE;
-	outline: 0;
-	font-size: 13px;
-}
-.div_comment_item p, .div_comment_item pre {
-	font-size: 16px;
-	line-height: 180%;
-	margin-bottom: 15px;
-	margin-left: 66px;
-}
-.div_comment_item em {
-	margin-left: 66px;
-	font-size: 14px;
-}
-.div_comment_item {
-	margin-bottom: 10px;
-	margin-right: 56px;
-	border-bottom: 1px dashed #eee !important;
-	margin: 0 -10px;
-	padding: 10px 10px 20px 10px;
-}
--->
-</style>
-
+<!-- 评论列表 -->
 <div class="div_comment_list" id="view_comment_list">
-
-    <div class="div_comment_item" id="reply2">
-        <div class="div_comment_avatar" >
-          <img alt="firstboy" src="/image/default_avatar.jpg" style="width:48px;height:48px;"/>
-        </div>
-        <div>
-        
-          <div>
-            <span><a href="/center/comment/list?id=" class="uname" target="_blank">firstboy</a></span>
-          </div>
-          
-          <div>
-            <p>看来中国古老的面相学可以发扬光大了！计算机算命是科学</p>
-            <em style="color: rgb(108, 115, 122);">2013-10-17 11:32:06</em>
-          </div>
-          
-        </div>
-    </div>
 </div>
 
 
 <div class="div_comment_add">
 	<div class="pull-left face">
 	    <a class="ulink" target="_blank" 
-	    	<?php echo (!empty($this->username))?'href="/center/comment/list?author='.$this->username.'"':'';?>>
+	    	<?php echo (!empty($this->username))?'href="/profile/comment/list?author='.$this->username.'"':'';?>>
 	        <img src="<?php echo (!empty($this->avatar))?$this->avatar:'/image/default_avatar.jpg';?>" 
 	        	style="width:48px;height:48px;border-radius: 6px;margin-left: 10px;float: left;" 
 	        	title="<?php echo (!empty($this->username))?$this->username:'匿名';?>" />
 	    </a>
 	</div>
-    <span class="name"><a <?php echo (!empty($this->username))?'href="/center/comment/list?author='.$this->username.'"':'';?>
+    <span class="name"><a <?php echo (!empty($this->username))?'href="/profile/comment/list?author='.$this->username.'"':'';?>
     	class="uname" target="_blank"><?php echo (!empty($this->username))?$this->username:'匿名';?></a></span>
     <form accept-charset="UTF-8" action="/post/comment/add" data-remote="true" id="form_comment" method="POST">
     <textarea class="topic_editor span10" id="comment_content" name="comment_content" 
@@ -453,7 +208,6 @@ $(document).ready(function() {
     <input type="submit" class="btn_comment_submit" onclick="return CommentAddHandler();" value="评论"/>
     </form>
 </div>
-
 
 </div><!-- 文章评论结束div -->
 

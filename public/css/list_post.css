@@ -1,0 +1,87 @@
+@CHARSET "UTF-8";
+
+.h4_post_list_title {
+	width: 100%;
+	margin-bottom: 10px;
+	float: left;
+}
+.h4_post_list_title a:link, .h4_post_list_title a:visited {
+	font: 20px/1.2em "微软雅黑", "黑体", Tahoma, Arial, Geneva, sans-serif;
+	color: #000;
+	text-decoration: none;
+}
+.h4_post_list_title a:hover {
+    color: #2375BE;
+    text-decoration: underline;
+}
+
+.div_post_list_info {
+	margin-top: 5px;
+	margin-bottom: 10px;
+	font-size: 14px;
+	font-family: Microsoft YaHei,"微软雅黑",Lucida,Verdana,Hiragino Sans GB,STHeiti,WenQuanYi Micro Hei,Droid Sans Fallback,SimSun,sans-serif;
+	line-height: 20px;
+}
+.div_post_list_info a {
+	color: #2375BE;
+	text-decoration: none;
+}
+.div_post_list_info a:hover {
+	color: #0664B0;
+	text-decoration: underline;
+	outline: 0;
+}
+
+.div_post_list_thumb {
+	float: left;
+	margin-right: 20px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.35),0 1px 3px rgba(0,0,0,0.45);
+	-moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.35),0 1px 3px rgba(0,0,0,0.45);
+	box-shadow: inset 0 1px 0 rgba(255,255,255,0.35),0 1px 3px rgba(0,0,0,0.45);
+}
+.div_post_list_thumb img {
+	width: 210px; 
+	height: 140px;
+	max-height: 150px;
+	display: inline;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.35),0 1px 3px rgba(0,0,0,0.45);
+	-moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.35),0 1px 3px rgba(0,0,0,0.45);
+	box-shadow: inset 0 1px 0 rgba(255,255,255,0.35),0 1px 3px rgba(0,0,0,0.45);
+}
+.div_post_list_abstract {
+	width: 435px;
+	float: left;
+	margin-bottom: 10px;
+	color: #656565;
+}
+
+.div_post_list_edit {
+	float: right;
+	margin-right: 2px;
+}
+.div_post_list_edit a {
+	letter-spacing: 2px;
+	margin-left: 10px;
+	font-size: 14px;
+	color: rgb(108, 115, 122);
+	text-decoration: none;
+}
+.div_post_list_edit a:hover {
+	color: #0664B0;
+	text-decoration: underline;
+	outline: 0;
+}
+
+.post_list_item {
+	padding-top: 10px;
+	width: 100%;
+	float: left;
+	border-bottom: #ccc 1px dotted;
+	padding-bottom: 30px;
+}

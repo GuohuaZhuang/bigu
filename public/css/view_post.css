@@ -1,0 +1,67 @@
+@CHARSET "UTF-8";
+
+.div_post_view_title h1 {
+	font-size: 26px;
+	color: #000;
+	text-align: left;
+	line-height: 100%;
+	margin-bottom: 24px;
+	margin-top: 10px;
+	font-weight: bold;
+	text-rendering: optimizelegibility;
+}
+
+.div_post_view_info {
+	margin-top: 5px;
+	margin-bottom: 10px;
+	font-size: 14px;
+	font-family: Microsoft YaHei,"微软雅黑",Lucida,Verdana,Hiragino Sans GB,STHeiti,WenQuanYi Micro Hei,Droid Sans Fallback,SimSun,sans-serif;
+	line-height: 20px;
+	border-bottom: 1px solid #eee;
+	margin-bottom: 16px;
+	padding: 6px 0;
+}
+.div_post_view_info a {
+	color: #2375BE;
+	text-decoration: none;
+}
+.div_post_view_info a:hover {
+	color: #0664B0;
+	text-decoration: underline;
+	outline: 0;
+}
+
+.div_post_view_abstract {
+	padding: 7px 0;
+	border-bottom: 1px solid #eee;
+	margin-bottom: 23px;
+	overflow: hidden;
+	font-size: 16px;
+	font-family: 'Microsoft YaHei', 微软雅黑, Lucida, Verdana, 'Hiragino Sans GB', STHeiti, 'WenQuanYi Micro Hei', 'Droid Sans Fallback', SimSun, sans-serif;
+	line-height: 1.6em;
+}
+.div_post_view_abstract p {
+	line-height: 1.6;
+	margin-bottom: 24px;
+}
+
+.div_post_view_edit {
+	float: right;
+	margin-right: 2px;
+	border-bottom: 1px solid #eee;
+	margin-bottom: 23px;
+	width: 100%;
+	text-align: right;
+}
+.div_post_view_edit a {
+	letter-spacing: 2px;
+	margin-left: 10px;
+	font-size: 14px;
+	color: rgb(108, 115, 122);
+	text-decoration: none;
+}
+.div_post_view_edit a:hover {
+	color: #0664B0;
+	text-decoration: underline;
+	outline: 0;
+}
