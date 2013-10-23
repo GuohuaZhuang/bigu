@@ -3,6 +3,7 @@
 require_once(APPLICATION_PATH . '/modules/post/models/DbTable/Post.php');
 require_once(APPLICATION_PATH . '/modules/post/models/DbTable/Category.php');
 require_once(APPLICATION_PATH . '/modules/auth/models/DbTable/Users.php');
+require_once(APPLICATION_PATH . '/modules/search/models/SearchAdapter.php');
 
 class Post_PostController extends Zend_Controller_Action
 {
@@ -161,7 +162,10 @@ class Post_PostController extends Zend_Controller_Action
 	    			'sub_category' => $post_sub_category,
 	    			'abstract' => $post_abstract,
 	    			'index_thumb' => $post_index_thumb);
-	    	$dbpost->insert($data);
+	    	$id_post = $dbpost->insert($data);
+	    	// SEARCH
+	    	$search = new SearchAdapter();
+	    	$search->addPosttoIndex($post_title, $post_content, $post_pub_datetime, $id_post);
     	} else {
     		// update record and remove thumb
     		$this->_remove_prethumb($post_id);
@@ -173,6 +177,10 @@ class Post_PostController extends Zend_Controller_Action
     				'index_thumb' => $post_index_thumb);
     		$where = $dbpost->getAdapter()->quoteInto('id=?', $post_id);
     		$dbpost->update($data, $where);
+    		// SEARCH
+    		$search = new SearchAdapter();
+    		$search->deletePostinIndex($post_id);
+    		$search->addPosttoIndex($post_title, $post_content, $post_pub_datetime, $post_id);
     	}
     }
     
@@ -190,7 +198,7 @@ class Post_PostController extends Zend_Controller_Action
     	// add post to db
     	$post_id = $request->getParam('post_id');
     	$this->_addpost($request, $post_id);
-    
+    	
     	// forwart to list posts
     	// $this->forward('list');
     	$this->redirect('/post/post/list');
@@ -243,10 +251,12 @@ class Post_PostController extends Zend_Controller_Action
 		$db_post = new Post_Model_DbTable_Post();
 		$where = $db_post->getAdapter()->quoteInto('id=?', $post_id);
 		$num = $db_post->delete($where);
-// 		if (empty($num)) return false;
+		
+		// SEARCH
+		$search = new SearchAdapter();
+		$search->deletePostinIndex($post_id);
 		
     	// forwart to list posts
-    	// $this->forward('list');
     	$this->redirect('/post/post/list');
 	}
 	

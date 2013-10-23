@@ -1,0 +1,79 @@
+<link href="/css/pagination.css" rel="stylesheet" type="text/css">
+
+<table>
+    <thead>
+      <tr>
+        <th>发表时间</th>
+        <th>文章标题</th>
+      </tr>
+    </thead>
+    <tbody>
+
+    <?php foreach ($this->result as $row) { ?>
+    <tr>
+        <td><?php echo $row['pub_datetime']; ?></td>
+        <td>
+        	<a href="/post/post/view?post_id=<?php echo $row['id_post']; ?>" 
+        		target="_blank"><?php echo $row['title']; ?></a>
+        </td>
+    </tr>
+    <?php } ?>
+    
+  </tbody>
+</table>
+
+    <!-- 翻页页码 -->
+<?php
+	$_get_str = '';
+	$_get_page = isset($_GET['page']) ? $_GET['page'] : 1;
+	$_get_q = isset($_GET['q']) ? $_GET['q'] : null;
+	if (!empty($_get_q)) $_get_str .= ('&q=' . $_get_q);
+?>
+
+<div class="div_pg_container">
+    <div class="div_pg_list">
+    <ul>
+<?php 
+$x = $_get_page;
+$n = ceil($this->total_count/10);
+$line = '';
+if ($x <= 0 || $n <= 0 || $x > $n) {
+	$line = '页码数出错，系统正在变更文章数量，请刷新页面，谢谢！';
+	return $line;
+}
+/*
+ 显示第１页时不显示“上一页”按钮。
+显示最后一页时不显示“下一页”按钮。
+中间的页数最多这样放：(当前选择x，总页数n)
+>10 ==> 1,2,...,x-1,x,x+1,...,n-1,n
+如果x-1 <= 2+1，则不显示左中间省略号。左边显示1,2,3,4,5。最大不能超过n。
+如果x+1 >= n-2，则不显示右中间省略号。右边显示n-4,n-3,n-2,n-1,n。最小不能小于1。
+*/
+if ($x > 1) echo '<li class="prev previous_page"><a rel="prev" href="/search/index/index?page='.($x-1).$_get_str.'">← 上一页</a></li>';
+
+for ($i = 1, $c = 1; $i <= $n; ) {
+	if($i == 3 && $x-1 > 2+1) {
+		if ($n-4 > 3) {
+			echo '<li class="disabled"><a><span class="gap">…</span></a></li>';
+			if ($x+1 > $n-2) $i = $n - 4;
+			else $i = $x - 1;
+			continue;
+		}
+	}
+	if ($x == $i) echo '<li class="active"><a>'.$i.'</a></li>';
+	else echo '<li><a href="/search/index/index?page='.$i.$_get_str.'">'.$i.'</a></li>';
+	$i ++; $c ++;
+	
+	if ($c == 5+1 && $x+1 < $n-2 && $i < $n-1) {
+		echo '<li class="disabled"><a><span class="gap">…</span></a></li>';
+		$i = $n - 1;
+		continue;
+	}
+	if ($c > 7) break;
+}
+
+if ($x < $n) echo '<li class="next next_page "><a rel="next" href="/search/index/index?page='.($x+1).$_get_str.'">下一页 →</a></li>';
+?>
+		</ul>
+    </div>
+</div>

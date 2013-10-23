@@ -53,12 +53,11 @@ function CommentPanelHandler() {
 						d[i].avatar, d[i].content, d[i].pub_datetime, d[i].id, d[i].id_post);
 				}
 			} else {
-				alert('添加评论失败');
+				alert('加载评论失败');
 			}
 		}, 
 		'POST', 
-		{'d': '', 'timestamp' : Date.parse(new Date()), 
-		'comment_id_post': '<?php echo (array_key_exists('id', $this->result))?$this->result['id']:'';?>' }, 
+		{'d': '', 'timestamp' : Date.parse(new Date())}, 
 		'loading');
 
     return false;
