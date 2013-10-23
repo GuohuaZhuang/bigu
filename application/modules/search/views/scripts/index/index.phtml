@@ -1,9 +1,60 @@
 <link href="/css/pagination.css" rel="stylesheet" type="text/css">
 
-<table>
+<style>
+<!--
+.search_table {
+width: 100%;
+margin-bottom: 20px;
+max-width: 100%;
+background-color: transparent;
+border-collapse: collapse;
+border-spacing: 0;
+display: table;
+border-color: gray;
+}
+.search_table thead:first-child tr:first-child th, .search_table thead:first-child tr:first-child td {
+border-top: 0;
+}
+.search_table thead th {
+background-color: #f2f2f2;
+background-image: -ms-linear-gradient(top, #f2f2f2, #e8e8e8);
+background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f2f2f2), to(#e8e8e8));
+background-image: -webkit-linear-gradient(top, #f2f2f2, #e8e8e8);
+background-image: -o-linear-gradient(top, #f2f2f2, #e8e8e8);
+background-image: linear-gradient(top, #f2f2f2, #e8e8e8);
+background-image: -moz-linear-gradient(top, #f2f2f2, #e8e8e8);
+border: 1px #dcdcdc solid !important;
+vertical-align: bottom;
+}
+.search_table th, .search_table td {
+font-size: 14px;
+padding: 8px;
+line-height: 20px;
+text-align: left;
+vertical-align: top;
+border-top: 1px solid #ddd;
+}
+.search_table tbody {
+display: table-row-group;
+vertical-align: middle;
+border-color: inherit;
+}
+.search_table a:hover {
+color: #0664B0;
+text-decoration: underline;
+outline: 0;
+}
+.search_table a {
+color: #2375BE;
+text-decoration: none;
+}
+-->
+</style>
+
+<table class="search_table">
     <thead>
       <tr>
-        <th>发表时间</th>
+        <th style="width: 80px;">发表时间</th>
         <th>文章标题</th>
       </tr>
     </thead>
@@ -11,7 +62,7 @@
 
     <?php foreach ($this->result as $row) { ?>
     <tr>
-        <td><?php echo $row['pub_datetime']; ?></td>
+        <td style="width: 80px; font-size: 12px;"><?php echo date('Y-m-d H:i:s', $row['pub_datetime']); ?></td>
         <td>
         	<a href="/post/post/view?post_id=<?php echo $row['id_post']; ?>" 
         		target="_blank"><?php echo $row['title']; ?></a>

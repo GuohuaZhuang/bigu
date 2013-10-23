@@ -99,9 +99,11 @@ class SearchAdapter
 		// pagination
 		$cacheId = md5($keyword);
 		// query
+		$query_highlight_word = array();
 		$query = new Zend_Search_Lucene_Search_Query_Boolean();
 		$queryTokens = Zend_Search_Lucene_Analysis_Analyzer::getDefault()->tokenize($keyword, 'utf-8');
 		foreach ($queryTokens as $token) {
+			$query_highlight_word[] = $token->getTermText();
 			$subquery = new Zend_Search_Lucene_Search_Query_MultiTerm();
 			$subquery->addTerm(new Zend_Search_Lucene_Index_Term($token->getTermText(), 'title'), null);
 			$subquery->addTerm(new Zend_Search_Lucene_Index_Term($token->getTermText(), 'content'), null);
@@ -129,17 +131,24 @@ class SearchAdapter
 		$publishedResultSet = array();
 		for ($resultId = $startId; $resultId < $endId; $resultId++) {
 			$document = $index->getDocument($resultSet[$resultId]['id']);
-			// $html = $query->highlightMatches(utf8_decode($document->getFieldUtf8Value('title')), 'utf-8');
-			// print_r($html); exit();
-			// $document->highlightExtended($keyword);
 			$publishedResultSet[$resultId] = array(
 					'id'    => $resultSet[$resultId]['id'],
 					'score' => $resultSet[$resultId]['score'],
-					'title' => $document->getFieldUtf8Value('title'),
+					'title' => $this->getHightlightResult($document->getFieldUtf8Value('title'), $query_highlight_word),
 					'pub_datetime' => $document->getFieldValue('pub_datetime'),
 					'id_post' => $document->getFieldValue('id_post')
 			);
 		}
 		return $publishedResultSet;
+	}
+	
+	public function getHightlightResult($str, $words)
+	{
+		foreach ($words as $word) {
+			if (strstr("<b style=\"color:red\"></b>", $word) == false) {
+				$str = preg_replace("/(".$word.")/i","<b style=\"color:red\">\\1</b>", $str);
+			}
+		}
+		return $str;
 	}
 }
