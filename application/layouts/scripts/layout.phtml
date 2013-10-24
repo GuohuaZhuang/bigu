@@ -2,6 +2,9 @@
 <html>
 	<head>
 		<meta charset="UTF-8" />
+		<title>比咕网 | 关注搜索和自然语言处理技术</title>
+		<meta name="keywords" content="比咕, 比咕网, bigu, 自然语言处理, 搜索引擎, 大数据, 数据挖掘, 情感语义分析, 中文分词, 文本分类, 文本聚类" />
+		<meta name="description" content="比咕网是一个关注搜索和自然语言处理技术的科技博客" />
 		<link href="/css/my.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript" src="/js/jquery.js" ></script>
 		<script type="text/javascript" src="/js/util.js" ></script>
@@ -38,18 +41,18 @@
 	<?php } else { ?>
 	  <table border="1" style="width: 100%;">
 	  	<tr>
-		  	<td style="width: 672px;">
+		  	<td style="width: 70%; padding-right: 10px;">
 		  		<!-- 右上广告图块 -->
 		  		<?php include(APPLICATION_PATH . "/../public/html/top_ad.html"); ?>
 		  	</td>
-		  	<td>
+		  	<td style="width: 30%; ">
 		  		<!-- 右上登录链接块 -->
 		  		<?php include(APPLICATION_PATH . "/../public/html/top_links.html"); ?>
 		  	</td>
 	  	</tr>
 	  	<?php if (empty($this->editor)) { ?>
 	  	<tr>
-		  	<td style="height: 45px;">
+		  	<td style="width: 70%; padding-right: 10px; height: 45px;">
 		  		<!-- 右上子导航栏 -->
 		  		<?php include(APPLICATION_PATH . "/../public/html/top_subnav.phtml"); ?>
 		  	</td>
@@ -61,7 +64,7 @@
 	  	<?php } // end for editor judgement ?>
 	  	<tr>
 		  	<td colspan="<?php echo (empty($this->editor)) ? 1 : 2; ?>" style="text-align:left;align:left;">
-		  		<div <?php echo (empty($this->editor)) ? 'style="width: 665px"' : ''; ?>>
+		  		<div <?php echo (empty($this->editor)) ? 'style="width: 706px"' : ''; ?>>
 		  		<!-- 右中内容正文/列表栏 -->
 				<?php if (!empty($this->error)) { ?>Error: <?php echo $this->error; ?><br/><?php } ?>
 				<?php if (!empty($this->success)) { ?>Success: <?php echo $this->success; ?><br/><?php } ?>

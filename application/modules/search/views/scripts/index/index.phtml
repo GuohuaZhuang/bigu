@@ -51,6 +51,8 @@ text-decoration: none;
 -->
 </style>
 
+<?php if (empty($this->result)) { echo '<br/>找不到任何文章<br/>'; } else { ?>
+
 <table class="search_table">
     <thead>
       <tr>
@@ -72,6 +74,8 @@ text-decoration: none;
     
   </tbody>
 </table>
+
+<?php } // end of result empty ?>
 
     <!-- 翻页页码 -->
 <?php

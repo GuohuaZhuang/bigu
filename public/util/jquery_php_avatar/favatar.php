@@ -28,7 +28,8 @@ $(function() {
     	}, 
         'POST', 
         {'d': '', 'timestamp' : Date.parse(new Date()), 
-         'profile_avatar': '<?php echo $thumbpath; ?>'}, 
+         'profile_avatar': '<?php echo $thumbpath; ?>', 
+         'profile_image': '<?php echo $imagepath; ?>' }, 
         'loading');
 })
 
@@ -45,12 +46,11 @@ if (!empty($error_log)) {
 
 <script type="text/javascript" src="/util/jquery_php_avatar/scripts/avatar_container.js"></script>
 
-<input type="hidden" id="thumbpath" name="thumbpath" 
-    value="<?php echo (isset($thumbpath) ? $thumbpath : ''); ?>"/>
-
 <form action="./index.php?fselector=1" method="POST" enctype="multipart/form-data">
     <div id="dropzone_container">
         <?php if (isset($thumbpath) && !empty($thumbpath)) { ?>
+		<input type="hidden" id="thumbpath" name="thumbpath" 
+		    value="<?php echo (isset($thumbpath) ? $thumbpath : ''); ?>"/>
         <!-- has avatar already -->
         <div class="div_change_avatar">
             <div class="default_text">

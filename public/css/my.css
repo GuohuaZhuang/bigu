@@ -29,12 +29,23 @@ body {
 .head_div {
     display: inline;
 }
-.affix a, .biaoqian a, .head_div a {
+.biaoqian a, .head_div a {
     letter-spacing: 2px;
     text-align: center;
     font-family: 'Microsoft YaHei', CenturyGothic, AppleGothic, sans-serif;
     line-height: 20px;
     margin-right: 15px;
+    font-size: 14px;
+    color: rgb(108, 115, 122);
+    border-bottom-color: rgb(108, 115, 122);
+    border-bottom-style: none;
+    text-decoration: none;
+}
+.affix a {
+    letter-spacing: 2px;
+    text-align: center;
+    font-family: 'Microsoft YaHei', CenturyGothic, AppleGothic, sans-serif;
+    line-height: 20px;
     font-size: 14px;
     color: rgb(108, 115, 122);
     border-bottom-color: rgb(108, 115, 122);
@@ -50,22 +61,11 @@ body {
 }
 
 .side_nav {
-    width: 20% !important;
+    width: 15% !important;
 }
 .affix {
     position: fixed;
 }
-/*
-ul, menu, dir {
-    display: block;
-    list-style-type: disc;
-    -webkit-margin-before: 0em;
-    -webkit-margin-after: 1em;
-    -webkit-margin-start: 0px;
-    -webkit-margin-end: 0px;
-    -webkit-padding-start: 0px;
-}
-*/
 nav {
     text-align: right;
     line-height: 20px;
@@ -109,6 +109,8 @@ ul {
 
 .menuText {
     text-align: right;
+	display: block;
+	margin:18px 2px 18px auto;
 }
 
 .menuText a {
@@ -164,7 +166,7 @@ body {
 
 /* ----------华丽丽的分割线------------ */
 .hm_topAD {
-width: 665px;
+width: 100%;
 float: left;
 margin: 0 10px 10px 0;
 }
@@ -180,7 +182,7 @@ float: left;
 border-bottom: #ccc 1px solid;
 }
 .hm_tagsColorWrap {
-width: 666px;
+width: 100%;
 float: left;
 }
 .biaoqian {
@@ -197,23 +199,22 @@ font-size: 12px;
 font-weight: normal;
 color: #fff;
 background: url(/image/tagsTitleBg.png) no-repeat;
-width: 48px;
 padding: 9px 25px;
 float: left;
 /*height: 40px;*/
-margin-top: 3px;
+margin: 3px 0px 0px 0px;
 }
 table td, table td * {
     vertical-align: top;
 }
 .biaoqian {
-width: 566px;
+width: 85%;
 height: 31px;
 line-height: 31px;
 border: 1px solid #E2E6EC;
 background: #F5F8FC;
 overflow: hidden;
-float: left;
+float: right;
 }
 .biaoqian ul, .biaoqian li {
 margin: 0;

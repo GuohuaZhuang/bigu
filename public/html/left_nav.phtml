@@ -6,13 +6,13 @@
 
 function _AppendCategoryItemIntoList(category) {
 	var new_item = '';
-	new_item += '<li class="menu_category"><figure><div class="menuText">';
+	new_item += '<li class="menu_category"><div class="menuText">';
 	new_item += '<a href="/post/post/list?category=';
 	new_item += category;
 	new_item += '">';
 	new_item += category;
 	new_item += '</a>';
-	new_item += '</div><i class="icon-home"></i></figure></li>';
+	new_item += '</div><i class="icon-home"></i></li>';
 	$('#ul_category_list').append(new_item);
 }
 
@@ -61,10 +61,12 @@ function CategoryListHandler(vcurr_category) {
 				}
 				// set font-weight to bold which category is selected
 				if (vcurr_category != '') {
-					$("#ul_category_list a").filter(":not(.menuText_a_hover)").css('font-weight', 'normal');
-					$("#ul_category_list a").filter(":not(.menuText_a_hover)").css('background-color', 'rgba(190, 183, 183, 0)');
-					$("#ul_category_list a").filter(":contains('"+vcurr_category+"')").css('font-weight', 'bold');
-					$("#ul_category_list a").filter(":contains('"+vcurr_category+"')").css('background-color', 'rgba(190, 183, 183, 0.34)');
+					// $("#ul_category_list a").filter(":not(.menuText_a_hover)").css('font-size', '16px');
+					// $("#ul_category_list a").filter(":not(.menuText_a_hover)").css('text-shadow', '1px 1px 1px rgba(255,255,255,.3),2px 2px 3px rgba(0,0,0,.3)');
+					// $("#ul_category_list a").filter(":not(.menuText_a_hover)").css('background-color', 'rgba(190, 183, 183, 0)');
+					$("#ul_category_list a").filter(":contains('"+vcurr_category+"')").css('font-size', '18px');
+					$("#ul_category_list a").filter(":contains('"+vcurr_category+"')").css('text-shadow', '1px 1px 1px rgba(205,205,205,.8),2px 2px 3px rgba(10,10,10,.8)');
+					// $("#ul_category_list a").filter(":contains('"+vcurr_category+"')").css('background-color', 'rgba(190, 183, 183, 0.34)');
 				}
 			} else {
 				alert('加载类别失败');
@@ -89,13 +91,13 @@ $(document).ready(function() {
 <div class="left_div">
 <nav class="sideBar hidden-phone pull-left">
 <ul data-spy="affix" class="side_nav affix" id="ul_category_list">
-    <li><figure>
+    <li>
         <div class="menuText">
         <a href="/">
             <img width="114" height="65" src="/image/bigu.png" alt="比咕网" title="点击回到比咕网首页">
         </a>
         </div>
-    </figure></li>
+    </li>
     <!-- 
     <li class="menu_category"><figure>
         <div class="menuText">

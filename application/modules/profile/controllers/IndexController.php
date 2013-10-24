@@ -31,6 +31,13 @@ class Profile_IndexController extends Zend_Controller_Action
 	    	$where = $db_user->getAdapter()->quoteInto('username=?', $username);
 	    	$db_user->update(array('avatar' => $data['profile_avatar']), $where);
 	    	echo '{"success": "更新图像数据成功"}';
+	    	// remove image file
+	    	if (isset($data['profile_image']) && !empty($data['profile_image'])) {
+	    		$profile_image = str_replace("./upload/", 
+	    			APPLICATION_PATH . "/../public/util/jquery_php_avatar/upload/",
+	    			$data['profile_image']);
+	    		@unlink($profile_image);
+	    	}
     	}
     	// stop layout and render
     	$this->_helper->layout->disableLayout();

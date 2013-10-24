@@ -34,6 +34,27 @@ class Post_PostController extends Zend_Controller_Action
     	return mb_substr($value, 0, 200, 'UTF-8');
     }
     
+    private function _remove_imgandthumb($id)
+    {
+    	$dbpost = new Post_Model_DbTable_Post();
+    	$html = $dbpost->get_content($id);
+    	// 去除表情符号，可以是上传的，也可以是网络上图片
+    	$rule = '#(<img[^>]*?>)#';
+    	if (preg_match_all($rule, $html, $match)) {
+    		$match = $match[0];
+    		foreach ($match as $m) {
+    			if (false != strstr($m, 'height:20px; width:20px')) continue;
+    			$rule_src = "#src=\"([^\"]*)\"#";
+    			if (preg_match($rule_src, $m, $match_src)) {
+    				if ('/upload/img/' == substr($match_src[1], 0, 12)) {
+    					@unlink($_SERVER['DOCUMENT_ROOT'].$match_src[1]);
+    					@unlink($_SERVER['DOCUMENT_ROOT'].'/upload/thumb/' . substr($match_src[1], 12));
+    				}
+    			}
+    		}
+    	}
+    }
+    
     private function _find_thumbpath($html)
     {
 //     	$rule = "#src=\"/upload/img/(20[0-9]{6}/[0-9a-fA-F]{32}\.(png|jpg|jpeg|gif))#x";
@@ -129,7 +150,7 @@ class Post_PostController extends Zend_Controller_Action
     {
     	$dbpost = new Post_Model_DbTable_Post();
     	$pre_thumb = $dbpost->get_index_thumb($id);
-    	if (!empty($pre_thumb)) unlink($_SERVER['DOCUMENT_ROOT'].$pre_thumb);
+    	if (!empty($pre_thumb)) @unlink($_SERVER['DOCUMENT_ROOT'].$pre_thumb);
     }
     
     private function _addpost($request, $post_id)
@@ -200,7 +221,6 @@ class Post_PostController extends Zend_Controller_Action
     	$this->_addpost($request, $post_id);
     	
     	// forwart to list posts
-    	// $this->forward('list');
     	$this->redirect('/post/post/list');
     }
     
@@ -248,16 +268,21 @@ class Post_PostController extends Zend_Controller_Action
 	{
 		$request = $this->getRequest();
 		$post_id = $request->getParam('post_id');
+		$category = $request->getParam('category');
+		
+		// DELETE thumb
+		$this->_remove_prethumb($post_id);
+		$this->_remove_imgandthumb($post_id);
+		
 		$db_post = new Post_Model_DbTable_Post();
 		$where = $db_post->getAdapter()->quoteInto('id=?', $post_id);
 		$num = $db_post->delete($where);
-		
 		// SEARCH
 		$search = new SearchAdapter();
 		$search->deletePostinIndex($post_id);
 		
     	// forwart to list posts
-    	$this->redirect('/post/post/list');
+    	$this->redirect('/post/post/list?category='.$category);
 	}
 	
 	public function listAction()
@@ -274,6 +299,7 @@ class Post_PostController extends Zend_Controller_Action
 		
 		$total_count = $db_post->fetch_count($author, $category, $sub_category);
 		$this->view->total_count = $total_count;
+		$this->view->category = $category;
 	}
 	
 	public function viewAction()

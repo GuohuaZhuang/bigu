@@ -4,6 +4,11 @@ require_once('./upload.php');
 
 $error_log = null;
 
+if (isset($_POST['thumbpath']) && !empty($_POST['thumbpath'])) {
+	$thumbpath = realpath(dirname(__FILE__)).'/'.$_POST['thumbpath'];
+	@unlink($thumbpath);
+}
+
 if (isset($_FILES['imagefile'])) {
     $imagefile = $_FILES['imagefile'];
     $imagepath = Upload($imagefile);

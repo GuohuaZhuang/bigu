@@ -1,7 +1,6 @@
 <?php
 
 require_once(APPLICATION_PATH . '/modules/post/models/DbTable/Category.php');
-require_once(APPLICATION_PATH . '/util/Json.php');
 
 class Post_CategoryController extends Zend_Controller_Action
 {

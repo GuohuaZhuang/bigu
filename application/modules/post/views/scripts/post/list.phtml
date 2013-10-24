@@ -16,7 +16,7 @@ function ConfirmHandler() {
 -->
 </style>
 
-<div style="width: 665px">
+<div style="width: 100%; padding-right: 10px;">
 	<?php if (empty($this->result)) { echo '<br/>找不到任何文章<br/>'; } ?>
     <?php foreach($this->result as $row) { ?>
     <div class="post_list_item">
@@ -58,7 +58,7 @@ function ConfirmHandler() {
         if ($user['username'] == $row['author']) { ?>
         <div class="div_post_list_edit">
         	<a href='/post/post/edit?post_id=<?php echo $row['id'] ?>'>编辑</a>
-        	<a onclick="return ConfirmHandler();" href='/post/post/delete?post_id=<?php echo $row['id'] ?>'>删除</a>
+        	<a onclick="return ConfirmHandler();" href='/post/post/delete?post_id=<?php echo $row['id'] ?><?php echo (empty($this->category)?'':'&category='.$this->category); ?>'>删除</a>
         </div>
     <?php }
     } ?>
