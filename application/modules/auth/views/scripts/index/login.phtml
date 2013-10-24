@@ -1,5 +1,14 @@
-<br /><br />
-<div id="view-content">
-	<p><b>这位大侠，进门请登录，谢谢！</b></p>
-	<?php echo $this->form; ?>
+
+<link href="/css/auth.css" rel="stylesheet" type="text/css">
+<span class="div_auth_title">登录</span>
+<hr style="border-color: rgb(240, 237, 237); margin: 0px; padding: 0px;" noshade="noshade"><br/>
+<div class="div_auth">
+	<form action="/auth/index/login" method="post">
+	<input type="hidden" name="redirect" value="<?php echo $this->redirect?>" />
+	<div><label class="label_auth" for="username">用户名</label><input type="text" name="username" value="" /></div><br/>
+	<div><label class="label_auth" for="password">密　码</label><input type="password" name="password" value="" /></div><br/>
+	<div><label class="label_auth" for="isremember"></label><input type="checkbox" checked="checked" name="isremember" value="1" />
+	<label class="label_auth_right">下次自动登录</label></div><br/>
+	<div><label class="label_auth" for="login"></label><input type="submit" value="登录" /></div>
+	</form>
 </div>

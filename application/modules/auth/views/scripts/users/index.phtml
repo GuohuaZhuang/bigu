@@ -1,6 +1,6 @@
 <script type="text/javascript">
 function SelectChanged(flag) {
-	if (typeof flag !== 'undefined' && flag) {
+	if (typeof flag !== undefined && flag) {
 		document.getElementById('btn_list_save').disabled = true;
 		return;
 	}
@@ -12,9 +12,9 @@ function Save() {
 	for (var i = 1; i < tr.length; i ++) {
 		var cells = tr[i].cells;
 		var data_line = {
-			'username': ((typeof cells[0].childNodes[0] === 'undefined') ? '' : cells[0].childNodes[0].data),
-			'real_name': ((typeof cells[1].childNodes[0] === 'undefined') ? '' : cells[1].childNodes[0].data), 
-			'email': ((typeof cells[2].childNodes[0] === 'undefined') ? '' : cells[2].childNodes[0].data),
+			'username': ((typeof cells[0].childNodes[0] === undefined) ? '' : cells[0].childNodes[0].data),
+			'real_name': ((typeof cells[1].childNodes[0] === undefined) ? '' : cells[1].childNodes[0].data), 
+			'email': ((typeof cells[2].childNodes[0] === undefined) ? '' : cells[2].childNodes[0].data),
 			'status': cells[3].childNodes[1].value,
 			'id_role': cells[4].childNodes[1].value
 		};
@@ -23,16 +23,16 @@ function Save() {
 
     Jsoncallback('/auth/users/update', 
     	    function (json) {
-		        if (typeof json.err !== 'undefined' && json.err != "") {
+		        if (json.err !== undefined && json.err != "") {
 		            alert(json.err);
 		            return false;
 		        }
-		        if (typeof json.success !== 'undefined') {
+		        if (json.success !== undefined) {
 		        	SelectChanged(true);
 			        alert(json.success);
 			        return true;
 		        }
-		        if (typeof json.data === 'undefined') {
+		        if (json.data === undefined) {
 		    		return false;
 	    		}
 		        var data = json.data;

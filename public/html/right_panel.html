@@ -37,14 +37,14 @@ function _AppendCommentItemIntoRightPanel(author, avatar, content, date, id, id_
 function CommentPanelHandler() {
 	Jsoncallback('/post/comment/top', 
 		function (json) {
-		    if (typeof json.err !== 'undefined' && json.err != "") {
+		    if (json.err != undefined && json.err != "") {
 		        alert(json.err);
 		        return false;
 		    }
-		    if (typeof json.success === 'undefined') {
+		    if (json.success == undefined) {
 				return false;
 			}
-			if (json.d !== 'undefined') {
+			if (json.d != undefined) {
 				var d = json.d;
 				$('#right_panel_content').html('');
 				for (var i = 0; i < d.length; i ++) {
@@ -52,7 +52,7 @@ function CommentPanelHandler() {
 						d[i].avatar, d[i].content, d[i].pub_datetime, d[i].id, d[i].id_post);
 				}
 			} else {
-				alert('加载评论失败');
+				// alert('加载评论失败');
 			}
 		}, 
 		'POST', 

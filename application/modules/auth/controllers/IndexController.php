@@ -35,6 +35,7 @@ class Auth_IndexController extends Zend_Controller_Action
     	$auth = Zend_Auth::getInstance();
     	if ($auth->hasIdentity()) {
     		$this->_forward('index');
+    		return;
     	}
     	
     	// 确定一下登录完成后应该跳转的页面
@@ -69,9 +70,15 @@ class Auth_IndexController extends Zend_Controller_Action
         		'username' => $username,
         		'id_role'  => $role_id
         	);
+        	$isremember = $request->getPost('isremember');
+        	if (empty($isremember)) {
+        		Zend_Session::forgetMe(); // 下次不自动登录
+        	} else {
+        		Zend_Session::rememberMe(); // 下次自动登录(默认rememberMeSeconds = 1209600; // 2 weeks)
+        	}
         	$auth->getStorage()->write($data);
         	
-        	// 清楚register
+        	// 清除register
         	$registry = Zend_Registry::getInstance();
         	if ($registry->isRegistered('acl')) $registry->offsetUnset('acl');
         	
@@ -88,6 +95,7 @@ class Auth_IndexController extends Zend_Controller_Action
     public function logoutAction()
     {
         $auth = Zend_Auth::getInstance();
+        Zend_Session::expireSessionCookie();
         $auth->clearIdentity();
         $this->redirect('/auth/index/login');
     }

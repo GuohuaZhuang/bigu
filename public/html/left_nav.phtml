@@ -29,14 +29,14 @@ function _AppendSubcategoryItemIntoList(subcategory) {
 function CategoryListHandler(vcurr_category) {
 	Jsoncallback('/post/category/list', 
 		function (json) {
-		    if (typeof json.err !== 'undefined' && json.err != "") {
+		    if (json.err != undefined && json.err != "") {
 		        alert(json.err);
 		        return false;
 		    }
-		    if (typeof json.success === 'undefined') {
+		    if (json.success == undefined) {
 				return false;
 			}
-			if (json.d !== 'undefined') {
+			if (json.d !== undefined) {
 				var d = json.d;
 				$('#ul_category_list>.menu_category').remove();
 				if (vcurr_category == '' && d.length > 0) {

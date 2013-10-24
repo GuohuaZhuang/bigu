@@ -20,11 +20,11 @@ function PostPreviewHandler() {
 function SelectChangedCascade() {
 	Jsoncallback('/post/category/subcategory', 
     	function (json) {
-	        if (typeof json.err !== 'undefined' && json.err != "") {
+	        if (json.err !== undefined && json.err != "") {
 	            alert(json.err);
 	            return false;
 	        }
-	        if (typeof json.subcategorys === 'undefined') {
+	        if (json.subcategorys === undefined) {
 	    		return false;
 			}
 			if (json.subcategorys.length > 0) {

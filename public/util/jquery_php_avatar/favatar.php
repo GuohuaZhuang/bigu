@@ -19,11 +19,11 @@ $(function() {
 	Jsoncallback('/profile/index/saveavatar', 
 	    function (json) {
 	    	if (null == json) return false;
-	        if (typeof json.err !== 'undefined' && json.err != "") {
+	        if (json.err != undefined && json.err != "") {
 	            alert(json.err);
 	            return false;
 	        }
-	        if (typeof json.success !== 'undefined') {
+	        if (json.success != undefined) {
 	        }
     	}, 
         'POST', 

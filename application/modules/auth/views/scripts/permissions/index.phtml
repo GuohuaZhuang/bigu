@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 function SelectChanged(flag) {
-	if (typeof flag !== 'undefined' && flag) {
+	if (typeof flag !== undefined && flag) {
 		document.getElementById('btn_list_save').disabled = true;
 		return;
 	}
@@ -19,7 +19,7 @@ function Save() {
 	for (var i = 1; i < tr.length; i ++) {
 		var cells = tr[i].cells;
 		var data_line = {
-			'id': ((typeof cells[0].childNodes[0] === 'undefined') ? '' : cells[0].childNodes[0].data),
+			'id': ((typeof cells[0].childNodes[0] === undefined) ? '' : cells[0].childNodes[0].data),
 			'id_role': cells[1].childNodes[1].value,
 			'id_resource': cells[2].childNodes[1].value,
 			'permission': cells[3].childNodes[1].value
@@ -29,16 +29,16 @@ function Save() {
 
     Jsoncallback('/auth/permissions/update', 
     	function (json) {
-	        if (typeof json.err !== 'undefined' && json.err != "") {
+	        if (json.err !== undefined && json.err != "") {
 	            alert(json.err);
 	            return false;
 	        }
-	        if (typeof json.success !== 'undefined') {
+	        if (json.success !== undefined) {
 	        	SelectChanged(true);
 		        alert(json.success);
 		        return true;
 	        }
-	        if (typeof json.data === 'undefined') {
+	        if (json.data === undefined) {
 	    		return false;
 			}
 		}, 
@@ -101,12 +101,12 @@ function tbl_deleteitem_handler(event) {
 	Jsoncallback('/auth/permissions/delete', 
 	    function (json) {
 	    	if (null == json) return false;
-	        if (typeof json.err !== 'undefined' && json.err != "") {
+	        if (json.err !== undefined && json.err != "") {
 	            alert(json.err);
 	            document.location.reload();
 	            return false;
 	        }
-	        if (typeof json.success !== 'undefined') {
+	        if (json.success !== undefined) {
 	        	SelectChanged(true);
 	        }
     	}, 
@@ -121,15 +121,15 @@ function tbl_additem_handler(event) {
 	Jsoncallback('/auth/permissions/add', 
 	    function (json) {
 	    	if (null == json) return false;
-	        if (typeof json.err !== 'undefined' && json.err != "") {
+	        if (json.err !== undefined && json.err != "") {
 	            alert(json.err);
 	            return false;
 	        }
-	        if (typeof json.success !== 'undefined') {
+	        if (json.success !== undefined) {
 	        	SelectChanged(true);
 		        // alert(json.success);
 	        }
-	        if (typeof json.id === 'undefined') {
+	        if (json.id === undefined) {
 	    		return false;
     		}
 	        var id = json.id;

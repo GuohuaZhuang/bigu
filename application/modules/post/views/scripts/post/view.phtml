@@ -116,14 +116,14 @@ function _AppendCommentItemIntoList(author, avatar, content, date, id) {
 function CommentAddHandler() {
 	Jsoncallback('/post/comment/add', 
     	function (json) {
-	        if (typeof json.err !== 'undefined' && json.err != "") {
+	        if (json.err !== undefined && json.err != "") {
 	            alert(json.err);
 	            return false;
 	        }
-	        if (typeof json.success === 'undefined') {
+	        if (json.success === undefined) {
 	    		return false;
 			}
-			if (json.id !== 'undefined') {
+			if (json.id !== undefined) {
 				var nowdate = new Date().format("yyyy-MM-dd h:mm:ss");
 				var author = '<?php echo (!empty($this->username))?$this->username:'匿名';?>';
 				var content = $('#comment_content').val();
@@ -147,14 +147,14 @@ function CommentAddHandler() {
 function CommentListHandler() {
 	Jsoncallback('/post/comment/list', 
 		function (json) {
-		    if (typeof json.err !== 'undefined' && json.err != "") {
+		    if (json.err !== undefined && json.err != "") {
 		        alert(json.err);
 		        return false;
 		    }
-		    if (typeof json.success === 'undefined') {
+		    if (json.success === undefined) {
 				return false;
 			}
-			if (json.d !== 'undefined') {
+			if (json.d !== undefined) {
 				var d = json.d;
 				$('#view_comment_list').html('');
 				for (var i = 0; i < d.length; i ++) {
