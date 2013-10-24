@@ -115,7 +115,6 @@ class Profile_IndexController extends Zend_Controller_Action
     public function indexAction()
     {
     	$this->view->profile = true;
-    	$profiles = array();
     	
     	$username = Util_Global::getUsername();
     	if (empty($username)) {
@@ -128,13 +127,25 @@ class Profile_IndexController extends Zend_Controller_Action
     	foreach ($result as $item) {
     		$profiles[$item['pname']] = $item['pvalue'];
     	}
-    	$this->view->profile_profiles = $profiles;
+    	$view_profiles = array(
+    			'gender' => isset($profiles['gender'])?$profiles['gender']:'',
+    			'address' => isset($profiles['address'])?$profiles['address']:'',
+    			'intro' => isset($profiles['intro'])?$profiles['intro']:'',
+    			'city' => isset($profiles['city'])?$profiles['city']:'',
+    			'weibo' => isset($profiles['weibo'])?$profiles['weibo']:'',
+    			'qq' => isset($profiles['qq'])?$profiles['qq']:'',
+    			'phone' => isset($profiles['phone'])?$profiles['phone']:'',
+    			'company' => isset($profiles['company'])?$profiles['company']:'',
+    			'title' => isset($profiles['title'])?$profiles['title']:'',
+    			'industry' => isset($profiles['industry'])?$profiles['industry']:'',
+    			'homepage' => isset($profiles['homepage'])?$profiles['homepage']:'');
+    	$this->view->profile_profiles = $view_profiles;
     	
     	$db_users = new Auth_Model_DbTable_Users();
     	$select = $db_users->getAdapter()->select();
     	$select->where('username=?', $username);
     	$select->from(array('U' => 'tbl_users'), 
-    			array('username', 'real_name', 'email'));
+    			array('username', 'real_name', 'email', 'avatar'));
     	$stmt = $db_users->getAdapter()->query($select);
     	$result_user = $stmt->fetchAll();
     	if (!empty($result_user)) $this->view->profile_users = $result_user[0];

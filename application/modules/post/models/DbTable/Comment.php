@@ -5,6 +5,15 @@ class Post_Model_DbTable_Comment extends Zend_Db_Table_Abstract
 
     protected $_name = 'tbl_comment';
     
+    public function deleteByPostidCascade($id_post) {
+    	if (empty($id_post)) {
+    		return;
+    	} else {
+    		$where = $this->getAdapter()->quoteInto('id_post=?', $id_post);
+    		$num = $this->delete($where);
+    	}
+    }
+    
     public function fetchAllByPostid($id_post) {
     	$select = $this->getAdapter()->select();
     	$select->from(array('C' => 'tbl_comment'), array('id', 'id_post', 'content', 'pub_datetime', 'author'));

@@ -1,6 +1,7 @@
 <?php
 
 require_once(APPLICATION_PATH . '/modules/post/models/DbTable/Post.php');
+require_once(APPLICATION_PATH . '/modules/post/models/DbTable/Comment.php');
 require_once(APPLICATION_PATH . '/modules/post/models/DbTable/Category.php');
 require_once(APPLICATION_PATH . '/modules/auth/models/DbTable/Users.php');
 require_once(APPLICATION_PATH . '/modules/search/models/SearchAdapter.php');
@@ -270,14 +271,20 @@ class Post_PostController extends Zend_Controller_Action
 		$post_id = $request->getParam('post_id');
 		$category = $request->getParam('category');
 		
-		// DELETE thumb
+		// DELETE upload image file and generated thumb file
 		$this->_remove_prethumb($post_id);
 		$this->_remove_imgandthumb($post_id);
 		
+		// DELETE comment
+		$db_comment = new Post_Model_DbTable_Comment();
+		$db_comment->deleteByPostidCascade($post_id);
+		
+		// DELETE post itself
 		$db_post = new Post_Model_DbTable_Post();
 		$where = $db_post->getAdapter()->quoteInto('id=?', $post_id);
 		$num = $db_post->delete($where);
-		// SEARCH
+		
+		// DELETE index from SEARCH
 		$search = new SearchAdapter();
 		$search->deletePostinIndex($post_id);
 		
