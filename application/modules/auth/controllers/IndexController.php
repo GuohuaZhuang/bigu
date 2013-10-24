@@ -86,7 +86,8 @@ class Auth_IndexController extends Zend_Controller_Action
         } else {
         	// 验证失败不跳转
         	$this->view->form = $form;
-        	$this->view->error = '登录失败';
+        	echo "<label class=\"label_auth\"></label><span class=\"div_auth_message\" style=\"color:red\">＊登录失败</span><br/>\n";
+        	// $this->view->error = '登录失败';
         }
 		
         $this->view->redirect = $redirect;

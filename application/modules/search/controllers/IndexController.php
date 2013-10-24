@@ -12,6 +12,9 @@ class Search_IndexController extends Zend_Controller_Action
     	$this->search = new SearchAdapter();
     }
     
+    /*
+     * No longer use
+     */
     public function testaddAction()
     {
     	Zend_Search_Lucene_Analysis_Analyzer::setDefault(new CN_Lucene_Analyzer());
@@ -40,7 +43,9 @@ class Search_IndexController extends Zend_Controller_Action
     	$this->_helper->layout->disableLayout();
     	$this->_helper->viewRenderer->setNoRender(TRUE);
     }
-    
+    /*
+     * No longer use
+    */
     public function testqueryAction()
     {
     	Zend_Search_Lucene_Analysis_Analyzer::setDefault(new CN_Lucene_Analyzer());
@@ -82,7 +87,9 @@ class Search_IndexController extends Zend_Controller_Action
     	$this->_helper->layout->disableLayout();
     	$this->_helper->viewRenderer->setNoRender(TRUE);
     }
-    
+    /*
+     * No longer use
+    */
     public function pagination($q, &$total_count, $page = 1, $count = 10)
     {
     	$frontendOptions = array('lifeTime' => 3600, 'automatic_serialization' => true);

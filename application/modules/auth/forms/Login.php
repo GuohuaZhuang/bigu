@@ -2,8 +2,14 @@
 
 class Auth_Form_Login extends Zend_Form
 {
+	public $username;
+	public $password;
+	public $redirect;
+	public $isremember;
 	public function isValid($args)
 	{
+		if (!isset($args['username'])) return false; // 还没提交
+		
 		if (isset($args['username']) && isset($args['password'])
 			&& !empty($args['username']) && !empty($args['password']))
 		{
@@ -16,9 +22,15 @@ class Auth_Form_Login extends Zend_Form
 // 					// username and password is all valid ok.
 // 				}
 // 			}
-
+			$this->username = $args['username'];
+			$this->password = $args['password'];
 			return true;
 		}
+		$this->redirect = isset($args['redirect']) ? $args['redirect']: '';
+		$this->isremember = isset($args['isremember']) ? $args['isremember']: '';
+		
+		echo "<label class=\"label_auth\"></label><span class=\"div_auth_message\" style=\"color:red\">＊用户名和密码不能为空</span><br/>\n";
+		
 		return false;
 	}
 	

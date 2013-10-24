@@ -1,1 +1,23 @@
-<?php echo $this->form; ?><br/>
+<!--<?php echo $this->form; ?><br/>-->
+
+<form enctype="application/x-www-form-urlencoded" method="post" action=""><dl class="zend_form">
+<li><label for="real_name" class="required">名字</label>
+<div class="element">
+<input type="text" name="real_name" id="real_name" value="<?php echo (isset($this->form->real_name)?$this->form->real_name:'');?>" class="input-text"></div></li>
+<li><label for="email" class="required">Email邮箱</label>
+<div class="element">
+<input type="text" name="email" id="email" value="<?php echo (isset($this->form->email)?$this->form->email:'');?>" class="input-text"></div></li>
+<li><label for="emailAgain" class="required">再次确认邮箱</label>
+<div class="element">
+<input type="text" name="emailAgain" id="emailAgain" value="<?php echo (isset($this->form->emailAgain)?$this->form->emailAgain:'');?>" class="input-text"></div></li>
+<li><label for="username" class="required">用户名</label>
+<div class="element">
+<input type="text" name="username" id="username" value="<?php echo (isset($this->form->username)?$this->form->username:'');?>" class="input-text"></div></li>
+<li><label for="password" class="required">密码</label>
+<div class="element">
+<input type="password" name="password" id="password" value="<?php echo (isset($this->form->password)?$this->form->password:'');?>" class="input-password"></div></li>
+<li><label for="passwordAgain" class="required">再次确认密码</label>
+<div class="element">
+<input type="password" name="passwordAgain" id="passwordAgain" value="<?php echo (isset($this->form->passwordAgain)?$this->form->passwordAgain:'');?>" class="input-password"></div></li>
+<li><div class="button">
+<input type="submit" name="register" id="register" value="注册" class="input-submit"></div></li></dl></form><br/>

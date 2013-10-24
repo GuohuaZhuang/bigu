@@ -1,5 +1,12 @@
 @CHARSET "UTF-8";
 
+.div_auth_message {
+display: inline-block;
+height: 30px;
+font-size: 16px;
+font-family: Microsoft YaHei,"微软雅黑",Lucida,Verdana,Hiragino Sans GB,STHeiti,WenQuanYi Micro Hei,Droid Sans Fallback,SimSun,sans-serif;
+margin: 5px 0px 5px 15px;
+}
 .div_auth input[type="text"], .div_auth input[type="password"] {
 display: inline-block;
 height: 30px;
