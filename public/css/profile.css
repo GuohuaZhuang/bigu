@@ -1,5 +1,8 @@
 @CHARSET "UTF-8";
 
+.div_profile_value input[type="text"] {
+	max-width: 70%;
+} 
 .profile_title {
 	font-size: 20px;
 	font-weight: bold;

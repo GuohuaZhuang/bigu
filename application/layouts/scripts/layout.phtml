@@ -68,8 +68,8 @@
 	  	</tr>
 	  	<?php } // end for editor judgement ?>
 	  	<tr>
-		  	<td colspan="<?php echo (empty($this->editor)) ? 1 : 2; ?>" style="text-align:left;align:left;">
-		  		<div <?php echo (empty($this->editor)) ? 'style="width: 706px"' : ''; ?>>
+		  	<td colspan="<?php echo (empty($this->editor)) ? 1 : 2; ?>" style="text-align:left;align:left;width: 70%;padding-right:10px;">
+		  		<div <?php echo (empty($this->editor)) ? 'style="width: 100%"' : ''; ?>>
 		  		<!-- 右中内容正文/列表栏 -->
 				<?php if (!empty($this->error)) {
 					echo "<div class=\"div_message\"><span style=\"color:red\">【ERROR】：".$this->error."</span></div><br/>\n";

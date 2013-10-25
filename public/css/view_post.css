@@ -40,6 +40,10 @@
 	font-family: 'Microsoft YaHei', 微软雅黑, Lucida, Verdana, 'Hiragino Sans GB', STHeiti, 'WenQuanYi Micro Hei', 'Droid Sans Fallback', SimSun, sans-serif;
 	line-height: 1.6em;
 }
+.div_post_view_abstract img {
+	height: auto;
+	width: 100%;
+}
 .div_post_view_abstract p {
 	line-height: 1.6;
 	margin-bottom: 24px;

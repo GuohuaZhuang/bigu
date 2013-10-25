@@ -13,6 +13,56 @@ class Profile_IndexController extends Zend_Controller_Action
         /* Initialize action controller here */
     }
     
+    public function removeuploadAction()
+    {
+    	$json = '';
+    	try {
+    		$request = $this->getRequest();
+    		$data = $request->getParams();
+    		// remove image file
+    		if (isset($data['profile_image']) && !empty($data['profile_image'])) {
+    			$profile_image = str_replace("./upload/",
+    					APPLICATION_PATH . "/../public/util/jquery_php_avatar/upload/",
+    					$data['profile_image']);
+    			unlink($profile_image);
+    			$json = '{"success": "删除上传头像图片完成"}';
+    		} else {
+    			$json = '{"err": "删除上传头像图片失败"}';
+    		}
+    	} catch (Exception $e) {
+    		$json = '{"err": "删除上传头像图片失败"}';
+    	}
+    	echo $json;
+    	// stop layout and render
+    	$this->_helper->layout->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender(TRUE);
+    }
+    
+    public function removethumbAction()
+    {
+    	$json = '';
+    	try {
+	    	$request = $this->getRequest();
+	    	$data = $request->getParams();
+	    	// remove image file
+	    	if (isset($data['profile_avatar']) && !empty($data['profile_avatar'])) {
+	    		$profile_avatar = str_replace("./thumb/",
+	    				APPLICATION_PATH . "/../public/util/jquery_php_avatar/thumb/",
+	    				$data['profile_avatar']);
+	    		unlink($profile_avatar);
+	    		$json = '{"success": "删除旧头像图片完成"}';
+	    	} else {
+	    		$json = '{"err": "删除旧头像图片失败"}';
+	    	}
+    	} catch (Exception $e) {
+    		$json = '{"err": "删除上传头像图片失败"}';
+    	}
+    	echo $json;
+    	// stop layout and render
+    	$this->_helper->layout->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender(TRUE);
+    }
+    
     public function saveavatarAction()
     {
     	$request = $this->getRequest();

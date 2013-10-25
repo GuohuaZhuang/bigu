@@ -74,7 +74,7 @@ class Auth_IndexController extends Zend_Controller_Action
         	if (empty($isremember)) {
         		Zend_Session::forgetMe(); // 下次不自动登录
         	} else {
-        		Zend_Session::rememberMe(); // 下次自动登录(默认rememberMeSeconds = 1209600; // 2 weeks)
+        		Zend_Session::rememberMe(1209600); // 下次自动登录(默认rememberMeSeconds = 1209600; // 2 weeks)
         	}
         	$auth->getStorage()->write($data);
         	

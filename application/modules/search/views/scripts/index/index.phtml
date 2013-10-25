@@ -48,24 +48,27 @@ outline: 0;
 color: #2375BE;
 text-decoration: none;
 }
+.div_search {
+width: 100%;
+}
 -->
 </style>
 
 <?php if (empty($this->result)) { echo '<br/>找不到任何文章<br/>'; } else { ?>
-
+<div class="div_search">
 <table class="search_table">
     <thead>
       <tr>
-        <th style="width: 80px;">发表时间</th>
-        <th>文章标题</th>
+        <th style="width: 20%;">发表时间</th>
+        <th style="width: 80%;">文章标题</th>
       </tr>
     </thead>
     <tbody>
 
     <?php foreach ($this->result as $row) { ?>
     <tr>
-        <td style="width: 80px; font-size: 12px;"><?php echo date('Y-m-d H:i:s', $row['pub_datetime']); ?></td>
-        <td>
+        <td style="width: 20%; font-size: 12px;"><?php echo date('Y-m-d H:i:s', $row['pub_datetime']); ?></td>
+        <td style="width: 80%;">
         	<a href="/post/post/view?post_id=<?php echo $row['id_post']; ?>" 
         		target="_blank"><?php echo $row['title']; ?></a>
         </td>
@@ -131,4 +134,6 @@ if ($x < $n) echo '<li class="next next_page "><a rel="next" href="/search/index
 ?>
 		</ul>
     </div>
+</div>
+
 </div>

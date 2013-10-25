@@ -6,19 +6,19 @@
 <body>
 
 <div id="head_links_container" class="head_div">
-    <a href="/post/post/list">主页</a>
+    <div style="float:left"><a href="/post/post/list">主页</a></div>
     <?php $auth = Zend_Auth::getInstance();
     if ($auth->hasIdentity()) {
         $user = $auth->getStorage()->read();
-        echo '<a href="/profile/index/index?username=' . $user['username'] . '">' . $user['username'] . '</a>';
-        echo '<a href="/auth/index/logout">退出</a>';
-        echo '<a href="/post/post/add">发表文章</a>';
+        echo '<div style="float:left"><a href="/profile/index/index?username=' . $user['username'] . '">' . $user['username'] . '</a></div>';
+        echo '<div style="float:left"><a href="/auth/index/logout">退出</a></div>';
+        echo '<div style="float:left"><a href="/post/post/add">发稿</a></div>';
         if (3 == $user['id_role']) {
-            echo '<a href="/auth/users/">管理</a>';
+            echo '<div style="float:left"><a href="/auth/users/">管理</a></div>';
         }
     } else {
-        echo '<a href="/auth/index/login">登录</a>';
-		echo '<a href="/auth/index/register">注册</a>';
+        echo '<div style="float:left"><a href="/auth/index/login">登录</a></div>';
+		echo '<div style="float:left"><a href="/auth/index/register">注册</a></div>';
     }?>
     
 </div>
