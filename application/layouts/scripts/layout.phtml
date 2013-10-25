@@ -6,6 +6,7 @@
 		<meta name="keywords" content="比咕, 比咕网, bigu, 自然语言处理, 搜索引擎, 大数据, 数据挖掘, 情感语义分析, 中文分词, 文本分类, 文本聚类" />
 		<meta name="description" content="比咕网是一个关注搜索和自然语言处理技术的科技博客" />
 		<link href="/css/my.css" rel="stylesheet" type="text/css" />
+		<link href="/css/message.css" rel="stylesheet" type="text/css">
 		<script type="text/javascript" src="/js/jquery.js" ></script>
 		<script type="text/javascript" src="/js/util.js" ></script>
 		<script type="text/javascript" src="/js/my.js" ></script>
@@ -35,8 +36,12 @@
 	<?php if (!empty($this->manage)) { ?>
 	
 	<!-- 管理右边面板 -->
-	<?php if (!empty($this->error)) { ?>Error: <?php echo $this->error; ?><br/><?php } ?>
-	<?php if (!empty($this->success)) { ?>Success: <?php echo $this->success; ?><br/><?php } ?>
+	<?php if (!empty($this->error)) {
+		echo "<div class=\"div_message\"><span style=\"color:red\">【ERROR】：".$this->error."</span></div><br/>\n";
+	} ?>
+	<?php if (!empty($this->success)) {
+		echo "<div class=\"div_message\"><span style=\"color:green\">【SUCCESS】：".$this->success."</span></div><br/>\n";
+	} ?>
 	<?php echo $this->layout()->content; ?>
 	<?php } else { ?>
 	  <table border="1" style="width: 100%;">
@@ -66,8 +71,12 @@
 		  	<td colspan="<?php echo (empty($this->editor)) ? 1 : 2; ?>" style="text-align:left;align:left;">
 		  		<div <?php echo (empty($this->editor)) ? 'style="width: 706px"' : ''; ?>>
 		  		<!-- 右中内容正文/列表栏 -->
-				<?php if (!empty($this->error)) { ?>Error: <?php echo $this->error; ?><br/><?php } ?>
-				<?php if (!empty($this->success)) { ?>Success: <?php echo $this->success; ?><br/><?php } ?>
+				<?php if (!empty($this->error)) {
+					echo "<div class=\"div_message\"><span style=\"color:red\">【ERROR】：".$this->error."</span></div><br/>\n";
+				} ?>
+				<?php if (!empty($this->success)) {
+					echo "<div class=\"div_message\"><span style=\"color:green\">【SUCCESS】：".$this->success."</span></div><br/>\n";
+				} ?>
 				<?php echo $this->layout()->content; ?>
 				</div>
 		  	</td>

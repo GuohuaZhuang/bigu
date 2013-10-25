@@ -1,23 +1,44 @@
-<!--<?php echo $this->form; ?><br/>-->
+<link href="/css/auth.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+<!--
+$(document).ready(function() {
+	var obj = $('#auth_register:first *:input[type=text]:first');
+	obj.focus();
+	obj.select();
+});
+//-->
+</script>
 
-<form enctype="application/x-www-form-urlencoded" method="post" action=""><dl class="zend_form">
-<li><label for="real_name" class="required">名字</label>
-<div class="element">
-<input type="text" name="real_name" id="real_name" value="<?php echo (isset($this->form->real_name)?$this->form->real_name:'');?>" class="input-text"></div></li>
-<li><label for="email" class="required">Email邮箱</label>
-<div class="element">
-<input type="text" name="email" id="email" value="<?php echo (isset($this->form->email)?$this->form->email:'');?>" class="input-text"></div></li>
-<li><label for="emailAgain" class="required">再次确认邮箱</label>
-<div class="element">
-<input type="text" name="emailAgain" id="emailAgain" value="<?php echo (isset($this->form->emailAgain)?$this->form->emailAgain:'');?>" class="input-text"></div></li>
-<li><label for="username" class="required">用户名</label>
-<div class="element">
-<input type="text" name="username" id="username" value="<?php echo (isset($this->form->username)?$this->form->username:'');?>" class="input-text"></div></li>
-<li><label for="password" class="required">密码</label>
-<div class="element">
-<input type="password" name="password" id="password" value="<?php echo (isset($this->form->password)?$this->form->password:'');?>" class="input-password"></div></li>
-<li><label for="passwordAgain" class="required">再次确认密码</label>
-<div class="element">
-<input type="password" name="passwordAgain" id="passwordAgain" value="<?php echo (isset($this->form->passwordAgain)?$this->form->passwordAgain:'');?>" class="input-password"></div></li>
-<li><div class="button">
-<input type="submit" name="register" id="register" value="注册" class="input-submit"></div></li></dl></form><br/>
+<?php if (!isset($this->success) || empty($this->success)) { ?>
+
+<span class="div_auth_title">注册</span>
+<hr style="border-color: rgb(240, 237, 237); margin: 0px; padding: 0px;" noshade="noshade"><br/>
+<div class="div_auth">
+	<form action="/auth/index/register" method="post" id="auth_register" enctype="application/x-www-form-urlencoded">
+	
+	<input type="hidden" name="redirect" value="<?php echo $this->redirect?>" />
+	
+	<div><label class="label_auth" for="real_name">名字</label><input type="text" name="real_name" 
+		value="<?php echo (isset($this->form->real_name)?$this->form->real_name:'');?>" /></div><br/>
+	
+	<div><label class="label_auth" for="email">Email邮箱</label><input type="text" name="email" 
+		value="<?php echo (isset($this->form->email)?$this->form->email:'');?>" /></div><br/>
+	
+	<div><label class="label_auth" for="emailAgain">再次确认邮箱</label><input type="text" name="emailAgain" 
+		value="<?php echo (isset($this->form->emailAgain)?$this->form->emailAgain:'');?>" /></div><br/>
+	
+	<div><label class="label_auth" for="username">用户名</label><input type="text" name="username" 
+		value="<?php echo (isset($this->form->username)?$this->form->username:'');?>" /></div><br/>
+	
+	<div><label class="label_auth" for="password">密码</label><input type="password" name="password" 
+		value="<?php echo (isset($this->form->password)?htmlspecialchars($this->form->password):'');?>" /></div><br/>
+	
+	<div><label class="label_auth" for="passwordAgain">再次确认密码</label><input type="password" name="passwordAgain" 
+		value="<?php echo (isset($this->form->passwordAgain)?htmlspecialchars($this->form->passwordAgain):'');?>" /></div><br/>
+	
+	<div><label class="label_auth"></label><input type="submit" value="注册" /></div>
+	
+	</form>
+</div>
+
+<?php } ?>

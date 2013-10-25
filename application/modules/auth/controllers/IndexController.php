@@ -121,13 +121,13 @@ class Auth_IndexController extends Zend_Controller_Action
     	// 查验后存库
         $user= new Auth_Model_DbTable_Users();
         if ($user->hasEmail($data['email'])) { /// email 是否已有
-        	$this->view->error = 'Email已经注册过了';
+        	$form->outputMessage('Email已经注册过了');
+        	$this->view->form = $form;
+        	return;
         } else if ($user->hasUsername($data['username'])) { /// username 是否已有
-        	$this->view->error = '用户名已经注册过了';
-        } else if (!$data['email'] == $data['emailAgain']) { /// email == emailAgain？
-        	$this->view->error = '两次填写邮箱不一致';
-        } else if (!$data['password'] == $data['passwordAgain']) { /// password == passwordAgain？
-        	$this->view->error = '两次填写密码不一致';
+        	$form->outputMessage('用户名已经被注册过了');
+        	$this->view->form = $form;
+        	return;
         }
     	
     	///如果查验合法发邮件
@@ -143,7 +143,7 @@ class Auth_IndexController extends Zend_Controller_Action
         	
         	$mail = new Zend_Mail('UTF-8');
         	$mail->setFrom('guohua_zhuang@163.com', 'Bigu Adminstrator');
-        	$mail->setSubject('Thank you for registering');
+        	$mail->setSubject('[比咕网] 感谢您的注册(Thank you for registering)');
         	$mail->setEncodingOfHeaders(Zend_Mime::ENCODING_BASE64);
         	$ev_url = 'http://bigu1.local/auth/index/emailverification?email='
         		 . $data['email'] . '&str=' . sha1($data['email']);
@@ -151,16 +151,24 @@ class Auth_IndexController extends Zend_Controller_Action
         		"如果无法直接跳转到链接，请手动复制以下链接到浏览器地址栏并访问以完成激活：$ev_url<br/>";
         	$mail->setBodyHtml($html, 'UTF-8');
         	$mail->addTo($data['email'], $data['real_name']);
-        	if ($mail->send()) {
-        		$data['password_salt'] = Util_Global::generateSalt();//'xcNsdaAd73328aDs73oQw223hd';
-        		$data['id_role'] = 2;
-        		$data['password'] = sha1($data['password_salt'] . $data['password']);
-        		// JUST FOR DEBUG 
-        		$user->insert($data);
-        		$this->view->success = '注册成功';
-        		$this->_setTableUser($user);
-        	} else {
-        		$this->view->error = '向你提供的邮箱发送注册激活信息失败';
+        	try {
+	        	if ($mail->send()) {
+	        		$data['password_salt'] = Util_Global::generateSalt();//'xcNsdaAd73328aDs73oQw223hd';
+	        		$data['id_role'] = 2;
+	        		$data['password'] = sha1($data['password_salt'] . $data['password']);
+	        		// INSERT TO DB
+	        		$user->insert($data);
+	        		$this->view->success = '注册成功！请登录邮箱激活帐号，谢谢！';
+	        		$this->_setTableUser($user);
+	        	} else {
+	        		$form->outputMessage('向你提供的邮箱发送注册激活信息失败');
+	        		$this->view->form = $form;
+	        		return;
+	        	}
+        	} catch (Exception $e) {
+        		$form->outputMessage('向你提供的邮箱发送注册激活信息失败，可能由于网络原因导致。<br/>'.$e->getMessage());
+        		$this->view->form = $form;
+        		return;
         	}
         }
     }
@@ -194,7 +202,7 @@ class Auth_IndexController extends Zend_Controller_Action
 	            // THE USER EXISTS AND THE VERIFICATION STRING IS CORRECT
 	            // LET'S APPROVE THE USER
 	            if ($users->edit($email, array('status' => 'approved')) ) {
-	                $this->view->success = '您好，'. $user->username . '! 你的账号已经成功激活啦！';
+	                $this->view->success = '您好，'. $user->username . '! 你的账号已经成功激活啦！<br/>您现在可以登录喽！';
 	            }
 	        }
 	    }
