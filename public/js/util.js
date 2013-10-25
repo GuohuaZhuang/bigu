@@ -14,11 +14,11 @@ function Jsoncallback(url, callback, method, data, loadid) {
 		url: url, 
 		success: function(json) {
 			if (loadid) $('#'+loadid).fadeOut(200);
-			callback(json);
+			if (callback != null) callback(json);
 		}, 
 		error: function(json, textStatus, errorThrown) {
 			if (loadid) $('#'+loadid).fadeOut(200);
-			alert('[ERROR] -- JSON CALLBACK:\n'
+			if (callback != null) alert('[ERROR] -- JSON CALLBACK:\n'
 				+ '[ERROR:textStatus]: ' + textStatus 
 				+ '[ERROR:errorThrown]: ' + errorThrown 
 				+ '[ERROR:json.responseText]: ' + json.responseText);

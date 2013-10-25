@@ -21,50 +21,48 @@ if (!empty($error_log)) {
 } else {
 ?>
 
+<link href="/css/auth.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="/util/jquery_php_avatar/scripts/avatar.js"></script>
 <script type="text/javascript">
 <!--
-window.onbeforeunload = function () {
-	if ($('#issubmit').val() == '0') {
-		if (window.confirm("正在修改头像，确认要离开吗？")) {
-			Jsoncallback('/profile/index/removeupload', 
-			    function (json) {
-			    	if (null == json) return false;
-			        if (json.err != undefined && json.err != "") {
-			            alert(json.err);
-			            return false;
-			        }
-			        if (json.success != undefined) {
-			        }
-		    	}, 
-		        'POST', 
-		        {'d': '', 'timestamp' : Date.parse(new Date()), 
-		         'profile_image': '<?php echo $imagepath; ?>' }, 
-		        'loading');
-			return true;
-		} else {
-			// 维持这个页面
-			return false;
-		}
-	}
-	return true;
+function sleep(n) { 
+	var start = new Date().getTime(); 
+	while(true)  if(new Date().getTime()-start > n) break; 
 }
+
+var g_fselector_issubmit = 0;
+
+function BeforeUnloadHandler() {
+	return '正在修改头像，确认要离开吗？';
+}
+
+function UnloadHandler() {
+	if (g_fselector_issubmit == 0) {
+		Jsoncallback('/profile/index/removeupload', 
+		    null, 
+	        'POST', 
+	        {'d': '', 'timestamp' : Date.parse(new Date()), 
+	         'profile_image': '<?php echo $imagepath; ?>' }, 
+	        'loading');
+        sleep(500);
+	}
+}
+
+$(window).on('beforeunload', BeforeUnloadHandler);
+$(window).on('unload', UnloadHandler);
+
 function BeforeSaveAvatar() {
+	$(window).off('beforeunload', BeforeUnloadHandler);
+	$(window).off('unload', UnloadHandler);
+	g_fselector_issubmit = 1;
 	$('#issubmit').val('1');
 	Jsoncallback('/profile/index/removethumb', 
-	    function (json) {
-	    	if (null == json) return false;
-	        if (json.err != undefined && json.err != "") {
-	            alert(json.err);
-	            return false;
-	        }
-	        if (json.success != undefined) {
-	        }
-    	}, 
+	    null, 
         'POST', 
         {'d': '', 'timestamp' : Date.parse(new Date()), 
          'profile_avatar': '<?php echo $thumbpath; ?>' }, 
         'loading');
+	sleep(500);
 }
 //-->
 </script>
@@ -91,7 +89,7 @@ function BeforeSaveAvatar() {
         <!-- ,&nbsp;<label for="si_y1">Y1:</label> --><input type="hidden" id="si_y1" name="si_y1" />
         <!-- <br/><label for="si_width">W&nbsp;:</label> --><input type="hidden" id="si_width" name="si_width" />
         <!-- ,&nbsp;<label for="si_height">H<sub>&nbsp;&nbsp;</sub>:</label> --><input type="hidden" id="si_height" name="si_height" />
-        <br/><input type="submit" onclick="return BeforeSaveAvatar();" name="si_submit" style="width: auto; margin-left: 0;" value="保存头像"/><br/>
+        <br/><div class="div_auth"><input type="submit" onclick="return BeforeSaveAvatar();" name="si_submit" style="width: auto; margin-left: 0;" value="保存头像"/></div><br/>
     </div>
     </form>
     
