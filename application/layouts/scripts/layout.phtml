@@ -19,7 +19,10 @@
 	</head>
 	
 	<body>
-<section>
+	
+<table border="1" style="width: 100%;">
+<tr><td style="width:20%; height: 100%; position: fixed;">
+
 	<?php if (!empty($this->manage)) { ?>
 	<!-- 管理左面板 -->
 	<?php include(APPLICATION_PATH . "/../public/html/left_mnav.html"); ?>
@@ -30,6 +33,8 @@
 	<!-- 主页左面板 -->
 	<?php include(APPLICATION_PATH . "/../public/html/left_nav.phtml"); ?>
 	<?php } ?>
+	
+</td><td style="width:80%; height: 100%; text-align: right;">
 	
 	<!-- 右边面板(采用table作布局) -->
 	<div class="span10 content borBox pull-right">
@@ -92,7 +97,9 @@
 	<?php include(APPLICATION_PATH . "/../public/html/foot.html"); ?>
 	<?php } ?>
 	</div>
-</section>
+	
+</td></tr>
+</table>
 
 <?php include(APPLICATION_PATH . "/../public/html/loading.html"); ?>
 </body>

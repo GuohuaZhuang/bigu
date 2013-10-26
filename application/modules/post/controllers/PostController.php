@@ -313,7 +313,7 @@ class Post_PostController extends Zend_Controller_Action
 	{
 		$auth = Zend_Auth::getInstance();
 		$user = $auth->getStorage()->read();
-		$this->view->username = $user['username'];
+		$this->view->username = isset($user['username'])?$user['username']:'';
 		$db_users = new Auth_Model_DbTable_Users();
 		$this->view->avatar = $db_users->fetchAvatar($user['username']);
 		

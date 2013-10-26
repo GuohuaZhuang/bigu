@@ -128,7 +128,7 @@ function td_dblclick_handler() {
     var inval = $(this).html();
     $(this).unbind("dblclick", td_dblclick_handler);
     
-    $(this).html("<input type='text' style='width:100%;text-align:right;' value='"+inval+"'/>");
+    $(this).html("<input type='text' style='width:100%;text-align:left;' value='"+inval+"'/>");
     $(this).children().focus();
     
     $(this).children().focusout(function() {
