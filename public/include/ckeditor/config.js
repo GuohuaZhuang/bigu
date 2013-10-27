@@ -10,7 +10,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.filebrowserImageUploadUrl = '/util/upload.php?type=img';
 	config.filebrowserFlashUploadUrl = '/util/upload.php?type=flash';
 	// code snippet
-	config.extraPlugins = 'syntaxhighlight';
+	config.extraPlugins = 'syntaxhighlight,eqneditor';
 	config.syntaxhighlight_lang = 'cpp';
 	config.syntaxhighlight_hideControls = true;
 	

@@ -27,7 +27,7 @@ SyntaxHighlighter.autoloader(
 	'vb vbnet /include/SyntaxHighlighter/scripts/shBrushVb.js',
 	'xml xhtml xslt html /include/SyntaxHighlighter/scripts/shBrushXml.js'
 );
-SyntaxHighlighter.config.strings.expandSource = 'Quelltext anzeigen';
-SyntaxHighlighter.config.strings.noBrush = 'Kann keine Zielsprache finden für: ';
-SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Zielsprache wurde nicht für html-script Option konfiguriert: ';
+SyntaxHighlighter.config.strings.expandSource = '查看程序代码';
+SyntaxHighlighter.config.strings.noBrush = '无法找到目标语言：';
+SyntaxHighlighter.config.strings.brushNotHtmlScript = '目标语言没有配置为HTML脚本选项：';
 SyntaxHighlighter.all();

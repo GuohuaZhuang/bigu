@@ -98,6 +98,7 @@ class Post_PostController extends Zend_Controller_Action
     	// filetype
     	$_tmp_arr_v5 = explode('.', $filetmp);
     	$filetype = strtolower(end($_tmp_arr_v5));
+    	if (false!=strstr($filetype,'latex')) $filetype = 'gif';
     	// filename
     	$filename = md5(microtime().rand(0, 100)) . '.' . $filetype;
     	

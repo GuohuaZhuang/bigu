@@ -1,0 +1,21 @@
+﻿CKEDITOR.plugins.setLang( 'syntaxhighlight', 'zh-cn', {
+	title:'插入程序代码',
+	contextTitle:'编辑程序代码',
+	sourceTab:'程序代码',
+	langLbl:'选择编程语言',
+	sourceTextareaEmptyError:'程序代码不能为空！',
+	advancedTab:'高级',
+	hideGutter:'隐藏行数',
+	hideGutterLbl:'隐藏行数显示.',
+	hideControls:'隐藏控制',
+	hideControlsLbl:'隐藏在代码上方的控制面板.',
+	collapse:'折叠',
+	collapseLbl:'默认情况下代码块为折叠状态.(控制面板需要被打开)',
+	showColumns:'显示列数',
+	showColumnsLbl:'在第1行显示列数.',
+	lineWrap:'禁用自动换行',
+	lineWrapLbl:'关闭自动换行.',
+	lineCount:'默认的行计数',
+	highlight:'代码行的高亮',
+	highlightLbl:'输入一个用逗号分隔行线要突出显示，如<em style="font-style:italic">3,10,15</em>.'
+});
