@@ -77,6 +77,7 @@ var CKBUILDER_CONFIG = {
 		'specialchar' : 1,
 		'scayt' : 1,
 		'stylescombo' : 1,
+		'syntaxhighlight' : 1,
 		'tab' : 1,
 		'table' : 1,
 		'tabletools' : 1,
