@@ -69,7 +69,8 @@ class Profile_IndexController extends Zend_Controller_Action
     	$data = $request->getParams();
     	
     	// 保证当前用户登录
-    	$username = Util_Global::getUsername();
+    	$username = Util_Global::getUsername(true);
+    	if (false == $username) { $this->redirect('/auth/index/login'); }
     	if (empty($username) || empty($data['profile_avatar']) 
     			|| strpos($data['profile_avatar'], '/thumb/') == FALSE) {
     		echo '{"err": "更新图像数据失败"}';

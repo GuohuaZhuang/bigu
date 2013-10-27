@@ -5,6 +5,7 @@ require_once(APPLICATION_PATH . '/modules/post/models/DbTable/Comment.php');
 require_once(APPLICATION_PATH . '/modules/post/models/DbTable/Category.php');
 require_once(APPLICATION_PATH . '/modules/auth/models/DbTable/Users.php');
 require_once(APPLICATION_PATH . '/modules/search/models/SearchAdapter.php');
+require_once(APPLICATION_PATH . '/util/Global.php');
 
 class Post_PostController extends Zend_Controller_Action
 {
@@ -163,9 +164,8 @@ class Post_PostController extends Zend_Controller_Action
     	// pub_datetime
     	$post_pub_datetime = date('Y-m-d H:i:s');
     	// author
-    	$auth = Zend_Auth::getInstance();
-    	$user = $auth->getStorage()->read();
-    	$post_author = $user['username'];
+    	$post_author = Util_Global::getUsername(true);
+    	if (false == $post_author) { $this->redirect('/auth/index/login'); }
     	// category and sub_category
     	$post_category = $request->getParam('post_select_bigcategory');
     	$post_sub_category = $request->getParam('post_select_subcategory');
@@ -311,11 +311,10 @@ class Post_PostController extends Zend_Controller_Action
 	
 	public function viewAction()
 	{
-		$auth = Zend_Auth::getInstance();
-		$user = $auth->getStorage()->read();
-		$this->view->username = isset($user['username'])?$user['username']:'';
+		$username = Util_Global::getUsername();
+		$this->view->username = $username;
 		$db_users = new Auth_Model_DbTable_Users();
-		$this->view->avatar = $db_users->fetchAvatar($user['username']);
+		$this->view->avatar = $db_users->fetchAvatar($username);
 		
 		$request = $this->getRequest();
 		$post_id = $request->getParam('post_id');
@@ -329,9 +328,9 @@ class Post_PostController extends Zend_Controller_Action
 	
 	public function previewAction()
 	{
-		$auth = Zend_Auth::getInstance();
-		$user = $auth->getStorage()->read();
-		$this->view->username = $user['username'];
+		$username = Util_Global::getUsername(true);
+		if (false == $username) { $this->redirect('/auth/index/login'); }
+		$this->view->username = $username;
 		$this->view->preview = true;
 		
 		$request = $this->getRequest();
@@ -342,9 +341,7 @@ class Post_PostController extends Zend_Controller_Action
 		// pub_datetime
 		$post_pub_datetime = date('Y-m-d H:i:s');
 		// author
-		$auth = Zend_Auth::getInstance();
-		$user = $auth->getStorage()->read();
-		$post_author = $user['username'];
+		$post_author = $username;
 		// category and sub_category
 		$post_category = $request->getParam('post_select_bigcategory');
 		$post_sub_category = $request->getParam('post_select_subcategory');

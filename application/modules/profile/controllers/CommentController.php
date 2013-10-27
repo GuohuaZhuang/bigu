@@ -18,7 +18,8 @@ class Profile_CommentController extends Zend_Controller_Action
     	
     	$request = $this->getRequest();
     	$page = $request->getParam('page');
-        $username = Util_Global::getUsername();
+        $username = $request->getParam('username');
+        if (empty($username)) $username = Util_Global::getUsername();
     	if (empty($username)) {
     		return false;
     	}
@@ -28,10 +29,5 @@ class Profile_CommentController extends Zend_Controller_Action
     	
     	$total_count = $db->fetch_count($username);
     	$this->view->total_count = $total_count;
-    }
-    
-    public function listAction()
-    {
-    	$this->redirect('/profile/comment/index');
     }
 }

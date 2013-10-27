@@ -9,6 +9,10 @@ CKEDITOR.editorConfig = function( config ) {
 	// config.uiColor = '#AADC6E';
 	config.filebrowserImageUploadUrl = '/util/upload.php?type=img';
 	config.filebrowserFlashUploadUrl = '/util/upload.php?type=flash';
+	// code snippet
+	config.extraPlugins = 'syntaxhighlight';
+	config.syntaxhighlight_lang = 'cpp';
+	config.syntaxhighlight_hideControls = true;
 	
 	config.font_names =
 	'微软雅黑/"Microsoft YaHei", 微软雅黑, Lucida, Verdana, "Hiragino Sans GB", STHeiti, "WenQuanYi Micro Hei", "Droid Sans Fallback", SimSun, sans-serif;' + 

@@ -34,7 +34,9 @@ class Profile_PostController extends Zend_Controller_Action
     
     public function listAction()
     {
-    	$username = Util_Global::getUsername();
+    	$request = $this->getRequest();
+    	$username = $request->getParam('username');
+    	if (empty($username)) $username = Util_Global::getUsername();
     	if (empty($username)) {
     		return false;
     	}

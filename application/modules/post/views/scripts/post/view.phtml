@@ -1,3 +1,8 @@
+<link type="text/css" rel="stylesheet" media="all" href="/include/SyntaxHighlighter/styles/shCore.css"></link>
+<link type="text/css" rel="stylesheet" media="all" href="/include/SyntaxHighlighter/styles/shThemeDefault.css"></link>
+<script src="/include/SyntaxHighlighter/scripts/shCore.js" type="text/javascript"></script>
+<script src="/include/SyntaxHighlighter/scripts/shAutoloader.js" type="text/javascript"></script>
+<script src="/include/SyntaxHighlighter/load_syntaxhighlighter.js" type="text/javascript"></script>
 <link href="/css/view_post.css" rel="stylesheet" type="text/css">
 <link href="/css/view_comment.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="/js/comment.js" ></script>
@@ -91,7 +96,7 @@ function _AppendCommentItemIntoList(author, avatar, content, date, id) {
 	new_comment += "\" style=\"width:48px;height:48px;\">";
 	new_comment += "</div><div>";
 	new_comment += "<div><span><a ";
-	if (author != '' && author != "匿名") new_comment += ("href=\"/profile/comment/list?id=" + author + "\"");
+	if (author != '' && author != "匿名") new_comment += ("href=\"/profile/comment/index?username=" + author + "\"");
 	new_comment += " class=\"uname\" target=\"_blank\">";
 	new_comment += author; // author
 	new_comment += "</a></span></div>";
@@ -192,13 +197,13 @@ $(document).ready(function() {
 <div class="div_comment_add">
 	<div class="pull-left face">
 	    <a class="ulink" target="_blank" 
-	    	<?php echo (!empty($this->username))?'href="/profile/comment/list?author='.$this->username.'"':'';?>>
+	    	<?php echo (!empty($this->username))?'href="/profile/comment/index?username='.$this->username.'"':'';?>>
 	        <img src="<?php echo (!empty($this->avatar))?$this->avatar:'/image/default_avatar.jpg';?>" 
 	        	style="width:48px;height:48px;border-radius: 6px;margin-left: 10px;float: left;" 
 	        	title="<?php echo (!empty($this->username))?$this->username:'匿名';?>" />
 	    </a>
 	</div>
-    <span class="name"><a <?php echo (!empty($this->username))?'href="/profile/comment/list?author='.$this->username.'"':'';?>
+    <span class="name"><a <?php echo (!empty($this->username))?'href="/profile/comment/index?username='.$this->username.'"':'';?>
     	class="uname" target="_blank"><?php echo (!empty($this->username))?$this->username:'匿名';?></a></span>
     <form accept-charset="UTF-8" action="/post/comment/add" data-remote="true" id="form_comment" method="POST">
     <textarea class="topic_editor span10" id="comment_content" name="comment_content" 

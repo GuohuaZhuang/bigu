@@ -7,7 +7,7 @@
 function _AppendCommentItemIntoRightPanel(author, avatar, content, date, id, id_post) {
 	if (avatar == '') avatar = '/image/default_avatar.jpg';
 	var new_comment = '';
-    var author_href = ((author != '' && author != "匿名") ? (" href=\"/profile/comment/list?id=" + author + "\"") : "");
+    var author_href = ((author != '' && author != "匿名") ? (" href=\"/profile/comment/index?username=" + author + "\"") : "");
     
 	new_comment += "<li class=\"active\">";
 	new_comment += "<a class=\"ulink\" target=\"_blank\" ";

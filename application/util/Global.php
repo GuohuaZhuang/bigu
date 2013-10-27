@@ -1,11 +1,17 @@
 <?php
 class Util_Global
 {
-	public static function getUsername()
+	public static function getUsername($ismandatory = false)
 	{
 		$auth = Zend_Auth::getInstance();
 		$user = $auth->getStorage()->read();
-		return $user['username'];
+		if (isset($user['username'])) {
+			return $user['username'];
+		} else if ($ismandatory) {
+			return false;
+		} else {
+			return '';
+		}
 	}
 	
 	public static function generateSalt($length = 32, $chars = '1234567890abcdef') {

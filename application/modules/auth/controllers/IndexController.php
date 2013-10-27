@@ -34,7 +34,9 @@ class Auth_IndexController extends Zend_Controller_Action
     	// 如果用户已经登录就跳转到用户中心页面
     	$auth = Zend_Auth::getInstance();
     	if ($auth->hasIdentity()) {
-    		$this->_forward('index');
+    		$redirect = '/post/post/list';
+    		$this->redirect($redirect);
+    		// $this->_forward('index');
     		return;
     	}
     	
@@ -44,7 +46,8 @@ class Auth_IndexController extends Zend_Controller_Action
     	if (strlen($redirect) == 0)
     		$redirect = $request->getServer('REQUEST_URI');
     	if (strlen($redirect) == 0)
-    		$redirect = '/auth/index/index';
+    		$redirect = '/post/post/list';
+//     		$redirect = '/auth/index/index';
     	
     	// 读取表单
     	$form = new Auth_Form_Login();
@@ -89,7 +92,6 @@ class Auth_IndexController extends Zend_Controller_Action
         	echo "<label class=\"label_auth\"></label><span class=\"div_auth_message\" style=\"color:red\">＊登录失败</span><br/>\n";
         	// $this->view->error = '登录失败';
         }
-		
         $this->view->redirect = $redirect;
     }
 

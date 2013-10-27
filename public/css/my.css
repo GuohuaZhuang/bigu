@@ -136,6 +136,7 @@ ul {
 }
 
 .content{
+	text-align: left;
 	background-color: #FAFAFA;
 	box-shadow: 0 0 5px 0 silver;
 	padding: 10px 20px;
@@ -143,7 +144,8 @@ ul {
 	width: 100%;
 	height: auto;
 	margin-top: -2;
-margin-right: -2;
+	margin-right: -2;
+	font-family: 'Microsoft YaHei', 微软雅黑, Lucida, Verdana, 'Hiragino Sans GB', STHeiti, 'WenQuanYi Micro Hei', 'Droid Sans Fallback', SimSun, sans-serif;
 }
 .krhr_nav {
 	background: #dedede;

@@ -26,9 +26,15 @@
         </div>
         
     </div>
+    <?php $auth = Zend_Auth::getInstance();
+    if ($auth->hasIdentity()) {
+        $user = $auth->getStorage()->read();
+        if ($user['username'] == $row['author']) { ?>
     <div class="div_post_view_edit">
         <a onclick="return ConfirmDeleteCommentHandler('<?php echo $row['id']?>');" href="/post/comment/delete">删除该评论</a>
     </div>
+    <?php }
+    } ?>
 </div>
 <?php } } ?>
 
