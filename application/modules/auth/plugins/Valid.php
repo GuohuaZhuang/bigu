@@ -113,9 +113,9 @@ class Auth_Plugin_Valid extends Zend_Controller_Plugin_Abstract
 				// echo '正在判断' . $this->_role . '和' . $one_res . '权限结果 = ' . $result . '<br/>';
 			}
 		}
-		if(!$result) { echo '正在判断' . $this->_role . '和权限结果 = ' . $result . '<br/>';
-		print_r($resources);
-		}
+// 		if(!$result) { echo '正在判断' . $this->_role . '和权限结果 = ' . $result . '<br/>';
+// 		print_r($resources);
+// 		}
 		return $result;
 	}
 }
