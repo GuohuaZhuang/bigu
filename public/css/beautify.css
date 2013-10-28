@@ -1,0 +1,36 @@
+@CHARSET "UTF-8";
+
+.shop-global-error {
+	padding: 150px 0 200px 40%;
+	background: url(/image/disappoint.png) no-repeat 30% center;
+}
+.shop-global-error-btn a {
+	margin-right: 10px;
+}
+.btn-home {
+	background-image: linear-gradient(rgb(60, 171, 244), rgb(14, 114, 195));
+	border: 0;
+	color: #fff;
+}
+.btn_beautify {
+	text-decoration: none;
+	display: inline-block;
+	font-size: 14px;
+	height: 38px;
+	line-height: 38px;
+	text-align: center;
+	cursor: pointer;
+	border: 1px solid #e6e9ed;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	color: #fff;
+	padding: 0;
+	width: 140px;
+	margin:10px 20px 10px 0px;
+}
+.btn-dake {
+	background-color: #656d78;
+	border: 0;
+	color: #fff;
+}

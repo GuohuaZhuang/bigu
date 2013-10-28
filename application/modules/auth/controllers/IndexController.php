@@ -147,7 +147,7 @@ class Auth_IndexController extends Zend_Controller_Action
         	$mail->setFrom('guohua_zhuang@163.com', 'Bigu Adminstrator');
         	$mail->setSubject('[比咕网] 感谢您的注册(Thank you for registering)');
         	$mail->setEncodingOfHeaders(Zend_Mime::ENCODING_BASE64);
-        	$ev_url = 'http://bigu1.local/auth/index/emailverification?email='
+        	$ev_url = 'http://'.$_SERVER['SERVER_NAME'].'/auth/index/emailverification?email='
         		 . $data['email'] . '&str=' . sha1($data['email']);
         	$html = "<h1>Bigu注册邮件</h1>感谢您注册Bigu，请点击链接完成激活: <a href=\"$ev_url\">激活账号</a><br/>". 
         		"如果无法直接跳转到链接，请手动复制以下链接到浏览器地址栏并访问以完成激活：$ev_url<br/>";
