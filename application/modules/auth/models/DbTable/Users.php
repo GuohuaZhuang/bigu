@@ -29,6 +29,16 @@ class Auth_Model_DbTable_Users extends Zend_Db_Table_Abstract
 		}
 		return false;
 	}
+	public function getRealname($username) {
+		if (empty($username)) {
+			return false;
+		}
+		$result= $this->find($username);
+		if (!empty($result)) {
+			return $result[0]['real_name'];
+		}
+		return false;
+	}
 	public function hasEmail($email) {
 		if (empty($email)) {
 			return false;

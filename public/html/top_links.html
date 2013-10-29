@@ -10,7 +10,7 @@
     <?php $auth = Zend_Auth::getInstance();
     if ($auth->hasIdentity()) {
         $user = $auth->getStorage()->read();
-        echo '<div style="float:left"><a href="/profile/index/index?username=' . $user['username'] . '">' . $user['username'] . '</a></div>';
+        echo '<div style="float:left"><a href="/profile/index/index?username=' . $user['username'] . '">' . $user['real_name'] . '</a></div>';
         echo '<div style="float:left"><a href="/auth/index/logout">退出</a></div>';
         echo '<div style="float:left"><a href="/post/post/add">发稿</a></div>';
         if (3 == $user['id_role']) {

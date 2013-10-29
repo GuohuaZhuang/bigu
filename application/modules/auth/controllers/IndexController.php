@@ -70,9 +70,11 @@ class Auth_IndexController extends Zend_Controller_Action
         	// 验证成功的话把用户身份存储到auth的storage中
         	$user= new Auth_Model_DbTable_Users();
         	$role_id = $user->getRoleId($username);
+        	$real_name = $user->getRealname($username);
         	$data= array(
         		'username' => $username,
-        		'id_role'  => $role_id
+        		'id_role'  => $role_id,
+        		'real_name' => $real_name
         	);
         	$isremember = $request->getPost('isremember');
         	if (empty($isremember)) {
@@ -155,7 +157,7 @@ class Auth_IndexController extends Zend_Controller_Action
         	$mail->setEncodingOfHeaders(Zend_Mime::ENCODING_BASE64);
         	$ev_url = 'http://'.$_SERVER['SERVER_NAME'].'/auth/index/emailverification?email='
         		 . $data['email'] . '&str=' . sha1($data['email']);
-        	$html = "<h1>Bigu注册邮件</h1>感谢您注册Bigu，请点击链接完成激活: <a href=\"$ev_url\">激活账号</a><br/>". 
+        	$html = "<h1>Bigu注册邮件</h1>您好".$data['real_name']."，感谢您注册Bigu，请点击链接完成激活: <a href=\"$ev_url\">激活账号</a><br/>". 
         		"如果无法直接跳转到链接，请手动复制以下链接到浏览器地址栏并访问以完成激活：$ev_url<br/>";
         	$mail->setBodyHtml($html, 'UTF-8');
         	$mail->addTo($data['email'], $data['real_name']);
