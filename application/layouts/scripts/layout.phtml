@@ -29,6 +29,9 @@
 	<?php } else if (!empty($this->profile)) { ?>
 	<!-- 个人中心面板 -->
 	<?php include(APPLICATION_PATH . "/../public/html/left_pnav.html"); ?>
+	<?php } else if (!empty($this->info)) { ?>
+	<!-- 信息中心面板 -->
+	<?php include(APPLICATION_PATH . "/../public/html/left_inav.html"); ?>
 	<?php } else { ?>
 	<!-- 主页左面板 -->
 	<?php include(APPLICATION_PATH . "/../public/html/left_nav.phtml"); ?>
@@ -38,8 +41,7 @@
 	
 	<!-- 右边面板(采用table作布局) -->
 	<div class="span10 content borBox pull-right">
-	<?php if (!empty($this->manage)) { ?>
-	
+	<?php if (!empty($this->manage) || !empty($this->info)) { ?>
 	<!-- 管理右边面板 -->
 	<?php if (!empty($this->error)) {
 		echo "<div class=\"div_message\"><span style=\"color:red\">【ERROR】：".$this->error."</span></div><br/>\n";
