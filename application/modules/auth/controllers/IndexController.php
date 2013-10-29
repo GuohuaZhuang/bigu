@@ -5,6 +5,7 @@ require_once(APPLICATION_PATH . '/modules/auth/forms/Login.php');
 require_once(APPLICATION_PATH . '/modules/auth/plugins/Authadapter.php');
 require_once(APPLICATION_PATH . '/modules/auth/forms/Register.php');
 require_once(APPLICATION_PATH . '/util/Global.php');
+require_once(APPLICATION_PATH . '/modules/auth/plugins/Acladapter.php');
 
 class Auth_IndexController extends Zend_Controller_Action
 {
@@ -81,9 +82,14 @@ class Auth_IndexController extends Zend_Controller_Action
         	}
         	$auth->getStorage()->write($data);
         	
-        	// 清除register
-        	$registry = Zend_Registry::getInstance();
-        	if ($registry->isRegistered('acl')) $registry->offsetUnset('acl');
+        	// 清除register [Note because registry is just live in a request, not global]
+        	// $registry = Zend_Registry::getInstance();
+        	// if ($registry->isRegistered('acl')) $registry->offsetUnset('acl');
+        	// 不用每次都初始化acl权限对照表
+			$defaultNamespace = new Zend_Session_Namespace();
+			Zend_Session::regenerateId();
+			$acl = new Auth_Plugin_Acladapter($role_id);
+			$defaultNamespace->acl = serialize($acl);
         	
         	$this->redirect($redirect);
         } else {

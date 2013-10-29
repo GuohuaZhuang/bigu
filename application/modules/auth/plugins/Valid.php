@@ -45,33 +45,34 @@ class Auth_Plugin_Valid extends Zend_Controller_Plugin_Abstract
 			// echo '认证没通过<br/>';
 			$this->_role = 1; // 默认guest role
 		}
+		// JUST FOR DEBUG
+		// echo '认证通过(_role='.$this->_role.')<br/>';
+		
+		// 执行Authorization权限判断
+		require_once(APPLICATION_PATH . '/modules/auth/plugins/Acladapter.php');
+		
+		// 不用每次都初始化acl权限对照表
+		$defaultNamespace = new Zend_Session_Namespace();
+		if (!isset($defaultNamespace->acl)) {
+			Zend_Session::regenerateId();
+			$acl = new Auth_Plugin_Acladapter($this->_role);
+			$defaultNamespace->acl = serialize($acl);
+		} else {
+			$acl = unserialize($defaultNamespace->acl);
+		}
+		
+		if ($this->_isAllowed($auth, $acl)) {
+			$redirect = false;
 			// JUST FOR DEBUG
-			// echo '认证通过(_role='.$this->_role.')<br/>';
-			
-			// 执行Authorization权限判断
-			require_once(APPLICATION_PATH . '/modules/auth/plugins/Acladapter.php');
-			
-			// 不用每次都初始化acl权限对照表
-			$registry = Zend_Registry::getInstance();
-			if (!$registry->isRegistered('acl')) {
-				$acl = new Auth_Plugin_Acladapter($this->_role);
-				$registry->set('acl', $acl);
-			} else {
-				$acl = $registry->get('acl');
-			}
-			
-			if ($this->_isAllowed($auth, $acl)) {
-				$redirect = false;
-				// JUST FOR DEBUG
-				// echo '权限通过<br/>';
-			} else {
-				// JUST FOR DEBUG
-				// echo '权限没通过<br/>';
-				$request->setModuleName('auth');
-				$request->setControllerName('index');
-				$request->setActionName('denyaccess');
-				return;
-			}
+			// echo '权限通过<br/>';
+		} else {
+			// JUST FOR DEBUG
+			// echo '权限没通过<br/>';
+			$request->setModuleName('auth');
+			$request->setControllerName('index');
+			$request->setActionName('denyaccess');
+			return;
+		}
 		
 		// 认证没通过或者权限没通过的都跳转到auth/index/login
 		if ($redirect) {
