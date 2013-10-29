@@ -112,6 +112,14 @@ class Profile_IndexController extends Zend_Controller_Action
     	$db_user->update(array('real_name' => $data['profile_real_name'], 
     			'email' => $data['profile_email']), $where);
     	
+    	// 同步修改session里面的真实名
+    	$auth = Zend_Auth::getInstance();
+    	if ($auth->hasIdentity()) {
+    		$user = $auth->getStorage()->read();
+    		$user['real_name'] = $data['profile_real_name'];
+    		$auth->getStorage()->write($user);
+    	}
+    	
     	$pdata = array(
     			'gender' => $data['profile_gender'], 
     			'address' => $data['profile_address'], 

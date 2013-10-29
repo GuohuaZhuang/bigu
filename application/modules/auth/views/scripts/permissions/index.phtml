@@ -166,7 +166,7 @@ $(function() {
     <tbody>
     <?php foreach($this->result as $row) { ?>
     <tr>
-        <td><?php echo $row['id'] ?></td>
+        <td style="color: #888;"><?php echo $row['id'] ?></td>
         <td>
         	<select onchange="SelectChanged()" disabled="disabled">
         		<?php foreach($this->rolenames as $id_role => $rolename) { ?>

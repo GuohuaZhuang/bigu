@@ -18,10 +18,11 @@ function Jsoncallback(url, callback, method, data, loadid) {
 		}, 
 		error: function(json, textStatus, errorThrown) {
 			if (loadid) $('#'+loadid).fadeOut(200);
-			if (callback != null) alert('[ERROR] -- JSON CALLBACK:\n'
-				+ '[ERROR:textStatus]: ' + textStatus 
-				+ '[ERROR:errorThrown]: ' + errorThrown 
-				+ '[ERROR:json.responseText]: ' + json.responseText);
+			// comment as not to alert when as net problems
+			// if (callback != null) alert('[ERROR] -- JSON CALLBACK:\n'
+			// 	+ '[ERROR:textStatus]: ' + textStatus 
+			// 	+ '[ERROR:errorThrown]: ' + errorThrown 
+			// 	+ '[ERROR:json.responseText]: ' + json.responseText);
 		}
 	});
 }
