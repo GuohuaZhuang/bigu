@@ -1,6 +1,11 @@
+
+<link href="/css/switch.css" rel="stylesheet" type="text/css">
+<link href="/css/dropdown.css" rel="stylesheet" type="text/css">
+<link href="/css/button.css" rel="stylesheet" type="text/css">
+
 <script type="text/javascript">
 function SelectChanged(flag) {
-	if (typeof flag !== undefined && flag) {
+	if (flag !== undefined && flag) {
 		document.getElementById('btn_list_save').disabled = true;
 		return;
 	}
@@ -12,11 +17,11 @@ function Save() {
 	for (var i = 1; i < tr.length; i ++) {
 		var cells = tr[i].cells;
 		var data_line = {
-			'username': ((typeof cells[0].childNodes[0] === undefined) ? '' : cells[0].childNodes[0].data),
-			'real_name': ((typeof cells[1].childNodes[0] === undefined) ? '' : cells[1].childNodes[0].data), 
-			'email': ((typeof cells[2].childNodes[0] === undefined) ? '' : cells[2].childNodes[0].data),
-			'status': cells[3].childNodes[1].value,
-			'id_role': cells[4].childNodes[1].value
+			'username': ((cells[0].childNodes[0] === undefined) ? '' : cells[0].childNodes[0].data),
+			'real_name': ((cells[1].childNodes[0] === undefined) ? '' : cells[1].childNodes[0].data), 
+			'email': ((cells[2].childNodes[0] === undefined) ? '' : cells[2].childNodes[0].data),
+			'status': $('input:radio[name=status'+i+']:checked').val(),
+			'id_role': cells[4].childNodes[1].childNodes[1].value
 		};
 		data[i-1] = data_line;
 	}
@@ -46,28 +51,36 @@ function Save() {
 
 <span style="font-size: 20px;">用户管理</span><br/><br/>
 <table id="mlist_table" class="table_manage">
-    <tr><th>username/用户名</th><th>real_name/真实姓名</th><th>email/邮箱</th><th>status/状态</th><th>role/角色</th></tr>
-    <?php foreach($this->result as $row) { ?>
+    <thead><tr><th>username/用户名</th><th>real_name/真实姓名</th><th>email/邮箱</th><th>status/状态</th><th>role/角色</th></tr></thead>
+    <tbody style="font-size: 13px">
+    <?php $_i = 0; foreach($this->result as $row) { $_i ++; ?>
     <tr>
         <td style="color: #888;"><?php echo $row['username'] ?></td>
         <td style="color: #888;"><?php echo $row['real_name'] ?></td>
         <td style="color: #888;"><?php echo $row['email'] ?></td>
         <td>
-            <select onchange="SelectChanged()">
-                <option <?php if($row['status'] == 'approved') { ?>selected<?php } ?> >approved</option>
-                <option <?php if($row['status'] == 'unapproved') { ?>selected<?php } ?> >unapproved</option>
-            </select>
+		    <div class="switch-div">
+		      <input type="radio" onchange="SelectChanged()" id="status_approved<?php echo $_i; ?>" class="switch-input" name="status<?php echo $_i; ?>" value="approved" <?php if($row['status'] == 'approved') echo 'checked'; ?>>
+		      <label for="status_approved<?php echo $_i; ?>" class="switch-label switch-label-off">approved</label>
+		      <input type="radio" onchange="SelectChanged()" id="status_unapproved<?php echo $_i; ?>" class="switch-input" name="status<?php echo $_i; ?>" value="unapproved" <?php if($row['status'] == 'unapproved') echo 'checked'; ?>>
+		      <label for="status_unapproved<?php echo $_i; ?>" class="switch-label switch-label-on">unapproved</label>
+		      <span class="switch-selection"></span>
+		    </div>
         </td>
         <td>
-        	<select onchange="SelectChanged()">
+			<div class="dropdown">
+		      <select class="dropdown-select" onchange="SelectChanged()">
         		<?php foreach($this->rolenames as $id_role => $rolename) { ?>
         		<option value="<?php echo $id_role; ?>" <?php if($row['role'] == $rolename) { ?>selected<?php } ?> ><?php echo $rolename; ?></option>
         		<?php } ?>
-        	</select>
+		      </select>
+		    </div>
         </td>
     </tr>
     <?php } ?>
+    </tbody>
 </table>
 <div style="text-align:left; margin: 10px;">
-<button id="btn_list_save" type="button" disabled="disabled" onclick="Save()">保存</button>
+<br/>
+<button id="btn_list_save" type="button" disabled="disabled" onclick="Save()" class="bigbutton button-blue">保存</button>
 </div>

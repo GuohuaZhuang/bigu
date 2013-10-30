@@ -1,7 +1,10 @@
+
+<link href="/css/button.css" rel="stylesheet" type="text/css">
+
 <script type="text/javascript">
 
 function SelectChanged(flag) {
-	if (typeof flag !== undefined && flag) {
+	if (flag !== undefined && flag) {
 		document.getElementById('btn_list_save').disabled = true;
 		return;
 	}
@@ -13,9 +16,9 @@ function Save() {
 	for (var i = 1; i < tr.length; i ++) {
 		var cells = tr[i].cells;
 		var data_line = {
-			'id': ((typeof cells[0].childNodes[0] === undefined) ? '' : cells[0].childNodes[0].data),
-			'role': ((typeof cells[1].childNodes[0] === undefined) ? '' : cells[1].childNodes[0].data), 
-			'id_parent': ((typeof cells[2].childNodes[0] === undefined) ? '' : cells[2].childNodes[0].data)
+			'id': ((cells[0].childNodes[0] === undefined) ? '' : cells[0].childNodes[0].data),
+			'role': ((cells[1].childNodes[0] === undefined) ? '' : cells[1].childNodes[0].data), 
+			'id_parent': ((cells[2].childNodes[0] === undefined) ? '' : cells[2].childNodes[0].data)
 		};
 		data[i-1] = data_line;
 	}
@@ -57,13 +60,13 @@ function TblAddItem() {
 	$("#mlist_table tbody").append("<tr><td></td>"
 		+ "<td><input type='text' style='width:100%;text-align:left;' value=''/></td>"
 		+ "<td><input type='text' style='width:100%;text-align:left;' value=''/></td>"
-		+ "<td><button onclick='tbl_additem_handler(event)'>确定</button></td></tr>");
+		+ "<td><a href='#' onclick='tbl_additem_handler(event)' class='button button-gray'>确定</a></td></tr>");
 	$("#mlist_table tbody>tr:last>td>input:first").focus();
     $( "#mlist_table input" ).keydown(function() {
         if (27 == event.which) { // ESC keyboard
         	TblCancelAddItem();
         } else if (13 == event.which) { // Enter keyboard
-            $("#mlist_table tbody>tr:last button").trigger("click");
+            $("#mlist_table tbody>tr:last a").trigger("click");
         }
 	});
     $("#btn_list_add").text("取消");
@@ -72,6 +75,9 @@ function TblAddItem() {
 }
 
 function tbl_deleteitem_handler(event) {
+	if (!confirm("确认要删除吗？")) {
+		return false;
+	}
 	Jsoncallback('/auth/roles/delete', 
 	    function (json) {
 	    	if (null == json) return false;
@@ -110,7 +116,7 @@ function tbl_additem_handler(event) {
 	        $("#mlist_table tbody>tr:last>td:first").text(id);
 	        $("#mlist_table tbody>tr:last>td")[1].innerHTML = $("#mlist_table tbody>tr:last>td")[1].childNodes[0].value;
 	        $("#mlist_table tbody>tr:last>td")[2].innerHTML = $("#mlist_table tbody>tr:last>td")[2].childNodes[0].value;
-	        $("#mlist_table tbody>tr:last>td")[3].innerHTML = "<button onclick=\'tbl_deleteitem_handler(event)\'>删除</button>";
+	        $("#mlist_table tbody>tr:last>td")[3].innerHTML = "<a href='#' onclick='return tbl_deleteitem_handler(event)' class='button button-gray'>删除</a>";
 	        $("#mlist_table tbody>tr:last>td").bind("dblclick", (td_dblclick_handler));
     	}, 
         'POST', 
@@ -167,18 +173,19 @@ $(function() {
     	<th style="width:10%;"></th>
     </tr>
     </thead>
-    <tbody>
+    <tbody style="font-size: 13px">
     <?php foreach($this->result as $row) { ?>
     <tr>
         <td style="color: #888;"><?php echo $row['id'] ?></td>
         <td><?php echo $row['role'] ?></td>
         <td><?php echo $row['id_parent'] ?></td>
-        <td><button onclick='tbl_deleteitem_handler(event)'>删除</button></td>
+        <td><a href="#" onclick="return tbl_deleteitem_handler(event)" class="button button-gray">删除</a></td>
     </tr>
     <?php } ?>
     </tbody>
 </table>
 <div style="text-align:left; margin: 10px;">
-<button id="btn_list_add" type="button" onclick="TblAddItem()">添加</button>
-<button id="btn_list_save" type="button" disabled="disabled" onclick="Save()">保存</button>
+<br/>
+<button id="btn_list_add" type="button" onclick="TblAddItem()" class="bigbutton button-blue">添加</button>&nbsp;&nbsp;
+<button id="btn_list_save" type="button" disabled="disabled" onclick="Save()" class="bigbutton button-blue">保存</button>
 </div>

@@ -1,7 +1,12 @@
+
+<link href="/css/switch.css" rel="stylesheet" type="text/css">
+<link href="/css/dropdown.css" rel="stylesheet" type="text/css">
+<link href="/css/button.css" rel="stylesheet" type="text/css">
+
 <script type="text/javascript">
 
 function SelectChanged(flag) {
-	if (typeof flag !== undefined && flag) {
+	if (flag !== undefined && flag) {
 		document.getElementById('btn_list_save').disabled = true;
 		return;
 	}
@@ -19,10 +24,10 @@ function Save() {
 	for (var i = 1; i < tr.length; i ++) {
 		var cells = tr[i].cells;
 		var data_line = {
-			'id': ((typeof cells[0].childNodes[0] === undefined) ? '' : cells[0].childNodes[0].data),
-			'id_role': cells[1].childNodes[1].value,
-			'id_resource': cells[2].childNodes[1].value,
-			'permission': cells[3].childNodes[1].value
+			'id': ((cells[0].childNodes[0] === undefined) ? '' : cells[0].childNodes[0].data),
+			'id_role': cells[1].childNodes[1].childNodes[1].value,
+			'id_resource': cells[2].childNodes[1].childNodes[1].value,
+			'permission': $('input:radio[name=permission'+i+']:checked').val()
 		};
 		data[i-1] = data_line;
 	}
@@ -59,31 +64,38 @@ function TblCancelAddItem() {
 }
 
 function TblAddItem() {
+	var index_num = $('#mlist_table').find('tr').length;
 	$("#mlist_table tbody").append("<tr><td></td>"
 		+ "<td>\n"
-		+ "<select onchange='SelectChangedValid()'>"
+		+ "<div class='dropdown'>\n"
+		+ "<select class='dropdown-select' onchange='SelectChangedValid()'>"
 		+ "<option value=''>--请选择角色--</option>"
 		<?php foreach($this->rolenames as $id_role => $rolename) { ?>
 		+ "<option value='<?php echo $id_role; ?>'><?php echo $rolename; ?></option>"
 		<?php } ?>
 		+ "</select>\n"
+		+ "</div>\n"
 		+"</td>\n"
 		+ "<td>\n"
-		+ "<select onchange='SelectChangedValid()'>"
+		+ "<div class='dropdown'>\n"
+		+ "<select class='dropdown-select' onchange='SelectChangedValid()'>"
 		+ "<option value=''>--请选择资源--</option>"
 		<?php foreach($this->resourcenames as $id_resource => $resourcename) { ?>
 		+ "<option value='<?php echo $id_resource; ?>'><?php echo $resourcename; ?></option>"
 		<?php } ?>
 		+ "</select>\n"
+		+ "</div>\n"
 		+ "</td>\n"
 		+ "<td>\n"
-		+ "<select onchange='SelectChangedValid()'>"
-		+ "<option value=''>--请选择权限控制--</option>"
-		+ "<option value='allow'>allow</option>"
-		+ "<option value='deny'>deny</option>"
-		+ "</select>\n"
+		+ "<div class='switch-div'>\n"
+		+ "  <input type='radio' onchange='SelectChanged()' id='permission_allow"+index_num+"' class='switch-input' name='permission"+index_num+"' value='allow' checked>\n"
+		+ "  <label for='permission_allow"+index_num+"' class='switch-label switch-label-off'>allow</label>\n"
+		+ "  <input type='radio' onchange='SelectChanged()' id='permission_deny"+index_num+"' class='switch-input' name='permission"+index_num+"' value='deny' >\n"
+		+ "  <label for='permission_deny"+index_num+"' class='switch-label switch-label-on'>deny</label>\n"
+		+ "  <span class='switch-selection'></span>\n"
+		+ "</div>\n"
 		+ "</td>\n"
-		+ "<td><button onclick='tbl_additem_handler(event)'>确定</button></td></tr>");
+		+ "<td><a href='#' onclick='tbl_additem_handler(event)' class='button button-gray'>确定</a></td></tr>");
 	$("#mlist_table tbody>tr:last>td>input:first").focus();
     $( "#mlist_table input" ).keydown(function() {
         if (27 == event.which) { // ESC keyboard
@@ -98,6 +110,9 @@ function TblAddItem() {
 }
 
 function tbl_deleteitem_handler(event) {
+	if (!confirm("确认要删除吗？")) {
+		return false;
+	}
 	Jsoncallback('/auth/permissions/delete', 
 	    function (json) {
 	    	if (null == json) return false;
@@ -118,6 +133,7 @@ function tbl_deleteitem_handler(event) {
 }
 
 function tbl_additem_handler(event) {
+	var index_num = $('#mlist_table').find('tr').length;
 	Jsoncallback('/auth/permissions/add', 
 	    function (json) {
 	    	if (null == json) return false;
@@ -136,13 +152,13 @@ function tbl_additem_handler(event) {
 	        $("#mlist_table tbody>tr:last>td:first").text(id);
 	        $("#mlist_table tbody>tr:last select")[0].disabled = true;
 	        $("#mlist_table tbody>tr:last select")[1].disabled = true;
-	        $("#mlist_table tbody>tr:last>td")[4].innerHTML = "<button onclick=\'tbl_deleteitem_handler(event)\'>删除</button>";
+	        $("#mlist_table tbody>tr:last>td")[4].innerHTML = "<a href='#' onclick='return tbl_deleteitem_handler(event)' class='button button-gray'>删除</a>";
     	}, 
         'POST',
         {'d': '', 'timestamp' : Date.parse(new Date()),
-         'id_role': $("#mlist_table tbody>tr:last>td")[1].childNodes[1].value,
-         'id_resource': $("#mlist_table tbody>tr:last>td")[2].childNodes[1].value,
-         'permission': $("#mlist_table tbody>tr:last>td")[3].childNodes[1].value},
+         'id_role': $("#mlist_table tbody>tr:last>td")[1].childNodes[1].childNodes[1].value,
+         'id_resource': $("#mlist_table tbody>tr:last>td")[2].childNodes[1].childNodes[1].value,
+         'permission': $("#mlist_table tbody>tr:last>td>div>input:radio[name=permission"+(index_num-1)+"]:checked").val()},
         'loading');
 	TblUnsetAddItem();
 }
@@ -163,36 +179,44 @@ $(function() {
     	<th style="width:10%;"></th>
     </tr>
     </thead>
-    <tbody>
-    <?php foreach($this->result as $row) { ?>
+    <tbody style="font-size: 13px">
+    <?php $_i = 0; foreach($this->result as $row) { $_i ++; ?>
     <tr>
         <td style="color: #888;"><?php echo $row['id'] ?></td>
         <td>
-        	<select onchange="SelectChanged()" disabled="disabled">
+        	<div class="dropdown">
+        	<select class="dropdown-select" onchange="SelectChanged()" disabled="disabled">
         		<?php foreach($this->rolenames as $id_role => $rolename) { ?>
         		<option value="<?php echo $id_role; ?>" <?php if($row['role'] == $rolename) { ?>selected<?php } ?> ><?php echo $rolename; ?></option>
         		<?php } ?>
         	</select>
+        	</div>
         </td>
         <td>
-        	<select onchange="SelectChanged()" disabled="disabled">
+        	<div class="dropdown">
+        	<select class="dropdown-select" onchange="SelectChanged()" disabled="disabled">
         		<?php foreach($this->resourcenames as $id_resource => $resourcename) { ?>
         		<option value="<?php echo $id_resource; ?>" <?php if($row['resource'] == $resourcename) { ?>selected<?php } ?> ><?php echo $resourcename; ?></option>
         		<?php } ?>
         	</select>
+        	</div>
         </td>
         <td>
-            <select onchange="SelectChanged()">
-                <option <?php if($row['permission'] == 'allow') { ?>selected<?php } ?> >allow</option>
-                <option <?php if($row['permission'] == 'deny') { ?>selected<?php } ?> >deny</option>
-            </select>
+			<div class="switch-div">
+		      <input type="radio" onchange="SelectChanged()" id="permission_allow<?php echo $_i; ?>" class="switch-input" name="permission<?php echo $_i; ?>" value="allow" <?php if($row['permission'] == 'allow') echo 'checked'; ?>>
+		      <label for="permission_allow<?php echo $_i; ?>" class="switch-label switch-label-off">allow</label>
+		      <input type="radio" onchange="SelectChanged()" id="permission_deny<?php echo $_i; ?>" class="switch-input" name="permission<?php echo $_i; ?>" value="deny" <?php if($row['permission'] == 'deny') echo 'checked'; ?>>
+		      <label for="permission_deny<?php echo $_i; ?>" class="switch-label switch-label-on">deny</label>
+		      <span class="switch-selection"></span>
+		    </div>
         </td>
-        <td><button onclick='tbl_deleteitem_handler(event)'>删除</button></td>
+        <td><a href="#" onclick="return tbl_deleteitem_handler(event)" class="button button-gray">删除</a></td>
     </tr>
     <?php } ?>
     </tbody>
 </table>
 <div style="text-align:left; margin: 10px;">
-<button id="btn_list_add" type="button" onclick="TblAddItem()">添加</button>
-<button id="btn_list_save" type="button" disabled="disabled" onclick="Save()">保存</button>
+<br/>
+<button id="btn_list_add" type="button" onclick="TblAddItem()" class="bigbutton button-blue">添加</button>&nbsp;&nbsp;
+<button id="btn_list_save" type="button" disabled="disabled" onclick="Save()" class="bigbutton button-blue">保存</button>
 </div>
