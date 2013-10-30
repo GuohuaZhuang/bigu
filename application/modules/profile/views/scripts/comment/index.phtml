@@ -14,14 +14,14 @@
 <div class="div_comment_item" id="comment_item_<?php echo $row['id']?>">
     <div>
         <div>
-            <span>
+            <span><em>评论给：</em>
                 <a class="div_comment_item_title" style="font-size: 18px;"
                 	href="/post/post/view?post_id=<?php echo $row['id_post']?>" target="_blank"><?php echo $row['title']?></a>
             </span>
         </div>
         
         <div>
-            <p><?php echo Util_Global::JsonReadable($row['content'],true);?></p>
+            <div class="comment_list_content_profile" style="margin: 10px 0px 10px 0px;"><p><?php echo Util_Global::JsonReadable($row['content'],true);?></p></div>
             <em style="color: rgb(108, 115, 122);"><?php echo $row['pub_datetime']?></em>
         </div>
         

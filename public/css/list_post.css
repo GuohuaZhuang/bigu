@@ -9,6 +9,7 @@
 	font: 20px/1.2em "微软雅黑", "黑体", Tahoma, Arial, Geneva, sans-serif;
 	color: #000;
 	text-decoration: none;
+	font-weight: bold;
 }
 .h4_post_list_title a:hover {
     color: #2375BE;
