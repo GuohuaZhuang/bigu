@@ -10,6 +10,7 @@
 	color: #000;
 	text-decoration: none;
 	font-weight: bold;
+	line-height: 150%;
 }
 .h4_post_list_title a:hover {
     color: #2375BE;
@@ -67,6 +68,7 @@
 	margin-left: 0px;
 	padding-left: 0px;
 	text-align: justify;
+	line-height: 150%;
 	/*text-justify: distribute-all-lines;ie6-8*/
 	/*text-align-last: justify;ie9*/
 	/*-moz-text-align-last: justify;ff*/
