@@ -26,12 +26,25 @@
 	For Windows Apache2:
 		You can add in httpd.conf or apache2.conf, or some extra conf.and then restart apache2.
 
-2. Create data and tmp file and set it all operator permissions.
+2. Create data and tmp file and set it all operator permissions if neccessary.
 
 	For Linux:
 		cd bigu
-		mkdir data tmp && sudo chmod 777 data tmp -R
+		mkdir data && sudo chmod 777 data -R
+		mkdir tmp && sudo chmod 777 tmp -R
+		mkdir public/upload/flash/ && sudo chmod 777 public/upload/flash/ -R
+		mkdir public/upload/img/ && sudo chmod 777 public/upload/img/ -R
+		mkdir public/upload/thumb/ && sudo chmod 777 public/upload/thumb/ -R
+		mkdir public/util/jquery_php_avatar/thumb/ && sudo chmod 777 public/util/jquery_php_avatar/thumb/ -R
+		mkdir public/util/jquery_php_avatar/upload/ && sudo chmod 777 public/util/jquery_php_avatar/upload/ -R
 	
 	For windows:
-		use explorer to create folder with name data and tmp, and set it's permission property as everyone can write them.
+		use explorer to create folder with name data, tmp, public/upload/flash/, public/upload/img/, public/upload/thumb/, 
+		public/util/jquery_php_avatar/thumb/, public/util/jquery_php_avatar/upload/, and set it's permission property as 
+		everyone can write them.
+
+
+INSTALL NOTES:
+
+	1. You should install apache2(with php5, has gd, mysql and pdo with mysql support) and mysql.
 
