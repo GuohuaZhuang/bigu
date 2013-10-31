@@ -1,0 +1,37 @@
+
+1. Create VHost in apache.
+
+	Change the following 2 root path and set your servername.
+	
+		<VirtualHost *:80>
+		   DocumentRoot "/var/git/bigu/public"
+		   ServerName bigu.com
+		   SetEnv APPLICATION_ENV production
+		
+		   <Directory "/var/git/bigu/public">
+		       Options Indexes MultiViews FollowSymLinks
+		       AllowOverride All 
+		       Order allow,deny
+		       Allow from all 
+		   </Directory>
+		
+		</VirtualHost>
+	
+	For Ubuntu Apache2:
+		Then you should save this configure file as name which you set your servername, 
+		for example, you can set save it as "bigu.com".
+		And now you can do "sudo a2ensite bigu.com" to add this vhost site.
+		Last you just must do "sudo service apache2 reload".
+	
+	For Windows Apache2:
+		You can add in httpd.conf or apache2.conf, or some extra conf.and then restart apache2.
+
+2. Create data and tmp file and set it all operator permissions.
+
+	For Linux:
+		cd bigu
+		mkdir data tmp && sudo chmod 777 data tmp -R
+	
+	For windows:
+		use explorer to create folder with name data and tmp, and set it's permission property as everyone can write them.
+
