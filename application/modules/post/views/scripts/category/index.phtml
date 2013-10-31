@@ -75,6 +75,9 @@ function TblAddItem() {
 }
 
 function tbl_deleteitem_handler(event) {
+	if (!confirm("确认要删除吗？")) {
+		return false;
+	}
 	Jsoncallback('/post/category/delete', 
 	    function (json) {
 	    	if (null == json) return false;
@@ -165,7 +168,7 @@ $(function() {
     <thead>
     <tr>
     	<th style="width:35%;">category/类别</th>
-    	<th style="width:35%;">parent_category/角色</th>
+    	<th style="width:35%;">parent_category/父类别</th>
     	<th style="width:20%;">post_count/文章数量</th>
     	<th style="width:10%;"></th>
     </tr>

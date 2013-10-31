@@ -15,7 +15,7 @@ class Post_CategoryController extends Zend_Controller_Action
     	$this->view->manage = true;
     	$db_category = new Post_Model_DbTable_Category();
     	$where = $db_category->getAdapter()->quoteInto('parent_category=?', '');
-    	$result = $db_category->fetchAll($where, 'parent_category')->toArray();
+    	$result = $db_category->fetchAll($where, 'create_time ASC')->toArray();
     	$this->view->result = $result;
     	$_oi = 0;
     	$json = '{"success": "OK", "d": [';
@@ -45,7 +45,7 @@ class Post_CategoryController extends Zend_Controller_Action
     {
         $this->view->manage = true;
         $db_category = new Post_Model_DbTable_Category();
-        $result = $db_category->fetchAll(null, 'parent_category')->toArray();
+        $result = $db_category->fetchAll(null, 'create_time ASC')->toArray();
         $this->view->result = $result;
     }
 
@@ -65,7 +65,7 @@ class Post_CategoryController extends Zend_Controller_Action
     			$result = $db_category->insert($data);
     			echo '{"success": "添加成功", "id": "'.$result.'"}';
     		} else {
-    			echo '{"err": "该角色已经存在"}';
+    			echo '{"err": "该类别已经存在"}';
     		}
     	}
     	// stop layout and render
@@ -85,7 +85,7 @@ class Post_CategoryController extends Zend_Controller_Action
     		if ($db_category->delete($where) == 1) {
     			echo '{"success": "删除成功"}';
     		} else {
-    			echo '{"err": "删除失败，没有这个角色"}';
+    			echo '{"err": "删除失败，没有这个类别"}';
     		}
     	}
     	// stop layout and render
