@@ -143,8 +143,8 @@ ul {
 	float: right;
 	width: 100%;
 	height: auto;
-	margin-top: -2;
-	margin-right: -2;
+	margin-top: -2px;
+	margin-right: -2px;
 	font-family: 'Microsoft YaHei', 微软雅黑, Lucida, Verdana, 'Hiragino Sans GB', STHeiti, 'WenQuanYi Micro Hei', 'Droid Sans Fallback', SimSun, sans-serif;
 }
 .krhr_nav {
