@@ -1,7 +1,7 @@
 
 1. Create VHost in apache.
 
-	Change the following 2 root path and set your servername.
+	Change the following 2 root path and set your servername. (and set DNS in hosts file with ServerName)
 	
 		<VirtualHost *:80>
 		   DocumentRoot "/var/git/bigu/public"
@@ -47,4 +47,8 @@
 INSTALL NOTES:
 
 	1. You should install apache2(with php5, has gd, mysql and pdo with mysql support) and mysql.
+	2. You can change mysql connection info like username, password and port in application/configs/application.ini if neccessary.
+	3. You must be sure your project bigu dir is not in no permission access parent dir, just like /root and other no 755 permissions.
+	4. You must add rewrite.load in apache2 to supprt .htaccess rule. (for ubuntu you can command "sudo a2enmod rewrite")
+	5. If you want to access both by ip and alias server name, you cat set "ServerName 127.0.0.1" temporary.
 
