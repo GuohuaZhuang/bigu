@@ -58,8 +58,8 @@ function uploadfile()
         if(move_uploaded_file($_FILES['upload']['tmp_name'],$file_host))
         {
             // 如果是图像则生成缩略图作为列表显示图
-            if ($type == 'img') generatethumb($filename, $filetype, 
-            		$file_host, $fn);
+            // if ($type == 'img') generatethumb($filename, $filetype, 
+            // 		$file_host, $fn);
         	mkhtml($fn,$config['site_url'].$file_abso,$config['message']);
         }
         else

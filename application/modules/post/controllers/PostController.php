@@ -40,7 +40,16 @@ class Post_PostController extends Zend_Controller_Action
     {
     	$dbpost = new Post_Model_DbTable_Post();
     	$html = $dbpost->get_content($id);
+    	$imagepaths = $this->_find_all_imagepath($html);
     	// 去除表情符号，可以是上传的，也可以是网络上图片
+    	foreach ($imagepaths as $imagepath) {
+	    	@unlink($_SERVER['DOCUMENT_ROOT'].$imagepath);
+    	}
+    }
+    
+    private function _find_all_imagepath($html)
+    {
+    	$imagepaths = array();
     	$rule = '#(<img[^>]*?>)#';
     	if (preg_match_all($rule, $html, $match)) {
     		$match = $match[0];
@@ -49,12 +58,12 @@ class Post_PostController extends Zend_Controller_Action
     			$rule_src = "#src=\"([^\"]*)\"#";
     			if (preg_match($rule_src, $m, $match_src)) {
     				if ('/upload/img/' == substr($match_src[1], 0, 12)) {
-    					@unlink($_SERVER['DOCUMENT_ROOT'].$match_src[1]);
-    					@unlink($_SERVER['DOCUMENT_ROOT'].'/upload/thumb/' . substr($match_src[1], 12));
+    					$imagepaths[] = $match_src[1];
     				}
     			}
     		}
     	}
+    	return $imagepaths;
     }
     
     private function _find_thumbpath($html)
@@ -80,7 +89,7 @@ class Post_PostController extends Zend_Controller_Action
     			$rule_src = "#src=\"([^\"]*)\"#";
     			if (preg_match($rule_src, $m, $match_src)) {
     				if ('/upload/img/' == substr($match_src[1], 0, 12)) {
-    					return '/upload/thumb/' . substr($match_src[1], 12);
+    					return $this->_generatethumb($_SERVER['DOCUMENT_ROOT'].$match_src[1], substr($match_src[1], 12));
     				} else {
     					return $this->_generatethumb($match_src[1]);
     					// return $match_src[1];
@@ -91,7 +100,7 @@ class Post_PostController extends Zend_Controller_Action
     	return null;
     }
     
-    function _generatethumb($filetmp)
+    function _generatethumb($filetmp, $filename = null)
     {
     	// thumb_dir
     	$thumb_dir = '/upload/thumb/' . date("Ymd");
@@ -100,7 +109,13 @@ class Post_PostController extends Zend_Controller_Action
     	$filetype = strtolower(end($_tmp_arr_v5));
     	if (false!=strstr($filetype,'latex')) $filetype = 'gif';
     	// filename
-    	$filename = md5(microtime().rand(0, 100)) . '.' . $filetype;
+    	if (null == $filename) {
+    		$filename = md5(microtime().rand(0, 100)) . '.' . $filetype;
+    	} else {
+    		// 调整日期文件夹名称
+    		$thumb_dir = '/upload/thumb/'.substr($filename, 0, 8);
+    		$filename = substr($filename, 8);
+    	}
     	
     	$thumb_path = $_SERVER['DOCUMENT_ROOT'].$thumb_dir;
     	if (!file_exists($thumb_path))
@@ -149,11 +164,36 @@ class Post_PostController extends Zend_Controller_Action
     	return ($thumb_dir . '/' . $filename);
     }
     
-    private function _remove_prethumb($id)
+    private function _remove_preimage($id, $post_content = null)
+    {
+    	$newarr_imagepaths = array();
+    	// 遍历找到所有新imagepath
+    	if (!empty($post_content)) {
+    		$newarr_imagepaths = $this->_find_all_imagepath($post_content);
+    	}
+    	$oldarr_imagepaths = array();
+    	$dbpost = new Post_Model_DbTable_Post();
+    	$old_content = $dbpost->get_content($id);
+    	if (!empty($old_content)) {
+    		$oldarr_imagepaths = $this->_find_all_imagepath($old_content);
+    	}
+    	
+    	// 遍历找到所有旧imagepath
+    	foreach ($oldarr_imagepaths as $imagepath) {
+    		// 不在新imagepath里面的就删除
+    		if (empty($newarr_imagepaths) || (!in_array($imagepath, $newarr_imagepaths))) {
+    			@unlink($_SERVER['DOCUMENT_ROOT'].$imagepath);
+    		}
+    	}
+    }
+    
+    private function _remove_prethumb($id, $post_index_thumb = null)
     {
     	$dbpost = new Post_Model_DbTable_Post();
     	$pre_thumb = $dbpost->get_index_thumb($id);
-    	if (!empty($pre_thumb)) @unlink($_SERVER['DOCUMENT_ROOT'].$pre_thumb);
+    	if ($pre_thumb != $post_index_thumb) {
+    		if (!empty($pre_thumb)) @unlink($_SERVER['DOCUMENT_ROOT'].$pre_thumb);
+    	}
     }
     
     private function _addpost($request, $post_id)
@@ -191,7 +231,8 @@ class Post_PostController extends Zend_Controller_Action
 	    	$search->addPosttoIndex($post_title, $post_content, $post_pub_datetime, $id_post);
     	} else {
     		// update record and remove thumb
-    		$this->_remove_prethumb($post_id);
+    		$this->_remove_prethumb($post_id, $post_index_thumb);
+    		$this->_remove_preimage($post_id, $post_content);
     		$data = array('title' => $post_title,
     				'content' => $post_content,
     				'category' => $post_category,
@@ -231,7 +272,8 @@ class Post_PostController extends Zend_Controller_Action
     	$this->view->editor = true;
 		$request = $this->getRequest();
 		$post_id = $request->getParam('post_id');
-		if (empty($post_id)) {
+		$editable = $request->getParam('editable');
+		if (empty($post_id) || (!empty($editable))) {
 			// title
 			$post_title = $request->getParam('post_title');
 			// content
@@ -241,6 +283,7 @@ class Post_PostController extends Zend_Controller_Action
 			$post_sub_category = $request->getParam('post_select_subcategory');
 			
 			$result = array(
+				'id' => $post_id,
 				'title' => $post_title,
 				'content' => $post_content,
 				'category' => $post_category,
@@ -335,6 +378,8 @@ class Post_PostController extends Zend_Controller_Action
 		$this->view->preview = true;
 		
 		$request = $this->getRequest();
+		// id
+		$post_id = $request->getParam('post_id');
 		// title
 		$post_title = $request->getParam('post_title');
 		// content
@@ -348,6 +393,7 @@ class Post_PostController extends Zend_Controller_Action
 		$post_sub_category = $request->getParam('post_select_subcategory');
 		
 		$this->view->result = array(
+			'id' => $post_id,
 			'title' => $post_title,
 			'content' => $post_content,
 			'pub_datetime' => $post_pub_datetime,

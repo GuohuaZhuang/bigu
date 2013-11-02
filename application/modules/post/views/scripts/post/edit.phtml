@@ -65,8 +65,8 @@ function SelectChangedCascade() {
 		<label class="post_add_label" style="display:<?php echo (empty($this->subcategorys)?'none':'inline'); ?>;">
 		    <select class="post_add_select" id="post_select_subcategory" name="post_select_subcategory">
 		        <option value="0" selected="selected" disabled>--详细类别(可选)--</option>
-        		<?php if (!empty($this->view->subcategorys)) foreach($this->subcategorys as $cgname) { ?>
-        		<option value="<?php echo $cgname; ?>" <?php if($this->result['sub_category'] == $cgname) {echo 'selected';} ?>><?php echo $cgname; ?></option>
+        		<?php if (!empty($this->subcategorys)) foreach($this->subcategorys as $scgname) { ?>
+        		<option value="<?php echo $scgname; ?>" <?php if($this->result['sub_category'] == $scgname) {echo 'selected';} ?>><?php echo $scgname; ?></option>
         		<?php } ?>
 		    </select>
 		</label>
