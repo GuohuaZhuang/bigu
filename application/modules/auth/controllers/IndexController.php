@@ -110,6 +110,26 @@ class Auth_IndexController extends Zend_Controller_Action
         $auth->clearIdentity();
         $this->redirect('/auth/index/login');
     }
+    
+    private function _send_email($subject, $html, $toemail, $toemailname)
+    {
+    	$tr = new Zend_Mail_Transport_Smtp('smtp.163.com', array(
+    			'auth'     => 'login',
+    			'username' => 'guohua_zhuang@163.com',
+    			'password' => 'GuoHua0513',
+    			'port'     => 25,
+    	));
+    	Zend_Mail::setDefaultTransport($tr);
+
+    	$mail = new Zend_Mail('UTF-8');
+    	$mail->setFrom('guohua_zhuang@163.com', 'Bigu Adminstrator');
+    	$mail->setSubject($subject);
+    	$mail->setEncodingOfHeaders(Zend_Mime::ENCODING_BASE64);
+    	$mail->setBodyHtml($html, 'UTF-8');
+    	$mail->addTo($toemail, $toemailname);
+    	
+    	return $mail;
+    }
 
     public function registerAction()
     {
@@ -143,24 +163,14 @@ class Auth_IndexController extends Zend_Controller_Action
     	///如果查验合法发邮件
     	///如果上述都ＯＫ，存库
         if (empty($this->view->error)) {
-        	$tr = new Zend_Mail_Transport_Smtp('smtp.163.com', array(
-        			'auth'     => 'login',
-        			'username' => 'guohua_zhuang@163.com',
-        			'password' => 'GuoHua0513',
-        			'port'     => 25,
-        	));
-        	Zend_Mail::setDefaultTransport($tr);
-        	
-        	$mail = new Zend_Mail('UTF-8');
-        	$mail->setFrom('guohua_zhuang@163.com', 'Bigu Adminstrator');
-        	$mail->setSubject('[比咕网] 感谢您的注册(Thank you for registering)');
-        	$mail->setEncodingOfHeaders(Zend_Mime::ENCODING_BASE64);
+        	$subject = '[比咕网] 感谢您的注册(Thank you for registering)';
         	$ev_url = 'http://'.$_SERVER['SERVER_NAME'].'/auth/index/emailverification?email='
-        		 . $data['email'] . '&str=' . sha1($data['email']);
-        	$html = "<h1>Bigu注册邮件</h1>您好".$data['real_name']."，感谢您注册Bigu，请点击链接完成激活: <a href=\"$ev_url\">激活账号</a><br/>". 
-        		"如果无法直接跳转到链接，请手动复制以下链接到浏览器地址栏并访问以完成激活：$ev_url<br/>";
-        	$mail->setBodyHtml($html, 'UTF-8');
-        	$mail->addTo($data['email'], $data['real_name']);
+        			. $data['email'] . '&str=' . sha1($data['email']);
+        	$html = "<h1>Bigu注册邮件</h1>您好".$data['real_name']."，感谢您注册Bigu，请点击链接完成激活: <a href=\"$ev_url\">激活账号</a><br/>"
+        			."如果无法直接跳转到链接，请手动复制以下链接到浏览器地址栏并访问以完成激活：$ev_url<br/>";
+        	
+        	$mail = $this->_send_email($subject, $html, $data['email'], $data['real_name']);
+        	
         	try {
 	        	if ($mail->send()) {
 	        		$data['password_salt'] = Util_Global::generateSalt();//'xcNsdaAd73328aDs73oQw223hd';
@@ -218,6 +228,94 @@ class Auth_IndexController extends Zend_Controller_Action
 	    }
     }
 
+    public function resetpasswordAction()
+    {
+        $request = $this->getRequest();
+	    $users = $this->_getTableUser();
+	    $new_pwd = $request->getParam('profile_new_pwd');
+	    $new_pwd_again = $request->getParam('profile_new_pwd_again');
+	    if (empty($users) || !($users instanceof Auth_Model_DbTable_Users)) {
+	    	$users = new Auth_Model_DbTable_Users();
+	    }
+	 	
+	    // GET THE VERIFICATION STRING FROM THE URI
+	    $str = $request->getParam('str');
+	    $email = $request->getParam('email');
+	 	
+	    // CHECK IF THE USER CORRESPONDING TO THE STRING EXISTS
+	    $user = $users->getSingleWithEmailHash($email, $str);
+	    if ($user == null) {
+	        $this->view->error = '非法的密码重置验证';
+	        return false;
+	    }
+	    $this->view->str = $str;
+	    $this->view->email = $email;
+	    
+	    // 显示正在修改密码的操作
+	    if (!empty($new_pwd) || !empty($new_pwd_again)) {
+	    	$this->view->profile_new_pwd = $new_pwd;
+	    	$this->view->profile_new_pwd_again = $new_pwd_again;
+	    }
+	    if (empty($new_pwd) || empty($new_pwd_again)) return true;
+	    if ($new_pwd != $new_pwd_again) {
+	    	Auth_Form_Register::GlobalOutputMessage('两次填写新密码不一致');
+	    	return false;
+	    }
+	    $pw_valid_ret = Auth_Form_Register::IsValidPassword($new_pwd);
+	    if ('OK' != $pw_valid_ret) {
+	    	Auth_Form_Register::GlobalOutputMessage($pw_valid_ret);
+	    	return false;
+	    }
+	    
+	    $data = array();
+	    $data['password_salt'] = Util_Global::generateSalt();
+	    $data['password'] = sha1($data['password_salt'] . $new_pwd);
+	    if ($users->edit($email, $data) ) {
+	    	$this->view->success = '您好，'. $user->username . '! 你的账号密码已经修改成功！<br/>'
+	    		. "<br/><a href=\"/auth/index/login\">点击登录</a><br/>";
+	    }
+    }
     
-}
+    public function forgetpasswordAction()
+    {
+    	$request = $this->getRequest();
+    	$profile_email = $request->getParam('profile_email');
+    	// 显示填写帐号邮箱view
+    	if (empty($profile_email)) return false;
+    	
+    	// 如果查实数据库中有这个邮箱，则发送邮件，邮件中的链接连至resetpasswordAction处理
+    	$users = $this->_getTableUser();
+    	if (empty($users) || !($users instanceof Auth_Model_DbTable_Users)) {
+    		$users = new Auth_Model_DbTable_Users();
+    	}
+    	$data = $users->getSingleWithEmail($profile_email);
+    	if (empty($data)) {
+    		$this->view->error = '该邮箱未注册';
+    		return false;
+    	}
+    	
+    	$subject = '[比咕网] 重置密码(Reset Password)';
+    	$ev_url = 'http://'.$_SERVER['SERVER_NAME'].'/auth/index/resetpassword?email='
+    		. $data['email'] . '&str=' . sha1($data['email']);
+    	$html = "<h1>Bigu重置密码</h1>您好".$data['real_name']
+    		. "，请点击链接设置新密码: <a href=\"$ev_url\">设置新密码</a><br/>"
+    		. "如果无法直接跳转到链接，请手动复制以下链接到浏览器地址栏并访问：$ev_url<br/>"
+    		. "如果您并未请求重置密码，请忽略本邮件。<br/>";
+    	
+    	$mail = $this->_send_email($subject, $html, $data['email'], $data['real_name']);
+    	
+    	try {
+	    	if ($mail->send()) {
+		    	$this->view->success = '重置密码邮件已发送至注册邮箱，请收取邮件进一步重置密码';
+		    	return true;
+		    } else {
+		    	$this->view->error = '向你提供的邮箱发送注册激活信息失败';
+		    	return false;
+	    	}
+    	} catch (Exception $e) {
+	    	$this->view->error = '向你提供的邮箱发送注册激活信息失败，可能由于网络原因导致';
+	    	return false;
+    	}
+    }
 
+}

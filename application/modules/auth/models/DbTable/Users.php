@@ -74,6 +74,17 @@ class Auth_Model_DbTable_Users extends Zend_Db_Table_Abstract
 		}
 		return null;
 	}
+	public function getSingleWithEmail($email) {
+		if (empty($email)) {
+			return null;
+		}
+		$where = $this->select()->where('email=?', $email);
+		$result= $this->fetchRow($where);
+		if (!empty($result)) {
+			return $result;
+		}
+		return null;
+	}
 	public function edit($email, $data) {
 		if (empty($email)) {
 			return false;

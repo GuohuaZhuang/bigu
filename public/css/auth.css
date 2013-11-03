@@ -89,3 +89,22 @@ padding: 5px;
 font-family: Microsoft YaHei,"微软雅黑",Lucida,Verdana,Hiragino Sans GB,STHeiti,WenQuanYi Micro Hei,Droid Sans Fallback,SimSun,sans-serif;
 margin: 0px 0px 5px 15px;
 }
+
+.a_auth {
+display: inline-block;
+vertical-align: middle;
+letter-spacing: 2px;
+font-family: 'Microsoft YaHei', CenturyGothic, AppleGothic, sans-serif;
+line-height: 20px;
+margin-left: 55px;
+font-size: 14px;
+color: rgb(108, 115, 122);
+border-bottom-color: rgb(108, 115, 122);
+border-bottom-style: none;
+text-decoration: none;
+}
+.a_auth:hover {
+font-weight: bold;
+color: #2375BE;
+text-decoration: underline;
+}

@@ -18,6 +18,9 @@ class Auth_Form_Register extends Zend_Form
 				'passwordAgain' => $this->passwordAgain
 			);
 	}
+	public static function GlobalOutputMessage($s) {
+		echo "<label class=\"label_auth\"></label><span class=\"div_auth_message\" style=\"color:red\">＊".$s."</span><br/>\n";
+	}
 	public function outputMessage($s) {
 		echo "<label class=\"label_auth\"></label><span class=\"div_auth_message\" style=\"color:red\">＊".$s."</span><br/>\n";
 	}
@@ -91,6 +94,16 @@ class Auth_Form_Register extends Zend_Form
 		
 		return true;
 	}
+	
+	public static function IsValidPassword($password)
+	{
+		if (preg_match('/^[\\~!@#$%^&*()-_=+|{}\[\],.?\/:`; \'\"\d\w]{3,}$/', $password) === 0)
+		{
+			return '密码必须由长度至少为3个由数字、英文字母或字符组成';
+		}
+		return 'OK';
+	}
+	
 // 	private $elementDecorators = array(
 // 			'ViewHelper',
 // 			array(array('data' => 'HtmlTag'), array('tag' => 'div', 'class' => 'element')),
