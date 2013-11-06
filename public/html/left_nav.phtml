@@ -16,9 +16,13 @@ function _AppendCategoryItemIntoList(category) {
 	$('#ul_category_list').append(new_item);
 }
 
-function _AppendSubcategoryItemIntoList(subcategory) {
+function _AppendSubcategoryItemIntoList(subcategory, category, currflag) {
 	var new_item = '';
-	new_item += '<li><a href="/post/post/list?sub_category=';
+	new_item += '<li><a ';
+	if (currflag) new_item += " style=\'background:#258CFF;color:#fff;padding: 10px 15px;\' ";
+	new_item += 'href="/post/post/list?category=';
+	new_item += category;
+	new_item += '&sub_category=';
 	new_item += subcategory;
 	new_item += '">';
 	new_item += subcategory;
@@ -26,7 +30,7 @@ function _AppendSubcategoryItemIntoList(subcategory) {
 	$('#ul_subcategory_list').append(new_item);
 }
 
-function CategoryListHandler(vcurr_category) {
+function CategoryListHandler(vcurr_category, vcurr_subcategory) {
 	Jsoncallback('/post/category/list', 
 		function (json) {
 		    if (json.err != undefined && json.err != "") {
@@ -55,7 +59,8 @@ function CategoryListHandler(vcurr_category) {
 							$('#div_subcategory').fadeIn();
 						}
 						for (var j = 0; j < subcategorys.length; j ++) {
-							_AppendSubcategoryItemIntoList(subcategorys[j]);
+							_AppendSubcategoryItemIntoList(subcategorys[j], 
+								d[i].category, (subcategorys[j] == vcurr_subcategory));
 						}
 					}
 				}
@@ -80,8 +85,11 @@ function CategoryListHandler(vcurr_category) {
 }
 
 $(document).ready(function() {
-	var curr_category = '<?php echo isset($_GET['category']) ? $_GET['category']: ''; ?>';
-	CategoryListHandler(curr_category);
+	var curr_category = '<?php echo isset($_GET['category']) ? $_GET['category'] 
+		: (isset($this->category) ? $this->category : ''); ?>';
+	var curr_subcategory = '<?php echo isset($_GET['sub_category']) ? $_GET['sub_category'] 
+		: (isset($this->sub_category) ? $this->sub_category : ''); ?>';
+	CategoryListHandler(curr_category, curr_subcategory);
 });
 
 </script>

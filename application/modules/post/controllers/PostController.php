@@ -368,6 +368,8 @@ class Post_PostController extends Zend_Controller_Action
 		if (empty($result)) return false;
 		$result = $result->toArray();
 		$this->view->result = $result;
+		$this->view->category = $result['category'];
+		$this->view->sub_category = $result['sub_category'];
 	}
 	
 	public function previewAction()

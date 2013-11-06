@@ -32,7 +32,7 @@ function ConfirmHandler() {
 	<span><a href="/post/post/list?category=<?php echo $this->result['category'] ?>"><?php echo $this->result['category'] ?></a></span>
 	<?php } ?>
 	<?php if (!empty($this->result['sub_category'])) { ?>/
-	<span><a href="/post/post/list?sub_category=<?php echo $this->result['sub_category'] ?>"><?php echo $this->result['sub_category'] ?></a></span>
+	<span><a href="/post/post/list?category=<?php echo $this->result['category'] ?>&sub_category=<?php echo $this->result['sub_category'] ?>"><?php echo $this->result['sub_category'] ?></a></span>
 	<?php } ?>
 </div>
 

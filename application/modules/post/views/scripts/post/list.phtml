@@ -35,7 +35,7 @@ function ConfirmHandler() {
         	<span><a href="/post/post/list?category=<?php echo $row['category'] ?>"><?php echo $row['category'] ?></a></span>
         	<?php } ?>
         	<?php if (!empty($row['sub_category'])) { ?>/
-        	<span><a href="/post/post/list?sub_category=<?php echo $row['sub_category'] ?>"><?php echo $row['sub_category'] ?></a></span>
+        	<span><a href="/post/post/list?category=<?php echo $row['category'] ?>&sub_category=<?php echo $row['sub_category'] ?>"><?php echo $row['sub_category'] ?></a></span>
         	<?php } ?>
         </div>
         
