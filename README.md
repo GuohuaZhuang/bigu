@@ -1,4 +1,6 @@
 bigu
 ====
 
-bigu is the name "比咕网" in Chinese, developed to provide search technology, Internet banking, information technology and other related open source hardware
+比咕网，专注于自然语言处理、机器学习、搜索引擎几个垂直领域的技术博客网站，在于分享一些基础知识和最新技术研究发展相关资讯。比咕网将提供从自然语言处理的中文分词、词性标注、语法语义以及相关的具体应用比如情感分析、自动问答等方面分享一些实际项目中的应用以及相关资料，另外也会谈到诸如搜索引擎中相关度排名、动态摘要、数据存储等方面技术分享，也会提供一些相关机器学习理论以及实际应用成果的国内外论文研究情况。
+
+比咕网提供搜索技术、自然语言处理、机器学习等相关方面的技术资讯。第一版本可以接受用户注册、用户发稿、用户评论。
