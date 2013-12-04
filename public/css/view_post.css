@@ -1,5 +1,15 @@
 @CHARSET "UTF-8";
 
+.div_post_view_abstract blockquote
+{
+    font-style: italic;
+    font-family: Georgia, Times, "Times New Roman", serif;
+    padding: 2px 8px 0px 20px;
+    border-style: solid;
+    border-color: #ccc;
+    border-width: 0px 0px 0px 5px;
+}
+
 .div_post_view_title h1 {
 	font-size: 26px;
 	color: #000;
