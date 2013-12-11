@@ -5,28 +5,15 @@ class Post_Model_DbTable_Post extends Zend_Db_Table_Abstract
 
     protected $_name = 'tbl_post';
     
-    public function get_content($id) {
+    public function get_one_value($id, $column) {
     	if (empty($id)) return false;
     	$select = $this->getAdapter()->select();
-    	$select->from(array('P' => 'tbl_post'), array('content'));
+    	$select->from(array('P' => 'tbl_post'), array($column));
     	$select->where('id=?', $id);
     	$stmt = $this->getAdapter()->query($select);
     	$result = $stmt->fetch();
     	if (!empty($result)) {
-    		return $result['content'];
-    	}
-    	return null;
-    }
-    
-    public function get_index_thumb($id) {
-    	if (empty($id)) return false;
-    	$select = $this->getAdapter()->select();
-    	$select->from(array('P' => 'tbl_post'), array('index_thumb'));
-		$select->where('id=?', $id);
-    	$stmt = $this->getAdapter()->query($select);
-    	$result = $stmt->fetch();
-    	if (!empty($result)) {
-    		return $result['index_thumb'];
+    		return $result[$column];
     	}
     	return null;
     }
@@ -55,10 +42,13 @@ class Post_Model_DbTable_Post extends Zend_Db_Table_Abstract
     	if (!empty($author)) $select->where('author=?', $author);
     	if (!empty($category)) $select->where('category=?', $category);
     	if (!empty($sub_category)) $select->where('sub_category=?', $sub_category);
-		// ->where('bug_status = ?', 'NEW')
-		// ->group('reported_by');
     	$stmt = $this->getAdapter()->query($select);
     	$result = $stmt->fetch();
     	return $result['count'];
+    }
+    
+    public function delete_by_id($id) {
+    	$where = $this->getAdapter()->quoteInto('id=?', $id);
+    	return $this->delete($where);
     }
 }

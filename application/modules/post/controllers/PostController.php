@@ -39,7 +39,7 @@ class Post_PostController extends Zend_Controller_Action
     private function _remove_imgandthumb($id)
     {
     	$dbpost = new Post_Model_DbTable_Post();
-    	$html = $dbpost->get_content($id);
+    	$html = $dbpost->get_one_value($id, 'content');
     	$imagepaths = $this->_find_all_imagepath($html);
     	// 去除表情符号，可以是上传的，也可以是网络上图片
     	foreach ($imagepaths as $imagepath) {
@@ -173,7 +173,7 @@ class Post_PostController extends Zend_Controller_Action
     	}
     	$oldarr_imagepaths = array();
     	$dbpost = new Post_Model_DbTable_Post();
-    	$old_content = $dbpost->get_content($id);
+    	$old_content = $dbpost->get_one_value($id, 'content');
     	if (!empty($old_content)) {
     		$oldarr_imagepaths = $this->_find_all_imagepath($old_content);
     	}
@@ -190,7 +190,7 @@ class Post_PostController extends Zend_Controller_Action
     private function _remove_prethumb($id, $post_index_thumb = null)
     {
     	$dbpost = new Post_Model_DbTable_Post();
-    	$pre_thumb = $dbpost->get_index_thumb($id);
+    	$pre_thumb = $dbpost->get_one_value($id, 'index_thumb');
     	if ($pre_thumb != $post_index_thumb) {
     		if (!empty($pre_thumb)) @unlink($_SERVER['DOCUMENT_ROOT'].$pre_thumb);
     	}
@@ -257,6 +257,7 @@ class Post_PostController extends Zend_Controller_Action
     		$db_category = new Post_Model_DbTable_Category();
     		$bigcategorys = $db_category->getAllBigCategory();
     		$this->view->bigcategorys = $bigcategorys;
+    		$this->render("edit");
     		return;
     	}
     	// add post to db
@@ -311,9 +312,20 @@ class Post_PostController extends Zend_Controller_Action
     
 	public function deleteAction()
 	{
+		$username = Util_Global::getUsername(true);
+		if (false == $username) {
+			$this->redirect('/auth/index/login');
+		}
+		
 		$request = $this->getRequest();
 		$post_id = $request->getParam('post_id');
 		$category = $request->getParam('category');
+		
+		$db_post = new Post_Model_DbTable_Post();
+		if ($username != $db_post->get_one_value($post_id, 'author')) {
+			$this->redirect('/index/error');
+			return;
+		}
 		
 		// DELETE upload image file and generated thumb file
 		$this->_remove_prethumb($post_id);
@@ -324,9 +336,7 @@ class Post_PostController extends Zend_Controller_Action
 		$db_comment->deleteByPostidCascade($post_id);
 		
 		// DELETE post itself
-		$db_post = new Post_Model_DbTable_Post();
-		$where = $db_post->getAdapter()->quoteInto('id=?', $post_id);
-		$num = $db_post->delete($where);
+		$db_post->delete_by_id($post_id);
 		
 		// DELETE index from SEARCH
 		$search = new SearchAdapter();

@@ -13,14 +13,6 @@ function PostPublishHandler() {
 	}
 }
 
-function PostPreviewHandler() {
-	document.getElementById('post_form').action='/post/post/preview';
-	if ($('#post_title').val() == '') {
-		alert('文章标题不能为空');
-		return false;
-	}
-}
-
 function SelectChangedCascade() {
 	Jsoncallback('/post/category/subcategory', 
     	function (json) {
@@ -71,6 +63,9 @@ function SelectChangedCascade() {
 		    </select>
 		</label>
 	</div>
+	<div style="position: relative; float: right; overflow: hidden; top: 0px; right: 0px; bottom: 0px;">
+		<div><span>已保存</span></div>
+	</div>
 	<br/>
 	<div>
 		<input type="text" id="post_title" name="post_title" class="edit_title_input" placeholder="在这里输入一个响亮的标题"
@@ -84,7 +79,6 @@ function SelectChangedCascade() {
 		<input type="hidden" id="post_id" name="post_id" value='<?php echo (!empty($this->result) && array_key_exists('id', $this->result)) ? $this->result['id'] : ''; ?>'>
 	<p style="text-align: start;">
 		<input type="submit" onclick="return PostPublishHandler();" value="保存">
-		<input type="submit" onclick="return PostPreviewHandler();" value="预览">
 	</p>
 </form>
 
