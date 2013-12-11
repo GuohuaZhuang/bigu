@@ -55,22 +55,23 @@ function CheckChange() {
 					post_title: $('#post_title').val(), 
 					post_content: editor_value };
 		try {
-			$.post('/post/post/save', d, function(json) {
-				if (json.success != undefined && json.post_id != undefined) {
-					$('#post_id').val(json.post_id);
-					// set autosave state
-					$('.div_autosave_saving').hide(); $('.div_autosave_saved').show();
-					autosave_try_delay = 3000;
-				}
-			}, 'json').fail(function() { TryDelay(); });
-		} catch (err) {
-			TryDelay();
+			Jsoncallback_witherrorhandle('/post/post/save', ResponeJson, 'POST', d, null, TryDelay);
+		} catch( err) {
+			TryDelay(null, null, null);
 		}
 	}
 }
 
-function TryDelay() {
-	alert('TryDelay now');
+function ResponeJson(json) {
+	if (json.success != undefined && json.post_id != undefined) {
+		$('#post_id').val(json.post_id);
+		// set autosave state
+		$('.div_autosave_saving').hide(); $('.div_autosave_saved').show();
+		autosave_try_delay = 3000;
+	}
+}
+
+function TryDelay(json, textStatus, errorThrown) {
 	autosave_try_delay *= 2;
 	window.setInterval(CheckChange, autosave_try_delay);
 }

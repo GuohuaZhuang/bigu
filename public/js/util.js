@@ -27,6 +27,31 @@ function Jsoncallback(url, callback, method, data, loadid) {
 	});
 }
 
+function Jsoncallback_witherrorhandle(url, callback, method, data, loadid, errorhandle) {
+	if (loadid) $('#'+loadid).fadeIn(200);
+	$.ajax({
+		type: method, 
+		data: data, 
+		scriptCharset: 'UTF-8', 
+		dataType: 'json', 
+		url: url, 
+		success: function(json) {
+			if (loadid) $('#'+loadid).fadeOut(200);
+			if (callback != null) callback(json);
+		}, 
+		error: function(json, textStatus, errorThrown) {
+			if (loadid) $('#'+loadid).fadeOut(200);
+			errorhandle(json, textStatus, errorThrown);
+			// comment as not to alert when as net problems
+			// if (callback != null) alert('[ERROR] -- JSON CALLBACK:\n'
+			// 	+ '[ERROR:textStatus]: ' + textStatus 
+			// 	+ '[ERROR:errorThrown]: ' + errorThrown 
+			// 	+ '[ERROR:json.responseText]: ' + json.responseText);
+		}
+	});
+}
+
+
 function getURLParameter(name) {
     return decodeURI(
         (RegExp(name + "=" + "(.+?)(&|$)").exec(location.search)||[,null])[1]
