@@ -225,10 +225,10 @@ class Post_PostController extends Zend_Controller_Action
 	    			'sub_category' => $post_sub_category,
 	    			'abstract' => $post_abstract,
 	    			'index_thumb' => $post_index_thumb);
-	    	$id_post = $dbpost->insert($data);
+	    	$post_id = $dbpost->insert($data);
 	    	// SEARCH
 	    	$search = new SearchAdapter();
-	    	$search->addPosttoIndex($post_title, $post_content, $post_pub_datetime, $id_post);
+	    	$search->addPosttoIndex($post_title, $post_content, $post_pub_datetime, $post_id);
     	} else {
     		// update record and remove thumb
     		$this->_remove_prethumb($post_id, $post_index_thumb);
@@ -246,6 +246,7 @@ class Post_PostController extends Zend_Controller_Action
     		$search->deletePostinIndex($post_id);
     		$search->addPosttoIndex($post_title, $post_content, $post_pub_datetime, $post_id);
     	}
+    	return $post_id;
     }
     
     public function addAction()
@@ -267,6 +268,22 @@ class Post_PostController extends Zend_Controller_Action
     	// forwart to list posts
     	$this->redirect('/post/post/list');
     }
+    public function saveAction()
+    {
+    	$json = '';
+    	try {
+    		$request = $this->getRequest();
+    		$post_id = $request->getParam('post_id');
+    		$post_id = $this->_addpost($request, $post_id);
+    		$json = '{"success": "ok", "post_id": "'.$post_id.'"}';
+    	} catch (Exception $e) {
+    		$json = '{"err": "save failed!"}';
+    	}
+    	echo $json;
+    	// stop layout and render
+    	$this->_helper->layout->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender(TRUE);
+    }
     
     public function editAction()
     {
@@ -275,21 +292,8 @@ class Post_PostController extends Zend_Controller_Action
 		$post_id = $request->getParam('post_id');
 		$editable = $request->getParam('editable');
 		if (empty($post_id) || (!empty($editable))) {
-			// title
-			$post_title = $request->getParam('post_title');
-			// content
-			$post_content = $this->_transform_content($request->getParam('post_content'));
-			// category and sub_category
-			$post_category = $request->getParam('post_select_bigcategory');
-			$post_sub_category = $request->getParam('post_select_subcategory');
-			
-			$result = array(
-				'id' => $post_id,
-				'title' => $post_title,
-				'content' => $post_content,
-				'category' => $post_category,
-				'sub_category' => $post_sub_category);
-			$this->view->result = $result;
+			$this->redirect('/index/error');
+			return;
 		} else {
 			$db_post = new Post_Model_DbTable_Post();
 			$where = $db_post->getAdapter()->quoteInto('id=?', $post_id);
@@ -380,37 +384,5 @@ class Post_PostController extends Zend_Controller_Action
 		$this->view->result = $result;
 		$this->view->category = $result['category'];
 		$this->view->sub_category = $result['sub_category'];
-	}
-	
-	public function previewAction()
-	{
-		$username = Util_Global::getUsername(true);
-		if (false == $username) { $this->redirect('/auth/index/login'); }
-		$this->view->username = $username;
-		$this->view->preview = true;
-		
-		$request = $this->getRequest();
-		// id
-		$post_id = $request->getParam('post_id');
-		// title
-		$post_title = $request->getParam('post_title');
-		// content
-		$post_content = $this->_transform_content($request->getParam('post_content'));
-		// pub_datetime
-		$post_pub_datetime = date('Y-m-d H:i:s');
-		// author
-		$post_author = $username;
-		// category and sub_category
-		$post_category = $request->getParam('post_select_bigcategory');
-		$post_sub_category = $request->getParam('post_select_subcategory');
-		
-		$this->view->result = array(
-			'id' => $post_id,
-			'title' => $post_title,
-			'content' => $post_content,
-			'pub_datetime' => $post_pub_datetime,
-			'author' => $post_author, 
-			'category' => $post_category,
-			'sub_category' => $post_sub_category);
 	}
 }

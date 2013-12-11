@@ -5,6 +5,76 @@
 <script src="/include/SyntaxHighlighter/scripts/shAutoloader.js" type="text/javascript"></script>
 <script type="text/javascript">
 
+var post_edit_struct = {
+	createNew: function() {
+		var _post_edit_struct = {};
+		_post_edit_struct.post_select_bigcategory = $('#post_select_bigcategory').val();
+		_post_edit_struct.post_select_subcategory = $('#post_select_subcategory').val();
+		_post_edit_struct.post_title = $('#post_title').val();
+		_post_edit_struct.post_content = $('#post_content').html().trim();
+		return _post_edit_struct;
+	}
+}
+
+var g_post_edit_struct;
+var autosave_try_delay = 3000;
+var g_firsttime_diff = true;
+
+$(document).ready(function() {
+	window.setInterval(CheckChange, 3000);
+	g_post_edit_struct = post_edit_struct.createNew();
+});
+
+function DiffPostStruct() {
+	var editor = CKEDITOR.instances.post_content;
+	var editor_value = CKEDITOR.tools.htmlEncode(editor.getData()).trim();
+	if (g_firsttime_diff) { g_post_edit_struct.post_content = editor_value; g_firsttime_diff = false; }
+	if ( (g_post_edit_struct.post_select_bigcategory == $('#post_select_bigcategory').val())
+		&& (g_post_edit_struct.post_select_subcategory == $('#post_select_subcategory').val())
+		&& (g_post_edit_struct.post_title == $('#post_title').val())
+		&& (g_post_edit_struct.post_content == editor_value) ) {
+		return false;
+	}
+	g_post_edit_struct.post_select_bigcategory = $('#post_select_bigcategory').val();
+	g_post_edit_struct.post_select_subcategory = $('#post_select_subcategory').val();
+	g_post_edit_struct.post_title = $('#post_title').val();
+	g_post_edit_struct.post_content = editor_value;
+	return true;
+}
+
+function CheckChange() {
+	if (DiffPostStruct()) {
+		// set autosave state
+		$('.div_autosave_saved').hide(); $('.div_autosave_saving').show();
+		// different then go to post
+		var editor = CKEDITOR.instances.post_content;
+		var editor_value = editor.getData();
+		var d = {	post_id: $('#post_id').val(), 
+					post_select_bigcategory: $('#post_select_bigcategory').val(), 
+					post_select_subcategory: $('#post_select_subcategory').val(), 
+					post_title: $('#post_title').val(), 
+					post_content: editor_value };
+		try {
+			$.post('/post/post/save', d, function(json) {
+				if (json.success != undefined && json.post_id != undefined) {
+					$('#post_id').val(json.post_id);
+					// set autosave state
+					$('.div_autosave_saving').hide(); $('.div_autosave_saved').show();
+					autosave_try_delay = 3000;
+				}
+			}, 'json').fail(function() { TryDelay(); });
+		} catch (err) {
+			TryDelay();
+		}
+	}
+}
+
+function TryDelay() {
+	alert('TryDelay now');
+	autosave_try_delay *= 2;
+	window.setInterval(CheckChange, autosave_try_delay);
+}
+
 function PostPublishHandler() {
 	document.getElementById('post_form').action='/post/post/add';
 	if ($('#post_title').val() == '') {
@@ -63,21 +133,26 @@ function SelectChangedCascade() {
 		    </select>
 		</label>
 	</div>
-	<div style="position: relative; float: right; overflow: hidden; top: 0px; right: 0px; bottom: 0px;">
-		<div><span>已保存</span></div>
+	<div class="div_save_state">
+		<div class="div_save_state_span div_autosave_start"><span>连接服务器</span></div>
+		<div class="div_save_state_autosave post_autosave_start div_autosave_start"></div>
+		<div class="div_save_state_span div_autosave_saving"><span>正在保存</span></div>
+		<div class="div_save_state_autosave post_autosave_saving div_autosave_saving"></div>
+		<div class="div_save_state_span div_autosave_saved"><span>已保存</span></div>
+		<div class="div_save_state_autosave post_autosave_saved div_autosave_saved"></div>
 	</div>
 	<br/>
 	<div>
 		<input type="text" id="post_title" name="post_title" class="edit_title_input" placeholder="在这里输入一个响亮的标题"
-			value="<?php if (!empty($this->result)) { echo $this->result['title']; } ?>"><br/><br/>
+			value="<?php if (!empty($this->result)) { echo $this->result['title']; } ?>"><br/>
 	</div>
 	<p>
 		<textarea class="ckeditor" cols="80" id="post_content" name="post_content" rows="10">
 			<?php if (!empty($this->result)) { echo $this->result['content']; } ?>
-		</textarea><br/>
+		</textarea>
 	</p>
-		<input type="hidden" id="post_id" name="post_id" value='<?php echo (!empty($this->result) && array_key_exists('id', $this->result)) ? $this->result['id'] : ''; ?>'>
 	<p style="text-align: start;">
+		<input type="hidden" id="post_id" name="post_id" value='<?php echo (!empty($this->result) && array_key_exists('id', $this->result)) ? $this->result['id'] : ''; ?>'>
 		<input type="submit" onclick="return PostPublishHandler();" value="保存">
 	</p>
 </form>

@@ -43,3 +43,12 @@ function addslashes(string) {
         replace(/'/g, '\\\'').
         replace(/"/g, '\\"');
 }
+function trim(str){
+	return str.replace(/(^\s*)|(\s*$)/g, "");
+}
+function ltrim(str){
+	return str.replace(/(^\s*)/g,"");
+}
+function rtrim(str){
+	return str.replace(/(\s*$)/g,"");
+}

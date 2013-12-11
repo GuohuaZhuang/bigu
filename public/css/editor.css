@@ -128,3 +128,38 @@ text-align: start;
     pointer-events:none;
     display:block;
 }
+
+.div_save_state {
+    position: relative;
+    float: right;
+    overflow: hidden;
+    right: 5px;
+    bottom: 15px;
+    line-height: 16px;
+}
+.div_save_state_span {
+    float: right;
+    color: #55af40;
+    font-size: 12px;
+    line-height: 18px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+.div_save_state_autosave {
+	float: right;
+	height: 18px;
+	width: 19px;
+	overflow: hidden;
+}
+.post_autosave_start {
+    background: url("/image/post_autosave_start.gif") -0px -0px no-repeat;
+}
+.post_autosave_saving {
+    background: url("/image/post_autosave_saving.gif") -0px -0px no-repeat;
+}
+.post_autosave_saved {
+    background: url("/image/post_autosave_saved.gif") -0px -0px no-repeat;
+}
+.div_autosave_start, .div_autosave_saving, .div_autosave_saved {
+	display: none;
+}
