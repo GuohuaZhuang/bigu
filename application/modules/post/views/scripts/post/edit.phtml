@@ -58,7 +58,7 @@ function SelectChangedCascade() {
 		    	 onchange="SelectChangedCascade()" >
 		        <option value="0" selected="selected" disabled>--请选择一个类别--</option>
         		<?php foreach($this->bigcategorys as $cgname) { ?>
-        		<option value="<?php echo $cgname; ?>" <?php if($this->result['category'] == $cgname) {echo 'selected';} ?>><?php echo $cgname; ?></option>
+        		<option value="<?php echo $cgname; ?>" <?php if(!empty($this->result) && $this->result['category'] == $cgname) {echo 'selected';} ?>><?php echo $cgname; ?></option>
         		<?php } ?>
 		    </select>
 		</label>&nbsp;
