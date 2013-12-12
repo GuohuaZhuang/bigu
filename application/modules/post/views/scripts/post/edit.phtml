@@ -5,6 +5,8 @@
 <script src="/include/SyntaxHighlighter/scripts/shAutoloader.js" type="text/javascript"></script>
 <script type="text/javascript">
 
+///////////////////////////BEGIN OF AUTOSAVE////////////////////////////////////
+
 var post_edit_struct = {
 	createNew: function() {
 		var _post_edit_struct = {};
@@ -16,16 +18,21 @@ var post_edit_struct = {
 	}
 }
 
+var DEFAULT_DELAY_TIME = 3000;
+var MAXIMUM_DELAY_TIME = 48000;
 var g_post_edit_struct;
-var autosave_try_delay = 3000;
+var autosave_try_delay = DEFAULT_DELAY_TIME;
 var g_firsttime_diff = true;
+var g_autosave_modified = false;
+var g_interval;
 
 $(document).ready(function() {
-	window.setInterval(CheckChange, 3000);
+	g_interval = setInterval(CheckChange, autosave_try_delay);
 	g_post_edit_struct = post_edit_struct.createNew();
 });
 
 function DiffPostStruct() {
+	if (g_autosave_modified) return true;
 	var editor = CKEDITOR.instances.post_content;
 	var editor_value = CKEDITOR.tools.htmlEncode(editor.getData()).trim();
 	if (g_firsttime_diff) { g_post_edit_struct.post_content = editor_value; g_firsttime_diff = false; }
@@ -35,11 +42,18 @@ function DiffPostStruct() {
 		&& (g_post_edit_struct.post_content == editor_value) ) {
 		return false;
 	}
+	g_autosave_modified = true;
+	return true;
+}
+
+function UpdatePostStruct() {
+	var editor = CKEDITOR.instances.post_content;
+	var editor_value = CKEDITOR.tools.htmlEncode(editor.getData()).trim();
 	g_post_edit_struct.post_select_bigcategory = $('#post_select_bigcategory').val();
 	g_post_edit_struct.post_select_subcategory = $('#post_select_subcategory').val();
 	g_post_edit_struct.post_title = $('#post_title').val();
 	g_post_edit_struct.post_content = editor_value;
-	return true;
+	g_autosave_modified = false;
 }
 
 function CheckChange() {
@@ -67,14 +81,21 @@ function ResponeJson(json) {
 		$('#post_id').val(json.post_id);
 		// set autosave state
 		$('.div_autosave_saving').hide(); $('.div_autosave_saved').show();
-		autosave_try_delay = 3000;
+		autosave_try_delay = DEFAULT_DELAY_TIME;
+		clearInterval(g_interval);
+		g_interval = setInterval(CheckChange, autosave_try_delay);
+		UpdatePostStruct();
 	}
 }
 
 function TryDelay(json, textStatus, errorThrown) {
 	autosave_try_delay *= 2;
-	window.setInterval(CheckChange, autosave_try_delay);
+	if (autosave_try_delay > MAXIMUM_DELAY_TIME) { autosave_try_delay = MAXIMUM_DELAY_TIME; }
+	clearInterval(g_interval);
+	g_interval = setInterval(CheckChange, autosave_try_delay);
 }
+
+////////////////////////////END OF AUTOSAVE/////////////////////////////////////
 
 function PostPublishHandler() {
 	document.getElementById('post_form').action='/post/post/add';
