@@ -53,13 +53,21 @@ INSTALL NOTES:
 	5. If you want to access both by ip and alias server name, you cat set "ServerName 127.0.0.1" temporary.
 
 For more sucurity, we suggest you to modify some configurations:
-	1. Ture off the php expose infomation.
+	1. Ture off the php expose information.
 		edit /etc/php5/apache2/php.ini.
 		    expose_php=Off
-	2. Remove Apache version and also operation system infomation.
+	2. Remove Apache version and also operation system information.
 		edit /etc/apache2/apache2.conf or /etc/apache2/conf.d/security, you are be sure just set them just once.
 			ServerSignature Off
 			ServerTokens Prod
 	3. Also we have change the session name in Boostrap.php, so if you are not like change a customize name, do not change it.
 		ini_set('session.name', 'BIGUSID');
+	4. Ture off allow url open and url include.
+		allow_url_fopen=Off
+		allow_url_include=Off
+
+Also, you should change your own informations in those files:
+	./application/configs/application.ini  [modify mysql connection info]
+	./application/modules/auth/controllers/IndexController.php [change your admin email SMTP/POP3 user and password]
+	./public/html/foot.html [modify your icp number name]
 
