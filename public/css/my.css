@@ -496,15 +496,25 @@ margin-left: 0;
 -moz-box-sizing: border-box;
 box-sizing: border-box;
 }
-.footContent a {
+.footContent .footlink {
     font-size: 14px;
     margin: 10px;
     line-height: 30px;
     color: #0664B0;
     text-decoration: none;
     font-family: 'Microsoft YaHei', 微软雅黑;
-.footContent a:hover {
+}
+.footContent .footlink:hover {
     color: #2375BE;
+    text-decoration: underline;
+}
+.footContent .footicp {
+    color: #cdcdcd;
+    text-decoration: none;
+    font-family: 'Microsoft YaHei', 微软雅黑;
+}
+.footContent .footicp:hover {
+    color: #B5B5B5;
     text-decoration: underline;
 }
 

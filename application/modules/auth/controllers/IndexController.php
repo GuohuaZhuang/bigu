@@ -116,7 +116,7 @@ class Auth_IndexController extends Zend_Controller_Action
     	$tr = new Zend_Mail_Transport_Smtp('smtp.163.com', array(
     			'auth'     => 'login',
     			'username' => 'guohua_zhuang@163.com',
-    			'password' => 'GuoHua0513',
+    			'password' => '**********',
     			'port'     => 25,
     	));
     	Zend_Mail::setDefaultTransport($tr);
