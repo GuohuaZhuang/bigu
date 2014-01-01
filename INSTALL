@@ -70,4 +70,3 @@ Also, you should change your own informations in those files:
 	./application/configs/application.ini  [modify mysql connection info]
 	./application/modules/auth/controllers/IndexController.php [change your admin email SMTP/POP3 user and password]
 	./public/html/foot.html [modify your icp number name]
-
