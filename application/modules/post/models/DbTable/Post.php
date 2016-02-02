@@ -10,6 +10,7 @@ class Post_Model_DbTable_Post extends Zend_Db_Table_Abstract
     	$select = $this->getAdapter()->select();
     	$select->from(array('P' => 'tbl_post'), array($column));
     	$select->where('id=?', $id);
+    	$select->where('id>0');
     	$stmt = $this->getAdapter()->query($select);
     	$result = $stmt->fetch();
     	if (!empty($result)) {
@@ -29,6 +30,7 @@ class Post_Model_DbTable_Post extends Zend_Db_Table_Abstract
     	if (!empty($author)) $select->where('author=?', $author);
     	if (!empty($category)) $select->where('category=?', $category);
     	if (!empty($sub_category)) $select->where('sub_category=?', $sub_category);
+    	$select->where('id>0');
     	$stmt = $this->getAdapter()->query($select);
     	$select->order('pub_datetime DESC');
     	$select->limitPage($page, $count);
@@ -42,6 +44,7 @@ class Post_Model_DbTable_Post extends Zend_Db_Table_Abstract
     	if (!empty($author)) $select->where('author=?', $author);
     	if (!empty($category)) $select->where('category=?', $category);
     	if (!empty($sub_category)) $select->where('sub_category=?', $sub_category);
+    	$select->where('id>0');
     	$stmt = $this->getAdapter()->query($select);
     	$result = $stmt->fetch();
     	return $result['count'];
